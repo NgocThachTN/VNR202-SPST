@@ -1,5 +1,5 @@
-import { initializeApp, getApps } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
+import { getFirestore, type Firestore } from 'firebase/firestore';
 import { getAuth, signInAnonymously } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -11,12 +11,31 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+function getClientApp(): FirebaseApp {
+  if (getApps().length === 0) {
+    return initializeApp(firebaseConfig);
+  }
+  return getApp();
+}
 
-export const clientDb = getFirestore(app);
+// Only initialize on the client side to avoid SSR/build-time errors
+let _clientDb: Firestore | null = null;
 
-// Đăng nhập ẩn danh để thỏa các rule yêu cầu authenticated user
-const auth = getAuth(app);
-signInAnonymously(auth).catch(() => {
-  // ignore; snapshot listener sẽ báo lỗi nếu rule vẫn chặn
-});
+export function getClientDb(): Firestore {
+  if (typeof window === 'undefined') {
+    throw new Error('getClientDb() must only be called on the client side');
+  }
+  if (!_clientDb) {
+    const app = getClientApp();
+    _clientDb = getFirestore(app);
+    // Đăng nhập ẩn danh để thỏa các rule yêu cầu authenticated user
+    const auth = getAuth(app);
+    signInAnonymously(auth).catch(() => {
+      // ignore; snapshot listener sẽ báo lỗi nếu rule vẫn chặn
+    });
+  }
+  return _clientDb;
+}
+
+// Backwards-compatible export — only safe to use inside useEffect / event handlers
+export const clientDb = typeof window !== 'undefined' ? getClientDb() : null as unknown as Firestore;

@@ -21,7 +21,7 @@ export interface Obstacle {
 export interface MapDecoration {
   x: number;
   y: number;
-  type: "fire" | "smoke" | "flag" | "debris" | "tree_stump" | "shell_casing" | "tank_active";
+  type: "fire" | "smoke" | "flag" | "debris" | "tree_stump" | "shell_casing" | "tank_active" | "tank_390";
 }
 
 export interface MapTheme {
@@ -252,7 +252,9 @@ export const GAME_LEVELS: LevelData[] = [
       ],
       decorations: [
         // Xe tăng 843 tiến về cổng Dinh
-        { x: 400, y: 220, type: "tank_active" },
+        { x: 380, y: 220, type: "tank_active" },
+        // Xe tăng 390 yểm trợ
+        { x: 450, y: 300, type: "tank_390" },
         // Cờ giải phóng
         { x: 395, y: 15, type: "flag" },
         // Khói lửa chiến trận

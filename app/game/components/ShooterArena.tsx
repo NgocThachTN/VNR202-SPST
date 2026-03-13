@@ -22,6 +22,16 @@ import {
   getWaveComposition,
 } from "../data";
 
+interface AllyTank {
+  id: number;
+  x: number;
+  y: number;
+  type: "843" | "390";
+  angle: number;
+  lastShot: number;
+  speed: number;
+}
+
 /* ═══════════════════════════════════════════════════════════════════ */
 /*  SHOOTER ARENA — canvas top-down shooter with mouse aim             */
 /* ═══════════════════════════════════════════════════════════════════ */
@@ -94,6 +104,7 @@ export default function ShooterArena({
     hitFlash: 0,
     spawnedByType: { soldier: 0, fortified: 0, tank: 0 },
     waveComposition: getWaveComposition(levelIndex, waveNum),
+    allies: [] as AllyTank[],
   });
 
   const ammoRef = useRef(ammo);
@@ -187,6 +198,24 @@ export default function ShooterArena({
     s.waveComposition = getWaveComposition(levelIndex, waveNum);
     const comp = s.waveComposition;
     s.enemyCount = comp.soldiers + comp.fortified + comp.tanks;
+
+    // Initialize allies for Level 1
+    if (levelIndex === 0) {
+      const decs = levelData.map?.decorations || [];
+      s.allies = decs
+        .filter(d => d.type === "tank_active" || d.type === "tank_390")
+        .map(d => ({
+          id: s.nextId++,
+          x: d.x,
+          y: d.y,
+          type: d.type === "tank_390" ? "390" : "843",
+          angle: -Math.PI / 2,
+          lastShot: Date.now() - Math.random() * 2000,
+          speed: 0.6,
+        }));
+    } else {
+      s.allies = [];
+    }
 
     function handleKeyDown(e: KeyboardEvent) {
       s.keys.add(e.key);
@@ -986,54 +1015,66 @@ export default function ShooterArena({
           ctx.fillRect(dec.x + 8, dec.y + 5, 2, 5);
           break;
 
-        case "tank_active": {
-          // Xe tăng T-54 số 843 — active, tiến về phía Dinh Độc Lập
-          const tx = dec.x, ty = dec.y;
-          const tt = Date.now() * 0.001;
-          // Tracks
-          ctx.fillStyle = "#2a2a1a";
-          ctx.fillRect(tx - 22, ty + 8, 44, 12);
-          ctx.fillRect(tx - 24, ty + 6, 48, 4);
-          // Track wheels
-          ctx.fillStyle = "#1a1a0a";
-          for (let i = 0; i < 5; i++) {
-            ctx.beginPath();
-            ctx.arc(tx - 18 + i * 9, ty + 14, 3, 0, Math.PI * 2);
-            ctx.fill();
-          }
-          // Hull
-          ctx.fillStyle = "#4a5a30";
-          ctx.fillRect(tx - 18, ty - 2, 36, 12);
-          ctx.fillStyle = "#3a4a20";
-          ctx.fillRect(tx - 20, ty + 4, 40, 6);
-          // Turret
-          ctx.fillStyle = "#5a6a38";
-          ctx.fillRect(tx - 10, ty - 8, 20, 10);
-          ctx.fillStyle = "#4a5a28";
-          ctx.fillRect(tx - 8, ty - 6, 16, 6);
-          // Barrel (pointing up/forward)
-          ctx.fillStyle = "#3a3a2a";
-          ctx.fillRect(tx - 2, ty - 22, 4, 16);
-          ctx.fillStyle = "#2a2a1a";
-          ctx.fillRect(tx - 1, ty - 24, 2, 4);
-          // Number 843
-          ctx.fillStyle = "#FFD700";
-          ctx.font = "bold 7px monospace";
-          ctx.fillText("843", tx - 8, ty + 3);
-          // Red star on turret
-          ctx.fillStyle = "#DA251D";
-          ctx.fillRect(tx - 2, ty - 5, 4, 3);
-          // Exhaust smoke
-          ctx.fillStyle = "#55555540";
-          ctx.beginPath();
-          ctx.arc(tx, ty + 22 + Math.sin(tt) * 2, 5 + Math.sin(tt * 2) * 2, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.fillStyle = "#44444425";
-          ctx.beginPath();
-          ctx.arc(tx + 3, ty + 28 + Math.sin(tt + 1) * 3, 7, 0, Math.PI * 2);
-          ctx.fill();
+        case "tank_active":
+        case "tank_390":
+          // Handled by dynamic ally rendering
           break;
-        }
+      }
+    }
+
+    function drawDynamicAlly(ally: AllyTank) {
+      const tx = ally.x, ty = ally.y;
+      const angle = ally.angle;
+      const tt = Date.now() * 0.001;
+      const is390 = ally.type === "390";
+
+      ctx.save();
+      ctx.translate(tx, ty);
+      ctx.rotate(angle + Math.PI / 2); // Base asset is vertical
+
+      // Tracks
+      ctx.fillStyle = "#2a2a1a";
+      ctx.fillRect(-22, 8, 44, 12);
+      ctx.fillRect(-24, 6, 48, 4);
+      // Track wheels
+      ctx.fillStyle = "#1a1a0a";
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath();
+        ctx.arc(-18 + i * 9, 14, 3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // Hull
+      ctx.fillStyle = "#4a5a30";
+      ctx.fillRect(-18, -2, 36, 12);
+      ctx.fillStyle = "#3a4a20";
+      ctx.fillRect(-20, 4, 40, 6);
+      // Turret
+      ctx.fillStyle = "#5a6a38";
+      ctx.fillRect(-10, -8, 20, 10);
+      ctx.fillStyle = "#4a5a28";
+      ctx.fillRect(-8, -6, 16, 6);
+      // Barrel
+      ctx.fillStyle = "#3a3a2a";
+      ctx.fillRect(-2, -22, 4, 16);
+      ctx.fillStyle = "#2a2a1a";
+      ctx.fillRect(-1, -24, 2, 4);
+      // Number
+      ctx.rotate(-(angle + Math.PI / 2)); // Draw text upright
+      ctx.fillStyle = "#FFD700";
+      ctx.font = "bold 7px monospace";
+      ctx.fillText(is390 ? "390" : "843", -8, 3);
+      // Red star on turret
+      ctx.fillStyle = "#DA251D";
+      ctx.fillRect(-2, -5, 4, 3);
+      
+      ctx.restore();
+
+      // Exhaust smoke
+      if (Math.sin(tt * 5) > 0) {
+        ctx.fillStyle = "#55555530";
+        ctx.beginPath();
+        ctx.arc(tx - Math.cos(angle) * 20, ty - Math.sin(angle) * 20, 5, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
@@ -1106,6 +1147,7 @@ export default function ShooterArena({
     }
 
     let running = true;
+    let allyShootTimer = 0;
 
     function gameLoop() {
       if (!running) return;
@@ -1113,6 +1155,63 @@ export default function ShooterArena({
       const AW = sizeRef.current.w, AH = sizeRef.current.h;
       const p = s.player;
       const u = upgradesRef.current;
+      const now = Date.now();
+
+      // ---- Ally Support AI (Tank 843 & 390) ----
+      if (levelIndex === 0 && s.allies.length > 0) {
+        for (const ally of s.allies) {
+          // Find nearest enemy
+          let nearest: Enemy | null = null;
+          let minDist = 9999;
+          for (const e of s.enemies) {
+            const d = Math.sqrt((e.x - ally.x)**2 + (e.y - ally.y)**2);
+            if (d < minDist) { minDist = d; nearest = e; }
+          }
+
+          if (nearest) {
+            // AI Movement & Rotation
+            const targetAngle = Math.atan2(nearest.y - ally.y, nearest.x - ally.x);
+            // Smoothly rotate
+            let diff = targetAngle - ally.angle;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+            ally.angle += diff * 0.05;
+
+            // Move if too far (keep distance 150-250)
+            if (minDist > 200) {
+              const nx = ally.x + Math.cos(ally.angle) * ally.speed;
+              const ny = ally.y + Math.sin(ally.angle) * ally.speed;
+              
+              // Simple check for obstacles
+              let blocked = false;
+              for (const obs of obstacles) {
+                if (obs.type === "palace" || obs.type === "gate") {
+                  if (nx > obs.x - 20 && nx < obs.x + obs.w + 20 && ny > obs.y - 20 && ny < obs.y + obs.h + 20) {
+                    blocked = true; break;
+                  }
+                }
+              }
+              if (!blocked) {
+                ally.x = nx;
+                ally.y = ny;
+              }
+            }
+
+            // Shooting
+            if (now - ally.lastShot > 2500 && minDist < 450) {
+              ally.lastShot = now;
+              s.bullets.push({
+                id: s.nextId++,
+                x: ally.x + Math.cos(ally.angle) * 25,
+                y: ally.y + Math.sin(ally.angle) * 25,
+                dx: Math.cos(ally.angle) * BULLET_SPEED,
+                dy: Math.sin(ally.angle) * BULLET_SPEED,
+              });
+              s.explosions.push({ id: s.nextId++, x: ally.x + Math.cos(ally.angle) * 30, y: ally.y + Math.sin(ally.angle) * 30, frame: 2 });
+            }
+          }
+        }
+      }
 
       // Speed upgrade: +15% per stack
       const speedStacks = u["speed_up"] || 0;
@@ -1206,7 +1305,6 @@ export default function ShooterArena({
       s.enemyBullets = s.enemyBullets.filter((b) => b.x > -10);
 
       // ---- Move enemies (type-specific AI) ----
-      const now = Date.now();
       for (const e of s.enemies) {
         if (e.hp <= 0) continue;
         const dx = p.x - e.x;
@@ -1353,6 +1451,9 @@ export default function ShooterArena({
 
       // Enemies
       for (const e of s.enemies) drawEnemyByType(e);
+
+      // Allies
+      for (const a of s.allies) drawDynamicAlly(a);
 
       // Explosions
       for (const ex of s.explosions) drawExplosion(ex.x, ex.y, ex.frame);

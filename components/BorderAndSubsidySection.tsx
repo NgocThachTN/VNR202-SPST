@@ -31,7 +31,7 @@ interface EventDetail {
   slides: EventSlide[];
 }
 
-const BORDER_EVENTS: Record<string, EventDetail> = {
+const HISTORICAL_EVENTS: Record<string, EventDetail> = {
   north: {
     id: 'north',
     title: 'Biên giới phía Bắc (1979-1989)',
@@ -178,6 +178,81 @@ const BORDER_EVENTS: Record<string, EventDetail> = {
           'Ngăn chặn sự trỗi dậy của các tàn quân diệt chủng.',
           'Rút quân toàn bộ năm 1989 sau khi bạn đã vững mạnh.',
           'Biểu tượng bất diệt của tình đoàn kết quốc tế cao cả.'
+        ]
+      }
+    ]
+  },
+  subsidy: {
+    id: 'subsidy',
+    title: 'Ký ức Thời Bao Cấp (1975-1986)',
+    accent: '#DA251D',
+    slides: [
+      {
+        title: 'Khủng hoảng & Tem phiếu',
+        subtitle: 'Giai đoạn 1975 - 1985',
+        highlight: 'Khó khăn bộn bề',
+        image: '/images/lam-phat-bao-cap.jpg',
+        imageCaption: 'Cảnh người dân chen chúc mua lương thực bằng tem phiếu thời bao cấp.',
+        content: [
+          'Sau ngày thống nhất, cả nước bước vào thời kỳ quá độ. Tuy nhiên, việc rập khuôn cơ chế quản lý kinh tế tập trung quan liêu, bao cấp trong thời gian quá dài đã đẩy nền kinh tế vào bế tắc trầm trọng.',
+          'Mọi nhu yếu phẩm từ gạo, thịt, vải vóc đến chất đốt đều được phân phối qua hệ thống tem phiếu. Cơ chế cứng nhắc này triệt tiêu hoàn toàn động lực lao động, sản xuất đình đốn, lạm phát phi mã, đời sống nhân dân cực kỳ gian khổ.',
+        ],
+        bullets: [
+          'Chế độ tem phiếu chi phối mọi mặt đời sống sinh hoạt.',
+          'Sản xuất đình trệ, hàng hóa thiết yếu vô cùng khan hiếm.',
+          'Lạm phát phi mã, có lúc lên tới ngưỡng hơn 700% (năm 1986).',
+          'Sức ép từ thực tiễn đòi hỏi Đảng phải dũng cảm nhìn thẳng vào sự thật.'
+        ]
+      },
+      {
+        title: 'Đột phá Khoán 100',
+        subtitle: 'Tháng 1 năm 1981',
+        highlight: 'Trói buộc được nới lỏng',
+        image: '/images/khoan-100.jpg',
+        imageCaption: 'Niềm vui của nông dân khi được tự chủ sản xuất trên mảnh ruộng khoán.',
+        content: [
+          'Để tháo gỡ khó khăn trong nông nghiệp - mặt trận hàng đầu, Ban Bí thư TW Đảng ban hành Chỉ thị 100 (Khoán 100). Đây là bước đột phá táo bạo từ cơ sở, cho phép khoán sản phẩm trực tiếp đến nhóm và cá nhân người lao động.',
+          'Khoán 100 đã khơi dậy mạnh mẽ sự hăng hái lao động của bà con nông dân. Từ chỗ làm chung, hưởng chung dẫn đến ỷ lại, người nông dân nay đã gắn bó máu thịt với sản phẩm mình làm ra, góp phần giải quyết một bước tình trạng thiếu lương thực thiết yếu.',
+        ],
+        bullets: [
+          'Phá vỡ cơ chế làm ăn tập thể kém hiệu quả trong nông nghiệp.',
+          'Giao quyền tự chủ một phần cho người lao động.',
+          'Tạo ra động lực to lớn, khôi phục lại sinh khí nông thôn.',
+          'Bước "xé rào" quan trọng chuẩn bị cho cơ chế Khoán 10 sau này.'
+        ]
+      },
+      {
+        title: 'Cú sốc Giá - Lương - Tiền',
+        subtitle: 'Năm 1985',
+        highlight: 'Bài học xương máu',
+        image: '/images/doi-tien.jpg',
+        imageCaption: 'Kỳ đổi tiền năm 1985 gây ra nhiều biến động lớn chưa từng có trên thị trường.',
+        content: [
+          'Tháng 6/1985, Hội nghị TW 8 (khóa V) quyết định dứt khoát xóa bỏ cơ chế bao cấp, lấy Giá - Lương - Tiền làm khâu đột phá. Đây là một chủ trương đúng đắn nhằm bước đầu thừa nhận nền kinh tế hàng hóa, hạch toán kinh doanh.',
+          'Tuy nhiên, sai lầm trong các biện pháp thực thi, đặc biệt là cuộc đổi tiền vội vã tháng 9/1985, đã gây phản tác dụng. Lạm phát bùng nổ vượt tầm kiểm soát, vật giá leo thang từng ngày. Bài học xương máu này là cái giá phải trả để đổi lấy tư duy kinh tế mới.',
+        ],
+        bullets: [
+          'Hội nghị TW 8 chính thức quyết định bãi bỏ chế độ bao cấp.',
+          'Sự kiện đổi tiền 1985 tạo ra cú sốc lớn cho lưu thông phân phối.',
+          'Lạm phát bùng nổ, giá cả leo thang không kiểm soát.',
+          'Một bước lùi tạm thời nhưng là chất xúc tác mạnh mẽ cho Đổi Mới.'
+        ]
+      },
+      {
+        title: 'Sản xuất bung ra - Mở đường Đổi Mới',
+        subtitle: 'Năm 1986',
+        highlight: 'Đêm trước Đổi Mới',
+        image: '/images/san-xuat-bung-ra.jpg',
+        imageCaption: 'Hoạt động kinh tế tư nhân, tiểu thủ công nghiệp bắt đầu nhộn nhịp trở lại.',
+        content: [
+          'Giữa bóp nghẹt khủng hoảng, Kết luận của Bộ Chính trị (tháng 8/1986) do Cố Tổng Bí thư Trường Chinh chủ trì đã tạo nên bước ngoặt lịch sử. Đảng đã dũng cảm thẳng thắn thừa nhận nền kinh tế nước ta tồn tại cấu trúc hàng hóa nhiều thành phần trong thời kỳ quá độ.',
+          'Châm ngôn "Sản xuất bung ra" trở thành luồng sinh khí mới. Sự lột xác toàn diện trong tư duy lý luận kinh tế đã dọn đường trực tiếp cho Đại hội VI (12/1986) - Đại hội của Đổi Mới, chính thức đưa đất nước thoát khỏi đêm dài gian khó.',
+        ],
+        bullets: [
+          'Kết luận Bộ Chính trị (8/1986) là bước lột xác quyết định về tư duy.',
+          'Thẳng thắn thừa nhận kinh tế hàng hóa nhiều thành phần.',
+          'Cởi trói pháp lý cho các năng lực sản xuất trong xã hội.',
+          'Tiền đề trực tiếp dẫn tới Đường lối Đổi Mới toàn diện tại Đại hội VI.'
         ]
       }
     ]
@@ -386,53 +461,79 @@ export default function BorderAndSubsidySection() {
               Hai Cuộc Chiến Tranh Bảo Vệ Biên Giới
             </h3>
             
-            <div className="relative aspect-[3/4] bg-[#E3D6C1] border-2 border-[#2C2A29] p-4 flex flex-col items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 opacity-20 pointer-events-none">
-                <Image 
-                  src="/images/thong_nhat_1975.png" 
-                  alt="map texture" 
-                  fill 
-                  className="object-cover grayscale sepia"
-                />
-              </div>
-              <div className="w-1/2 h-4/5 border-4 border-[#4A5D23] bg-[#D1C2A5]/80 relative z-0 flex items-center justify-center">
-                <span className="text-[#4A5D23]/30 font-serif-heading text-4xl font-black rotate-45">LÃNH THỔ</span>
+            <div className="relative aspect-[3/4] sm:aspect-[4/5] bg-[#E8D9C5] border-2 border-[#2C2A29] p-4 flex flex-col items-center justify-center overflow-hidden shadow-inner">
+              {/* Vùng Lãnh Thổ (Bản Đồ) */}
+              <div className="absolute inset-0 pointer-events-none flex items-center justify-center p-4">
+                <div className="relative w-full h-full">
+                  <Image 
+                    src="/images/vietnam_map.svg"
+                    alt="Bản đồ Việt Nam" 
+                    fill 
+                    className="object-contain drop-shadow-[4px_4px_0px_rgba(44,42,41,0.5)] opacity-90"
+                  />
+                </div>
               </div>
               
               {/* Pulsing dots for borders */}
-              <div className="absolute top-[20%] right-[45%] z-10 group">
+              {/* Biên Giới Phía Bắc */}
+              <div className="absolute top-[18%] right-[42%] z-10 group">
                 <button 
-                  className="w-8 h-8 bg-[#DA251D] rounded-full border-2 border-white cursor-pointer hover:scale-125 transition-transform shadow-lg relative flex items-center justify-center"
-                  onClick={() => setActiveEvent(BORDER_EVENTS.north)}
+                  className="w-8 h-8 md:w-10 md:h-10 bg-[#DA251D] rounded-full border-2 border-white cursor-pointer hover:scale-125 transition-transform shadow-lg relative flex items-center justify-center"
+                  onClick={() => setActiveEvent(HISTORICAL_EVENTS.north)}
                 >
                   <span className="absolute inset-0 rounded-full animate-ping bg-[#DA251D] opacity-75"></span>
-                  <MapPin size={16} className="text-white" />
+                  <MapPin size={18} className="text-white" />
                 </button>
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#FAF3EB] text-[#2C2A29] text-[10px] font-black px-2 py-1 border-2 border-[#2C2A29] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]">
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#FAF3EB] text-[#2C2A29] text-[10px] md:text-xs font-black px-2 py-1 border-2 border-[#2C2A29] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]">
                   PHÍA BẮC (1979-1989)
                 </div>
               </div>
 
-              <div className="absolute bottom-[20%] left-[40%] z-10 group">
+              {/* Biên Giới Tây Nam */}
+              <div className="absolute bottom-[30%] left-[30%] z-10 group">
                 <button 
-                  className="w-8 h-8 bg-[#1a5276] rounded-full border-2 border-white cursor-pointer hover:scale-125 transition-transform shadow-lg relative flex items-center justify-center"
-                  onClick={() => setActiveEvent(BORDER_EVENTS.south)}
+                  className="w-8 h-8 md:w-10 md:h-10 bg-[#1a5276] rounded-full border-2 border-white cursor-pointer hover:scale-125 transition-transform shadow-lg relative flex items-center justify-center"
+                  onClick={() => setActiveEvent(HISTORICAL_EVENTS.south)}
                 >
                   <span className="absolute inset-0 rounded-full animate-ping bg-[#1a5276] opacity-75"></span>
-                  <MapPin size={16} className="text-white" />
+                  <MapPin size={18} className="text-white" />
                 </button>
-                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-[#FAF3EB] text-[#2C2A29] text-[10px] font-black px-2 py-1 border-2 border-[#2C2A29] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]">
+                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-[#FAF3EB] text-[#2C2A29] text-[10px] md:text-xs font-black px-2 py-1 border-2 border-[#2C2A29] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]">
                   TÂY NAM (1977-1979)
                 </div>
               </div>
 
-              <div className="absolute top-4 right-4 bg-[#DA251D] text-white text-[9px] font-sans font-black px-2 py-1 flex items-center gap-1">
-                <Zap size={10} /> CLICK VÀO ĐIỂM ĐỂ XEM CHI TIẾT
+              {/* Quần Đảo Hoàng Sa */}
+              <div className="absolute top-[48%] right-[25%] z-10 group">
+                <div 
+                  className="w-4 h-4 bg-[#F4D03F] rounded-full border-2 border-[#2C2A29] cursor-help hover:scale-125 transition-transform shadow-lg relative flex items-center justify-center"
+                >
+                  <span className="absolute inset-0 rounded-full animate-ping bg-[#F4D03F] opacity-75"></span>
+                </div>
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#FAF3EB] text-[#2C2A29] text-[10px] font-black px-2 py-1 border-2 border-[#2C2A29] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]">
+                  QUẦN ĐẢO HOÀNG SA
+                </div>
+              </div>
+
+              {/* Quần Đảo Trường Sa */}
+              <div className="absolute bottom-[20%] right-[15%] z-10 group">
+                <div 
+                  className="w-4 h-4 bg-[#F4D03F] rounded-full border-2 border-[#2C2A29] cursor-help hover:scale-125 transition-transform shadow-lg relative flex items-center justify-center"
+                >
+                  <span className="absolute inset-0 rounded-full animate-ping bg-[#F4D03F] opacity-75"></span>
+                </div>
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#FAF3EB] text-[#2C2A29] text-[10px] font-black px-2 py-1 border-2 border-[#2C2A29] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]">
+                  QUẦN ĐẢO TRƯỜNG SA
+                </div>
+              </div>
+
+              <div className="absolute top-4 right-4 bg-[#DA251D] text-white text-[9px] font-sans font-black px-2 py-1 flex items-center gap-1 shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]">
+                <Zap size={10} /> CLICK CHẤM ĐỂ XEM CHI TIẾT
               </div>
             </div>
 
             <div className="mt-6 flex items-center justify-between text-[#5C554E] text-xs font-serif-body italic">
-              <p>* Bản đồ khái quát các hướng tấn công xâm lược của địch</p>
+              <p>* Bản đồ khái quát chủ quyền và các điểm nóng bảo vệ Tổ Quốc</p>
               <ArrowRight size={14} />
             </div>
           </div>
@@ -444,29 +545,45 @@ export default function BorderAndSubsidySection() {
                 Ký ức Thời Bao Cấp
               </h3>
               <p className="font-serif-body text-[#5C554E] mb-6 text-justify">
-                Giai đoạn này đất nước đồng thời thực hiện hai nhiệm vụ chiến lược: Xây dựng CNXH và Bảo vệ Tổ quốc. Tuy nhiên, do hậu quả nặng nề của chiến tranh và các sai lầm chủ quan, nền kinh tế rơi vào khủng hoảng trầm trọng.
+                Giai đoạn này đất nước đồng thời thực hiện hai nhiệm vụ chiến lược: Xây dựng CNXH và Bảo vệ Tổ quốc. Tuy nhiên, việc rập khuôn cơ chế kinh tế quan liêu, bao cấp trong thời gian dài đã đẩy nền kinh tế vào bế tắc trước khi Đảng dũng cảm tìm ra hướng Đổi Mới.
               </p>
               
-              <div className="bg-[#E3D6C1] border-2 border-[#2C2A29] p-6 text-center transform rotate-1 relative">
-                <div className="absolute -top-3 -left-3 bg-[#DA251D] text-white p-2 border-2 border-[#2C2A29] shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]">
+              <div 
+                className="bg-[#E3D6C1] border-2 border-[#2C2A29] p-6 text-center transform scale-100 hover:scale-[1.02] hover:-rotate-1 transition-all cursor-pointer relative shadow-[4px_4px_0px_0px_rgba(44,42,41,1)] group"
+                onClick={() => setActiveEvent(HISTORICAL_EVENTS.subsidy)}
+              >
+                <div className="absolute -top-3 -left-3 bg-[#DA251D] text-white p-2 border-2 border-[#2C2A29] shadow-[2px_2px_0px_0px_rgba(44,42,41,1)] group-hover:rotate-12 transition-transform">
                   <Calendar size={16} />
                 </div>
-                <div className="border border-dashed border-[#5C554E] p-4">
-                  <h4 className="font-bold text-xl uppercase tracking-widest text-[#2C2A29] mb-4 border-b border-[#5C554E] inline-block pb-1">Sổ Lương Thực</h4>
-                  <p className="text-[10px] font-serif-body mb-4 italic">Kỷ vật minh chứng cho một thời kỳ gian khổ nhưng đầy hy vọng</p>
-                  <div className="flex gap-4 justify-center mt-4">
-                    <div className="w-16 h-20 bg-[#F5E6D3] border-2 border-[#2C2A29] flex flex-col items-center justify-center font-bold text-[#DA251D] opacity-80 cursor-help hover:opacity-100 hover:scale-105 transition-all shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]" title="Phiếu Mua Gạo">
+                
+                <div className="border border-dashed border-[#5C554E] p-4 bg-[#FAF3EB]/50 group-hover:bg-[#FAF3EB] transition-colors relative">
+                  <h4 className="font-bold text-xl uppercase tracking-widest text-[#2C2A29] mb-2 border-b-2 border-[#2C2A29] inline-block pb-1">
+                    Hồ Sơ Bao Cấp
+                  </h4>
+                  <p className="text-[11px] font-serif-body mb-6 italic text-[#5C554E]">
+                    Nhấn vào để xem đầy đủ ký ức lịch sử giai đoạn 1975 - 1986
+                  </p>
+                  
+                  {/* Decorative tickets */}
+                  <div className="flex gap-4 justify-center mt-2 relative">
+                    <div className="w-16 h-20 bg-[#F5E6D3] border-2 border-[#2C2A29] flex flex-col items-center justify-center font-bold text-[#DA251D] shadow-[2px_2px_0px_0px_rgba(44,42,41,1)] -rotate-6">
                       <span className="text-[10px] uppercase">GẠO</span>
                       <span className="text-xs">13kg</span>
                     </div>
-                    <div className="w-16 h-20 bg-[#F5E6D3] border-2 border-[#2C2A29] flex flex-col items-center justify-center font-bold text-[#2C2A29] opacity-80 cursor-help hover:opacity-100 hover:scale-105 transition-all shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]" title="Phiếu Mua Vải">
+                    <div className="w-16 h-20 bg-[#F5E6D3] border-2 border-[#2C2A29] flex flex-col items-center justify-center font-bold text-[#2C2A29] shadow-[2px_2px_0px_0px_rgba(44,42,41,1)] rotate-3 z-10">
                       <span className="text-[10px] uppercase">VẢI</span>
                       <span className="text-xs">5m</span>
                     </div>
-                    <div className="w-16 h-20 bg-[#F5E6D3] border-2 border-[#2C2A29] flex flex-col items-center justify-center font-bold text-[#4A5D23] opacity-80 cursor-help hover:opacity-100 hover:scale-105 transition-all shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]" title="Phiếu Mua Thịt">
+                    <div className="w-16 h-20 bg-[#F5E6D3] border-2 border-[#2C2A29] flex flex-col items-center justify-center font-bold text-[#4A5D23] shadow-[2px_2px_0px_0px_rgba(44,42,41,1)] -rotate-3">
                       <span className="text-[10px] uppercase">THỊT</span>
                       <span className="text-xs">0.5kg</span>
                     </div>
+                  </div>
+
+                  <div className="mt-8">
+                    <span className="inline-flex items-center gap-2 px-5 py-2 bg-[#2C2A29] text-white text-[11px] font-sans font-black uppercase tracking-widest group-hover:bg-[#DA251D] transition-colors shadow-[2px_2px_0px_0px_rgba(218,37,29,0.3)]">
+                      Mở Tư Liệu Đọc Trang Trực Tuyến <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </span>
                   </div>
                 </div>
               </div>
@@ -474,7 +591,7 @@ export default function BorderAndSubsidySection() {
             
             <div className="mt-8 pt-4 border-t-2 border-[#D1C2A5]">
               <p className="text-xs italic text-[#5C554E] leading-relaxed">
-                <span className="font-black text-[#DA251D]">CHÚ Ý:</span> Tới Hội nghị TW 8 (6/1985), Đảng đã quyết định xóa bỏ cơ chế tập trung quan liêu bao cấp, lấy Giá - Lương - Tiền làm khâu đột phá, dọn đường cho Đổi Mới.
+                <span className="font-black text-[#DA251D]">CHÚ Ý:</span> Cơ chế quan liêu, bao cấp từng là gông cùm trói buộc nền kinh tế, buộc bộ máy lãnh đạo từ Trung ương đến địa phương phải trăn trở thai nghén những tư duy mới để dọn đường cho Đổi Mới toàn diện.
               </p>
             </div>
           </div>

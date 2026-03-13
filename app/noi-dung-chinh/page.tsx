@@ -33,297 +33,11 @@ import {
   Link as LinkIcon,
 } from "lucide-react";
 
-/* ═══════════════════════════════════════════════════════════════════ */
-/*  DATA                                                              */
-/* ═══════════════════════════════════════════════════════════════════ */
-
-interface Milestone {
-  year: string;
-  label: string;
-  icon: React.ReactNode;
-  accent: string;
-  headline: string;
-  body: string;
-  highlight?: string;
-  image: string;
-  imageCaption: string;
-  detailContent: string[];
-  detailBullets: string[];
-  sourceLink?: string;
-}
-
-const PHASE_1: Milestone[] = [
-  {
-    year: "1975",
-    label: "30/4",
-    icon: <Flag size={28} />,
-    accent: "#DA251D",
-    headline: "Thống Nhất Đất Nước",
-    body: "Chiến dịch Hồ Chí Minh toàn thắng, giải phóng miền Nam, chính thức khép lại 21 năm kháng chiến chống Mỹ đầy gian khổ và hy sinh.",
-    highlight: "Sức mạnh tổng hợp",
-    image: "/images/thong_nhat_1975.png",
-    imageCaption: "Niềm hân hoan của nhân dân trong ngày đất nước hoàn toàn giải phóng, non sông thu về một mối.",
-    detailContent: [
-      "Sau đại thắng mùa Xuân năm 1975, nền hòa bình và độc lập của Việt Nam cuối cùng đã được thiết lập. Thắng lợi vĩ đại này là kết tinh của máu, nước mắt và tinh thần kiên cường của toàn dân tộc suốt hơn 2 thập kỷ.",
-      "Về mặt chính trị, sự thống nhất và độc lập đã tạo ra một 'Sức mạnh tổng hợp' vô cùng to lớn từ lòng dân. Sự đoàn kết toàn dân tộc được củng cố vững chắc hơn bao giờ hết, là bệ phóng tinh thần cho công cuộc tái thiết đất nước.",
-      "Tuy nhiên, niềm vui độc lập đan xen với những thử thách khổng lồ. Đất nước bước vào thời kỳ quá độ lên chủ nghĩa xã hội từ một nền sản xuất nhỏ, nông nghiệp lạc hậu. Hậu quả chiến tranh để lại tàn dư nặng nề, cơ sở hạ tầng bị tàn phá, ruộng đồng đầy rẫy bom mìn, hàng triệu người mang thương tật, đòi hỏi một nguồn lực khổng lồ để khắc phục.",
-      "Về mặt quốc tế, bối cảnh phức tạp cũng đặt ra nhiều chông gai. Sự rạn nứt bên trong phe xã hội chủ nghĩa phần nào bộc lộ những khó khăn về mô hình phát triển. Cùng lúc đó, các thế lực thù địch tiếp tục âm mưu bao vây, cấm vận và phá hoại sự phát triển của Việt Nam non trẻ."
-    ],
-    detailBullets: [
-      "Toàn thắng ngày 30/4/1975 mang lại hòa bình, độc lập và tự do.",
-      "Chính trị: Tạo ra 'Sức mạnh tổng hợp' từ lòng dân và đoàn kết toàn dân tộc.",
-      "Kinh tế: Quá độ từ nền sản xuất nhỏ, trình độ kinh tế - xã hội rất thấp.",
-      "Xã hội: Hậu quả chiến tranh bom đạn nặng nề, đòi hỏi nguồn lực khổng lồ tái thiết.",
-      "Quốc tế: Phe XHCN rạn nứt, các thế lực thù địch bao vây cấm vận."
-    ],
-    sourceLink: "https://tulieuvankien.dangcongsan.vn/",
-  },
-  {
-    year: "1975",
-    label: "Tháng 8",
-    icon: <Star size={28} />,
-    accent: "#c0392b",
-    headline: "Hội nghị TW 24",
-    body: "Ban Chấp hành Trung ương Đảng khóa III họp Hội nghị lần thứ 24, đề ra đường lối chiến lược hoàn thành thống nhất nước nhà.",
-    highlight: "Quyết sách cực kỳ cấp bách",
-    image: "/images/hoi_nghi_tw24.png",
-    imageCaption: "Hội nghị Trung ương 24 khóa III đã đưa ra quyết sách then chốt về việc thống nhất đất nước.",
-    detailContent: [
-      "Tháng 8/1975, Ban Chấp hành Trung ương Đảng khóa III tiến hành Hội nghị lần thứ 24. Hội nghị nhận định rằng, sau khi giải phóng, nước ta vẫn tồn tại hai chính quyền: Chính phủ Việt Nam Dân chủ Cộng hòa (miền Bắc) và Chính phủ Cách mạng lâm thời Cộng hòa miền Nam Việt Nam (miền Nam).",
-      "Hội nghị chủ trương: Hoàn thành thống nhất nước nhà và đưa cả nước tiến nhanh, tiến mạnh, tiến vững chắc lên chủ nghĩa xã hội. Đây không chỉ là nhu cầu chính trị mà là quy luật khách quan của cách mạng.",
-      "Theo đó, miền Bắc tiếp tục xây dựng, phát triển CNXH và hoàn thiện quan hệ sản xuất XHCN. Đồng thời, miền Nam vừa tiến hành cải tạo, vừa xây dựng chủ nghĩa xã hội.",
-      "Thống nhất đất nước về mặt Nhà nước càng sớm sẽ càng phát huy sức mạnh mới của dân tộc, đồng thời ngăn ngừa và phá tan triệt để các âm mưu chia rẽ của các thế lực phản động trong và ngoài nước."
-    ],
-    detailBullets: [
-      "Hội nghị TW 24 khóa III họp tháng 8/1975.",
-      "Chủ trương định hướng: Hoàn thành thống nhất nước nhà về mặt nhà nước.",
-      "Miền Bắc: Tiếp tục xây dựng CNXH, hoàn thiện quan hệ sản xuất.",
-      "Miền Nam: Tiến hành cải tạo và xây dựng CNXH đồng thời.",
-      "Ý nghĩa: Phát huy sức mạnh, phá tan âm mưu chia rẽ của thế lực thù địch."
-    ],
-    sourceLink: "https://tulieuvankien.dangcongsan.vn/van-kien-dang-toan-tap/tap-36-1975-6019",
-  },
-  {
-    year: "1975",
-    label: "Tháng 11",
-    icon: <Landmark size={28} />,
-    accent: "#e74c3c",
-    headline: "Hội nghị Hiệp thương Bắc – Nam",
-    body: "Hai đoàn đại biểu từ miền Bắc và miền Nam tiến hành hội nghị lịch sử tại Sài Gòn, thống nhất quan điểm tổ chức Tổng tuyển cử chung.",
-    highlight: "Đồng lòng thống nhất",
-    image: "/images/hoi_nghi_hiep_thuong.png",
-    imageCaption: "Quang cảnh trang nghiêm của Hội nghị Hiệp thương chính trị tổ chức tại Sài Gòn.",
-    detailContent: [
-      "Quá trình chuẩn bị cho sự hợp nhất về mặt Nhà nước diễn ra hết sức khẩn trương và dân chủ. Ngày 27/10/1975, Ủy ban Thường vụ Quốc hội Việt Nam Dân chủ Cộng hòa đã cử đoàn đại biểu 25 thành viên do Chủ tịch Trường Chinh làm Trưởng đoàn.",
-      "Chỉ ít ngày sau, ngày 05-06/11/1975, Ủy ban Trung ương Mặt trận Dân tộc giải phóng miền Nam Việt Nam cũng cử đoàn 25 đại biểu do đồng chí Phạm Hùng lãnh đạo.",
-      "Từ ngày 15 đến 21/11/1975, Hội nghị Hiệp thương chính trị giữa hai đoàn đại biểu Bắc - Nam đã diễn ra tại Sài Gòn. Hội nghị thảo luận sôi nổi và đạt được sự nhất trí tuyệt đối.",
-      "Hội nghị khẳng định sự cần thiết tất yếu của việc thống nhất về mặt Nhà nước thông qua một cuộc Tổng tuyển cử chung trong cả nước. Nguyên tắc bầu cử được thống nhất là: dân chủ, phổ thông, bình đẳng, trực tiếp và bỏ phiếu kín."
-    ],
-    detailBullets: [
-      "Đoàn miền Bắc (27/10) do đồng chí Trường Chinh làm Trưởng đoàn.",
-      "Đoàn miền Nam (05-06/11) do đồng chí Phạm Hùng làm Trưởng đoàn.",
-      "Hội nghị Hiệp thương diễn ra tại Sài Gòn từ 15 đến 21/11/1975.",
-      "Khẳng định sự cần thiết phải thống nhất đất nước về mặt nhà nước.",
-      "Chốt phương thức qua Tổng tuyển cử: Phổ thông, bình đẳng, trực tiếp, bỏ phiếu kín."
-    ],
-    sourceLink: "https://tulieuvankien.dangcongsan.vn/ho-so-su-kien-nhan-chung/su-kien-va-nhan-chung/hoi-nghi-hiep-thuong-chinh-tri-thong-nhat-dat-nuoc-3687",
-  },
-  {
-    year: "1976",
-    label: "25/4",
-    icon: <Vote size={28} />,
-    accent: "#DA251D",
-    headline: "Tổng Tuyển Cử Lịch Sử",
-    body: "Lần đầu tiên sau nhiều thập kỷ chia cắt, toàn thể nhân dân hai miền Nam - Bắc cùng nô nức cầm lá phiếu bầu ra Quốc hội chung của nước Việt Nam.",
-    highlight: "Ngày hội non sông",
-    image: "/images/tong_tuyen_cu_1976.png",
-    imageCaption: "Cử tri trên khắp mọi miền tổ quốc tin tưởng bỏ lá phiếu bầu ra Quốc hội chung.",
-    detailContent: [
-      "Vào ngày 25/04/1976, sự kiện trọng đại được mong chờ nhất đã diễn ra: Cuộc Tổng tuyển cử bầu Quốc hội chung cho cả nước. Đây là một ngày hội lớn của non sông, khi hàng chục triệu cử tri từ Ải Nam Quan đến Mũi Cà Mau được thực hiện quyền làm chủ thực sự.",
-      "Cuộc bầu cử tuân thủ nghiêm ngặt các nguyên tắc dân chủ đã được Hội nghị Hiệp thương đề ra trước đó. Ý chí mạnh mẽ của nhân dân không chỉ được thể hiện qua tỷ lệ đi bầu kỷ lục mà còn qua niềm hy vọng cháy bỏng về một tương lai thịnh vượng.",
-      "Sự thành công của cuộc Tổng tuyển cử đã tạo nền tảng pháp lý tối cao cho việc hoàn thiện bộ máy chính quyền Nhà nước thống nhất, chấm dứt hoàn toàn về mặt pháp lý trạng thái tồn tại hai chính quyền."
-    ],
-    detailBullets: [
-      "Tiến hành ngày 25/04/1976 trên phạm vi toàn quốc.",
-      "Cuộc Tổng tuyển cử bầu ra Quốc hội nước Việt Nam thống nhất.",
-      "Thực hiện theo nguyên tắc dân chủ, phổ thông, trực tiếp, bỏ phiếu kín.",
-      "Đánh dấu ngày hội lớn của toàn dân, thể hiện ý chí làm chủ.",
-      "Tạo cơ sở pháp lý vững chắc cho việc kiện toàn bộ máy Nhà nước."
-    ],
-    sourceLink: "https://quochoi.vn/gioithieu/Pages/qua-trinh-phat-trien.aspx?ItemID=18",
-  },
-  {
-    year: "1976",
-    label: "Đại hội IV",
-    icon: <Award size={28} />,
-    accent: "#c0392b",
-    headline: "Xây dựng CNXH & Bảo vệ Tổ quốc",
-    body: "Đại hội IV của Đảng chính thức vạch ra đường lối tiến lên chủ nghĩa xã hội trên phạm vi cả nước sau khi hoàn thành thống nhất Nhà nước.",
-    highlight: "Giai đoạn bản lề",
-    image: "/images/bo_chinh_tri.png",
-    imageCaption: "Các nhà lãnh đạo Đảng và Nhà nước bàn thảo đường lối kiến thiết đất nước tại Đại hội IV.",
-    detailContent: [
-      "Tiếp nối thành công của việc kiện toàn bộ máy Nhà nước thống nhất, Đại hội đại biểu toàn quốc lần thứ IV của Đảng được triệu tập. Đây là Đại hội có ý nghĩa lịch sử vô cùng to lớn đối với tương lai dân tộc.",
-      "Đại hội IV có sứ mệnh vừa tổng kết những kinh nghiệm quý báu của cuộc kháng chiến vĩ đại vừa qua, vừa phác thảo cương lĩnh, đường lối cho cách mạng Việt Nam trong giai đoạn hoàn toàn mới.",
-      "Nhiệm vụ trung tâm xuyên suốt là 'Đảng lãnh đạo cả nước xây dựng chủ nghĩa xã hội và bảo vệ Tổ quốc'. Đại hội đã đề ra đường lối chung, nhấn mạnh việc thực hiện đồng thời 3 cuộc cách mạng (quan hệ sản xuất, khoa học kỹ thuật, tư tưởng văn hóa).",
-      "Tuy nhiên, do bối cảnh khó khăn chồng chất, vừa phải tái thiết sau chiến tranh, vừa phải chống lại sự cấm vận và chiến tranh biên giới, quá trình thực hiện Nghị quyết Đại hội gặp muôn vàn thách thức."
-    ],
-    detailBullets: [
-      "Đại hội IV định hình con đường tiến lên CNXH trên phạm vi cả nước.",
-      "Nhiệm vụ kép: Xây dựng CNXH gắn liền với Bảo vệ Tổ quốc.",
-      "Tổng kết kinh nghiệm kháng chiến và đề ra chiến lược mới.",
-      "Đẩy mạnh 3 cuộc cách mạng: Quan hệ sản xuất, KH-KT, tư tưởng văn hóa.",
-      "Luôn phải đối mặt với khó khăn chồng chất từ cấm vận và hậu quả chiến tranh."
-    ],
-    sourceLink: "https://tulieuvankien.dangcongsan.vn/ban-chap-hanh-trung-uong-dang/dai-hoi-dang/lan-thu-iv",
-  }
-];
-
-const PHASE_2: Milestone[] = [
-  {
-    year: "1982",
-    label: "Tháng 3",
-    icon: <Landmark size={28} />,
-    accent: "#1a5276",
-    headline: "Đại hội V",
-    body: "Đại hội V của Đảng tiếp tục khẳng định đường lối chung, đồng thời đánh giá khách quan về những khó khăn trong chặng đường đầu tiên của thời kỳ quá độ.",
-    highlight: "Nhìn nhận thực tế",
-    image: "/images/san_xuat_kinh_te.png",
-    imageCaption: "Hoạt động sản xuất kinh tế thời kỳ đầu được đẩy mạnh để giải quyết khó khăn đời sống.",
-    detailContent: [
-      "Đại hội đại biểu toàn quốc lần thứ V của Đảng Cộng sản Việt Nam họp từ ngày 27-31/03/1982 tại Hà Nội. Đại hội diễn ra trong bối cảnh nền kinh tế - xã hội đang gặp rất nhiều khó khăn và mất cân đối nghiêm trọng.",
-      "Đại hội V tiếp tục khẳng định hai nhiệm vụ chiến lược: Xây dựng thành công chủ nghĩa xã hội và sẵn sàng chiến đấu, bảo vệ vững chắc Tổ quốc Việt Nam XHCN. Hai nhiệm vụ này có quan hệ mật thiết và hỗ trợ lẫn nhau.",
-      "Đại hội đã chỉ ra rằng nước ta đang ở chặng đường đầu tiên của thời kỳ quá độ. Trong chặng đường này, nền kinh tế còn rất yếu kém, nông nghiệp và công nghiệp nhẹ chưa đáp ứng đủ nhu cầu thiết yếu.",
-      "Một quyết định quan trọng của Đại hội V là coi nông nghiệp là mặt trận hàng đầu, tập trung sức giải quyết vấn đề lương thực, thực phẩm và hàng tiêu dùng. Đây là bước điều chỉnh chiến lược quan trọng so với trước đây."
-    ],
-    detailBullets: [
-      "Đại hội V họp từ 27-31/03/1982, đối diện với muôn vàn khó khăn kinh tế.",
-      "Tiếp tục thực hiện 2 nhiệm vụ chiến lược: Xây dựng CNXH và Bảo vệ Tổ quốc.",
-      "Khẳng định nước ta đang ở chặng đường đầu tiên của thời kỳ quá độ.",
-      "Điều chỉnh chiến lược: Coi nông nghiệp là mặt trận hàng đầu.",
-      "Tập trung giải quyết vấn đề lương thực, thực phẩm và hàng tiêu dùng."
-    ],
-    sourceLink: "https://tulieuvankien.dangcongsan.vn/ban-chap-hanh-trung-uong-dang/dai-hoi-dang/lan-thu-v",
-  },
-  {
-    year: "1982-1986",
-    label: "Thực Hiện",
-    icon: <TrendingUp size={28} />,
-    accent: "#2c3e50",
-    headline: "Quá trình thực hiện Nghị quyết",
-    body: "Quá trình thực hiện Nghị quyết Đại hội V gặp vô vàn trở ngại do cơ chế bao cấp rập khuôn, lạm phát phi mã và đời sống nhân dân cực kỳ khó khăn.",
-    highlight: "Khủng hoảng & bế tắc",
-    image: "/images/chien_dau_bien_gioi.png",
-    imageCaption: "Bên cạnh khó khăn kinh tế, quân và dân ta vẫn kiên cường bảo vệ biên cương.",
-    detailContent: [
-      "Quá trình đưa Nghị quyết Đại hội V vào cuộc sống là một cuộc vật lộn cam go. Giai đoạn 1982-1986, đất nước rơi vào khủng hoảng kinh tế - xã hội trầm trọng nhất kể từ sau khi thống nhất.",
-      "Lạm phát phi mã (lên đến con số hơn 700% vào năm 1986), sản xuất đình đốn, phân phối lưu thông ách tắc. Chế độ tem phiếu bao cấp bộc lộ sự cứng nhắc, triệt tiêu động lực và kìm hãm sức sản xuất.",
-      "Hàng hóa thiết yếu cực kỳ khan hiếm, đời sống của người lao động, cán bộ công nhân viên và các lực lượng vũ trang vô cùng khó khăn. Áp lực từ thực tế sinh động đòi hỏi Đảng phải dũng cảm nhìn thẳng vào sự thật, đánh giá đúng sự thật.",
-      "Sự bế tắc này đã tạo ra sức ép khổng lồ từ thực tiễn cơ sở, buộc bộ máy lãnh đạo phải thai nghén những tư duy mới, nung nấu những bước đột phá nhằm cứu vãn nền kinh tế."
-    ],
-    detailBullets: [
-      "Khủng hoảng kinh tế - xã hội trầm trọng nhất kể từ sau 1975.",
-      "Lạm phát phi mã, sản xuất đình đốn, phân phối bế tắc.",
-      "Cơ chế tập trung quan liêu bao cấp triệt tiêu mọi động lực phát triển.",
-      "Đời sống nhân dân và lực lượng vũ trang vô cùng cực khổ.",
-      "Sức ép từ thực tiễn cơ sở buộc phải đổi mới cách làm."
-    ],
-    sourceLink: "https://tulieuvankien.dangcongsan.vn/",
-  },
-  {
-    year: "1986",
-    label: "Đột phá",
-    icon: <Scale size={28} />,
-    accent: "#1a5276",
-    headline: "Các bước đột phá kinh tế",
-    body: "Những bước đột phá trong tư duy kinh tế của Đảng dần hình thành, thừa nhận sản xuất hàng hóa, xóa bỏ bao cấp và mở đường cho công cuộc Đổi Mới toàn diện.",
-    highlight: "Thai nghén Đổi Mới",
-    image: "/images/bo_chinh_tri.png",
-    imageCaption: "Hội nghị Bộ Chính trị đánh dấu sự lột xác trong tư duy kinh tế, chuẩn bị cho Đại hội VI.",
-    detailContent: [
-      "Để thoát khỏi khủng hoảng, từ nỗ lực xé rào ở cơ sở đến những quyết định ở trung ương, các bước đột phá tiếp tục đổi mới kinh tế (1982-1986) đã được định hình.",
-      "Bắt đầu từ những thay đổi như 'Khoán 100' trong nông nghiệp, hay 'kế hoạch 3 phần' trong công nghiệp (1981), cho đến sự ra đời của Nghị quyết Hội nghị TW 8 (khóa V) vào tháng 6/1985 về Giá - Lương - Tiền.",
-      "Đỉnh cao của sự đột phá tư duy trước thềm Đại hội VI là Kết luận của Bộ Chính trị (tháng 8/1986). Bản Kết luận lịch sử này đã thẳng thắn thừa nhận nền kinh tế nước ta đang tồn tại cấu trúc hàng hóa nhiều thành phần.",
-      "Chủ trương cốt lõi là dứt khoát xóa bỏ cơ chế quản lý kinh tế tập trung quan liêu, bao cấp, chuyển hẳn sang hạch toán kinh doanh xã hội chủ nghĩa. Đây là bước lột xác về tư duy lý luận, dọn đường trực tiếp cho Đường lối Đổi mới toàn diện tại Đại hội VI (12/1986)."
-    ],
-    detailBullets: [
-      "Sự vận động đổi mới đi từ thực tiễn cơ sở (xé rào) lên Trung ương.",
-      "Nghị quyết TW 8 (6/1985) bước đầu giải quyết khâu Giá - Lương - Tiền.",
-      "Kết luận của Bộ Chính trị (8/1986) là bước đột phá tư duy quyết định.",
-      "Thừa nhận nền kinh tế hàng hóa nhiều thành phần.",
-      "Chủ trương dứt khoát xóa bỏ bao cấp, chuyển sang hạch toán kinh doanh."
-    ],
-    sourceLink: "https://tulieuvankien.dangcongsan.vn/ban-chap-hanh-trung-uong-dang/dai-hoi-dang/lan-thu-vi",
-  }
-];
-
-interface QuizItem {
-  question: string;
-  options: string[];
-  correctIndex: number;
-  explanation: string;
-}
-
-const quizData: QuizItem[] = [
-  // === THỐNG NHẤT ĐẤT NƯỚC (1-10) ===
-  { question: "Sau ngày 30/4/1975, nền hòa bình độc lập đã tạo ra điều gì cho cách mạng Việt Nam?", options: ["Sức mạnh quân sự", "'Sức mạnh tổng hợp' từ lòng dân", "Nền kinh tế công nghiệp", "Sự hỗ trợ của quốc tế"], correctIndex: 1, explanation: "Sự thống nhất đã tạo ra một 'Sức mạnh tổng hợp' vô cùng to lớn từ lòng dân." },
-  { question: "Hội nghị nào chốt chủ trương 'Hoàn thành thống nhất nước nhà về mặt Nhà nước'?", options: ["Hội nghị TW 24 (8/1975)", "Hội nghị TW 6 (8/1979)", "Đại hội IV (12/1976)", "Đại hội V (3/1982)"], correctIndex: 0, explanation: "Hội nghị TW 24 (8/1975) đã đưa ra quyết sách then chốt về mặt thống nhất Nhà nước." },
-  { question: "Hội nghị Hiệp thương chính trị Bắc - Nam (11/1975) diễn ra tại đâu?", options: ["Hà Nội", "Huế", "Sài Gòn", "Đà Nẵng"], correctIndex: 2, explanation: "Ngày 15 đến 21/11/1975, Hội nghị Hiệp thương chính trị hai đoàn Bắc-Nam họp tại Sài Gòn." },
-  { question: "Tổng tuyển cử bầu Quốc hội chung diễn ra vào ngày nào?", options: ["30/4/1975", "15/11/1975", "25/4/1976", "18/12/1986"], correctIndex: 2, explanation: "Ngày 25/04/1976 cuộc Tổng tuyển cử bầu Quốc hội chung đã diễn ra trên cả nước." },
-  { question: "Quốc hội khóa VI đã quyết định đổi tên nước thành gì?", options: ["Việt Nam Dân chủ Cộng hòa", "Cộng hòa Xã hội Chủ nghĩa Việt Nam", "Việt Nam Cộng hòa", "Liên bang Việt Nam"], correctIndex: 1, explanation: "Quốc hội khóa VI (7/1976) quyết định đổi tên nước thành nước Cộng hòa Xã hội Chủ nghĩa Việt Nam." },
-  { question: "Thành phố Sài Gòn được đổi tên thành gì sau ngày thống nhất?", options: ["Thành phố Thống Nhất", "Thành phố Hồ Chí Minh", "Thành phố Giải Phóng", "Thành phố Cách Mạng"], correctIndex: 1, explanation: "Sài Gòn - Gia Định được đổi tên thành Thành phố Hồ Chí Minh." },
-  { question: "Hội nghị Hiệp thương chính trị thống nhất hai miền Bắc - Nam diễn ra vào tháng/năm nào?", options: ["4/1975", "8/1975", "11/1975", "4/1976"], correctIndex: 2, explanation: "Hội nghị Hiệp thương diễn ra từ 15 đến 21/11/1975 tại Sài Gòn." },
-  { question: "Cuộc Tổng tuyển cử 25/4/1976 có bao nhiêu cử tri đi bỏ phiếu?", options: ["Khoảng 75%", "Khoảng 85%", "Khoảng 90%", "Hơn 98%"], correctIndex: 3, explanation: "Hơn 98% cử tri toàn quốc đã đi bỏ phiếu trong cuộc Tổng tuyển cử." },
-  { question: "Quốc hội khóa VI họp kỳ đầu tiên vào tháng/năm nào?", options: ["4/1976", "6/1976", "7/1976", "12/1976"], correctIndex: 2, explanation: "Quốc hội khóa VI họp phiên đầu tiên vào tháng 7/1976." },
-  { question: "Thủ đô của nước Việt Nam thống nhất được xác định là đâu?", options: ["Huế", "Sài Gòn", "Hà Nội", "Đà Nẵng"], correctIndex: 2, explanation: "Hà Nội được xác định là thủ đô của nước Cộng hòa Xã hội Chủ nghĩa Việt Nam." },
-
-  // === ĐẠI HỘI ĐẢNG IV, V (11-18) ===
-  { question: "Nhiệm vụ trung tâm được nêu tại Đại hội IV của Đảng là gì?", options: ["Chống giặc ngoại xâm", "Xây dựng CNXH và bảo vệ Tổ quốc", "Cải tạo nông nghiệp", "Mở rộng quan hệ quốc tế"], correctIndex: 1, explanation: "Nhiệm vụ xuyên suốt là 'Đảng lãnh đạo cả nước xây dựng CNXH và bảo vệ Tổ quốc'." },
-  { question: "Đại hội lần thứ IV của Đảng diễn ra vào thời gian nào?", options: ["Tháng 6/1975", "Tháng 12/1976", "Tháng 3/1982", "Tháng 12/1986"], correctIndex: 1, explanation: "Đại hội IV họp vào tháng 12/1976 tại Hà Nội." },
-  { question: "Đại hội V (3/1982) xác định đâu là 'mặt trận hàng đầu'?", options: ["Giáo dục đào tạo", "Công nghiệp nặng", "Nông nghiệp", "Quốc phòng an ninh"], correctIndex: 2, explanation: "Đại hội V quyết định coi nông nghiệp là mặt trận hàng đầu." },
-  { question: "Kế hoạch 5 năm lần thứ nhất (sau thống nhất) kéo dài từ năm nào đến năm nào?", options: ["1975-1980", "1976-1980", "1976-1981", "1978-1983"], correctIndex: 2, explanation: "Kế hoạch 5 năm lần thứ nhất 1976-1981 tập trung xây dựng CNXH trên phạm vi cả nước." },
-  { question: "Đại hội IV chủ trương ưu tiên phát triển ngành nào?", options: ["Nông nghiệp", "Thương mại", "Công nghiệp nặng", "Dịch vụ"], correctIndex: 2, explanation: "Đại hội IV chủ trương ưu tiên phát triển công nghiệp nặng, đây là 1 trong những sai lầm chủ quan." },
-  { question: "Đại hội V xác nhận 2 nhiệm vụ chiến lược nào?", options: ["Xây dựng CNXH và bảo vệ Tổ quốc", "Công nghiệp hóa và ngoại giao", "Nông nghiệp và thương mại", "Giáo dục và y tế"], correctIndex: 0, explanation: "Hai nhiệm vụ chiến lược: Xây dựng CNXH và Bảo vệ Tổ quốc XHCN." },
-  { question: "Chỉ thị 100 (Khoán 100) ban hành năm nào?", options: ["1979", "1981", "1983", "1986"], correctIndex: 1, explanation: "Chỉ thị 100 của Ban Bí thư về khoán sản phẩm trong nông nghiệp ban hành năm 1981." },
-  { question: "Khoán 100 cho phép khoán sản phẩm đến đơn vị nào?", options: ["Hợp tác xã", "Xã", "Nhóm lao động và người lao động", "Huyện"], correctIndex: 2, explanation: "Khoán 100 cho phép khoán sản phẩm đến nhóm lao động và cá nhân người lao động." },
-
-  // === KINH TẾ BAO CẤP & ĐỔI MỚI (19-30) ===
-  { question: "Trong giai đoạn 1982-1986, nền kinh tế đối mặt với khó khăn gì lớn nhất?", options: ["Khủng hoảng kinh tế, lạm phát phi mã", "Động đất", "Bùng nổ dân số", "Thiếu lao động"], correctIndex: 0, explanation: "1982-1986 là thời kỳ khủng hoảng kinh tế trầm trọng nhất, lạm phát phi mã lên tới hơn 700%." },
-  { question: "Nghị quyết Hội nghị TW 8 (khóa V, 6/1985) bàn về vấn đề cốt lõi nào?", options: ["Khoán 100", "Khoán 10", "Giá - Lương - Tiền", "Kế hoạch 3 phần"], correctIndex: 2, explanation: "Nghị quyết TW 8 (khóa V) tập trung vào khâu đột phá Giá - Lương - Tiền." },
-  { question: "Kết luận của Bộ Chính trị (8/1986) thừa nhận thực tế gì?", options: ["Kinh tế tự cung tự cấp", "Nền kinh tế hàng hóa nhiều thành phần", "Kinh tế thị trường tự do", "Kinh tế tư bản chủ nghĩa"], correctIndex: 1, explanation: "Kết luận thẳng thắn thừa nhận nền kinh tế nước ta đan xen cấu trúc hàng hóa nhiều thành phần." },
-  { question: "Đại hội VI (12/1986) được gọi là Đại hội gì?", options: ["Đại hội Thống nhất", "Đại hội Đổi mới", "Đại hội Cải cách", "Đại hội Mở cửa"], correctIndex: 1, explanation: "Đại hội VI (12/1986) được gọi là Đại hội Đổi mới, mở ra thời kỳ Đổi mới toàn diện đất nước." },
-  { question: "Trong thời bao cấp, người dân mua lương thực bằng hình thức nào?", options: ["Tiền mặt tự do", "Tem phiếu", "Trao đổi hàng hóa", "Ngân hàng"], correctIndex: 1, explanation: "Thời bao cấp, mọi nhu yếu phẩm đều được phân phối qua hệ thống tem phiếu." },
-  { question: "Lạm phát cao nhất trong giai đoạn 1985-1986 lên tới bao nhiêu?", options: ["200%", "500%", "Trên 700%", "Trên 1000%"], correctIndex: 2, explanation: "Lạm phát phi mã lên tới hơn 700% trong giai đoạn 1985-1986." },
-  { question: "Cơ chế quản lý kinh tế nào gây ra nhiều khó khăn trong giai đoạn 1975-1986?", options: ["Kinh tế thị trường", "Tập trung quan liêu bao cấp", "Kinh tế hỗn hợp", "Kinh tế tư nhân"], correctIndex: 1, explanation: "Cơ chế tập trung quan liêu bao cấp đã gây ra khủng hoảng kinh tế - xã hội trầm trọng." },
-  { question: "Đại hội VI chủ trương đổi mới trên lĩnh vực nào trước tiên?", options: ["Chính trị", "Giáo dục", "Kinh tế", "Ngoại giao"], correctIndex: 2, explanation: "Đổi mới kinh tế được xác định là trọng tâm trước tiên, xóa bỏ cơ chế bao cấp." },
-  { question: "Phương châm nào được Đại hội VI đề ra?", options: ["Nhìn thẳng vào sự thật", "Tiến nhanh, tiến mạnh", "Tự lực cánh sinh", "Đoàn kết quốc tế"], correctIndex: 0, explanation: "Đại hội VI đề ra phương châm 'nhìn thẳng vào sự thật, đánh giá đúng sự thật, nói rõ sự thật'." },
-  { question: "Sự kiện đổi tiền năm 1985 gây ra hậu quả gì?", options: ["Kinh tế phát triển", "Ổn định vật giá", "Lạm phát tăng vọt, đời sống khó khăn hơn", "Thu hẹp khoảng cách giàu nghèo"], correctIndex: 2, explanation: "Đổi tiền 9/1985 thất bại, gây hỗn loạn thị trường và lạm phát tăng vọt." },
-  { question: "Trước Đại hội VI, ai là Tổng Bí thư Đảng?", options: ["Hồ Chí Minh", "Lê Duẩn", "Trường Chinh", "Nguyễn Văn Linh"], correctIndex: 2, explanation: "Trường Chinh giữ chức Tổng Bí thư trước Đại hội VI. Tại Đại hội VI, Nguyễn Văn Linh được bầu." },
-
-  // === BIÊN GIỚI PHÍA BẮC (31-40) ===
-  { question: "Cuộc chiến tranh biên giới phía Bắc bắt đầu vào ngày nào?", options: ["17/02/1979", "30/04/1975", "07/01/1979", "05/03/1979"], correctIndex: 0, explanation: "Ngày 17/02/1979, đối phương huy động hơn 60 vạn quân tấn công biên giới phía Bắc." },
-  { question: "Đối phương đã huy động bao nhiêu quân tấn công biên giới phía Bắc?", options: ["20 vạn", "40 vạn", "60 vạn", "80 vạn"], correctIndex: 2, explanation: "Hơn 60 vạn quân cùng hàng ngàn xe tăng đã được huy động." },
-  { question: "Tuyến biên giới phía Bắc bị tấn công dài bao nhiêu km?", options: ["600 km", "800 km", "1.000 km", "Hơn 1.200 km"], correctIndex: 3, explanation: "Toàn tuyến biên giới phía Bắc dài hơn 1.200 km bị tấn công đồng loạt." },
-  { question: "Lệnh Tổng động viên toàn quốc được ban bố vào ngày nào?", options: ["17/02/1979", "25/02/1979", "05/03/1979", "18/03/1979"], correctIndex: 2, explanation: "Ngày 05/03/1979, Chủ tịch nước công bố lệnh Tổng động viên toàn quốc." },
-  { question: "Quân xâm lược phía Bắc cơ bản rút về bên kia biên giới vào ngày nào?", options: ["05/03/1979", "10/03/1979", "18/03/1979", "30/04/1979"], correctIndex: 2, explanation: "Đến ngày 18/03/1979, quân địch cơ bản phải rút về bên kia biên giới." },
-  { question: "Mặt trận Vị Xuyên (Hà Giang) kéo dài từ năm nào đến năm nào?", options: ["1979-1985", "1980-1988", "1984-1989", "1985-1990"], correctIndex: 2, explanation: "Mặt trận Vị Xuyên kéo dài từ năm 1984 đến 1989." },
-  { question: "Mặt trận Vị Xuyên còn có tên gọi nào?", options: ["Cối xay thịt", "Lò vôi thế kỷ", "Cánh đồng chết", "Đồi máu"], correctIndex: 1, explanation: "Mặt trận Vị Xuyên được mệnh danh là 'lò vôi thế kỷ' vì sự khốc liệt." },
-  { question: "Cuộc chiến biên giới phía Bắc tập trung ác liệt nhất ở tỉnh nào?", options: ["Quảng Ninh, Hải Phòng", "Cao Bằng, Lạng Sơn, Lào Cai", "Hà Giang, Tuyên Quang", "Sơn La, Điện Biên"], correctIndex: 1, explanation: "Quân địch tập trung tấn công mạnh nhất vào Cao Bằng, Lạng Sơn và Lào Cai." },
-  { question: "Lực lượng quân tại chỗ của Việt Nam ở biên giới phía Bắc năm 1979 khoảng bao nhiêu?", options: ["1 vạn", "3 vạn", "5 vạn", "10 vạn"], correctIndex: 2, explanation: "Việt Nam chỉ có khoảng 5 vạn quân tại chỗ, đối mặt với 60 vạn quân địch." },
-  { question: "Cuộc xung đột biên giới phía Bắc hoàn toàn chấm dứt vào năm nào?", options: ["1979", "1985", "1989", "1991"], correctIndex: 2, explanation: "Cuộc chiến chỉ thực sự chấm dứt vào năm 1989, mở ra quá trình bình thường hóa quan hệ." },
-
-  // === BIÊN GIỚI TÂY NAM (41-50) ===
-  { question: "Tập đoàn nào ở Campuchia gây chiến tranh biên giới Tây Nam?", options: ["Lon Nol", "Pol Pot - Ieng Sary", "Norodom Sihanouk", "Hun Sen"], correctIndex: 1, explanation: "Tập đoàn phản động Pol Pot - Ieng Sary đã gây ra chiến tranh biên giới Tây Nam." },
-  { question: "Vụ thảm sát Ba Chúc (An Giang) xảy ra vào năm nào?", options: ["1975", "1977", "1978", "1979"], correctIndex: 2, explanation: "Vụ thảm sát tàn bạo tại Ba Chúc (An Giang) xảy ra năm 1978, hơn 3.100 người bị sát hại." },
-  { question: "Cuộc tổng phản công biên giới Tây Nam bắt đầu vào ngày nào?", options: ["30/04/1975", "23/12/1978", "07/01/1979", "17/02/1979"], correctIndex: 1, explanation: "Ngày 23/12/1978, Quân đội Việt Nam mở cuộc tổng phản công trên toàn tuyến Tây Nam." },
-  { question: "Thủ đô Phnom Penh được giải phóng vào ngày nào?", options: ["23/12/1978", "07/01/1979", "17/02/1979", "30/04/1979"], correctIndex: 1, explanation: "Ngày 07/01/1979, Quân tình nguyện Việt Nam tiến vào giải phóng thủ đô Phnom Penh." },
-  { question: "Quân tình nguyện Việt Nam tại Campuchia được gọi bằng tên gì?", options: ["Đội quân thép", "Đội quân nhà Phật", "Đội quân giải phóng", "Đội quân anh hùng"], correctIndex: 1, explanation: "Quân tình nguyện Việt Nam được coi là 'Đội quân nhà Phật', cứu giúp dân Campuchia." },
-  { question: "Việt Nam rút toàn bộ quân tình nguyện khỏi Campuchia vào năm nào?", options: ["1985", "1987", "1989", "1991"], correctIndex: 2, explanation: "Năm 1989, Việt Nam hoàn thành nghĩa vụ quốc tế và rút toàn bộ quân về nước." },
-  { question: "Khmer Đỏ đã chiếm đóng các đảo nào của Việt Nam?", options: ["Hoàng Sa, Trường Sa", "Thổ Chu, Phú Quốc", "Cát Bà, Cô Tô", "Phú Quý, Lý Sơn"], correctIndex: 1, explanation: "Khmer Đỏ xua quân đánh chiếm các đảo Thổ Chu, Phú Quốc của Việt Nam." },
-  { question: "Khmer Đỏ huy động bao nhiêu sư đoàn áp sát biên giới Tây Nam?", options: ["5 sư đoàn", "10 sư đoàn", "15 sư đoàn", "19 sư đoàn"], correctIndex: 3, explanation: "Khmer Đỏ huy động 19 sư đoàn bộ binh áp sát biên giới trước khi Việt Nam phản công." },
-  { question: "Chiến thắng biên giới Tây Nam có ý nghĩa gì với Campuchia?", options: ["Mở rộng lãnh thổ", "Lật đổ chế độ diệt chủng, cứu dân tộc Campuchia", "Thành lập liên minh quân sự", "Sáp nhập hai nước"], correctIndex: 1, explanation: "Chiến thắng đã lật đổ chế độ diệt chủng Khmer Đỏ, cứu hàng triệu người Campuchia." },
-  { question: "Các tỉnh biên giới Tây Nam bị Khmer Đỏ tấn công chủ yếu là?", options: ["Cà Mau, Bạc Liêu", "Tây Ninh, An Giang", "Đồng Nai, Bình Dương", "Long An, Tiền Giang"], correctIndex: 1, explanation: "Khmer Đỏ xâm nhập sâu vào lãnh thổ các tỉnh Tây Ninh, An Giang." },
-];
+import { Milestone, PHASE_1, PHASE_2 } from "./data/milestones";
+import { QuizItem, quizData } from "./data/quiz";
+import { MilestoneCard } from "./components/MilestoneCard";
+import { InlineQuiz } from "./components/InlineQuiz";
+import { MilestoneDetailModal } from "./components/MilestoneDetailModal";
 
 /* ═══════════════════════════════════════════════════════════════════ */
 /*  COMPONENTS                                                        */
@@ -350,228 +64,6 @@ function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
   return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
 }
 
-/** Detail popup modal for milestone */
-function MilestoneDetailModal({ m, isOpen, onClose }: { m: Milestone | null; isOpen: boolean; onClose: () => void }) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => { document.body.style.overflow = "unset"; };
-  }, [isOpen]);
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    if (isOpen) window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isOpen, onClose]);
-
-  return (
-    <AnimatePresence>
-      {isOpen && m && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/60 z-[60] backdrop-blur-sm"
-          />
-
-          {/* Modal */}
-          <div className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 lg:p-8 pointer-events-none">
-            <motion.div
-              initial={{ opacity: 0, y: 100, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 100, scale: 0.95 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="bg-[#FAF3EB] w-full max-w-full lg:max-w-6xl rounded-t-lg lg:rounded-lg border-4 border-[#2C2A29] shadow-[12px_12px_0px_0px_rgba(44,42,41,1)] overflow-hidden pointer-events-auto flex flex-col max-h-[95vh]"
-            >
-              {/* Drag handle (mobile) */}
-              <div className="lg:hidden flex justify-center pt-3 pb-2 bg-[#E3D6C1] border-b-4 border-[#2C2A29]">
-                <div className="w-12 h-1.5 rounded-full bg-[#2C2A29]/20" />
-              </div>
-
-              {/* Header */}
-              <div className="flex items-start gap-4 px-5 sm:px-6 pt-4 sm:pt-6 pb-5 border-b-4 border-[#2C2A29] bg-[#E3D6C1]">
-                <div
-                  className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center text-white border-4 border-[#2C2A29] shadow-[4px_4px_0px_0px_rgba(44,42,41,1)]"
-                  style={{ background: m.accent }}
-                >
-                  {m.icon}
-                </div>
-                <div className="flex-1 min-w-0 pt-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="px-2 py-0.5 bg-[#2C2A29] text-white text-[10px] sm:text-xs uppercase tracking-widest font-sans font-bold">{m.year}</span>
-                    <span className="text-[10px] sm:text-xs uppercase tracking-[.2em] font-bold" style={{ color: m.accent }}>• {m.label}</span>
-                  </div>
-                  <h3 className="text-xl sm:text-3xl font-serif-heading font-black text-[#2C2A29] uppercase tracking-wider leading-tight pr-8">{m.headline}</h3>
-                </div>
-                <button
-                  onClick={onClose}
-                  className="flex-shrink-0 p-2 -mr-2 -mt-2 rounded-sm border-4 border-transparent hover:border-[#2C2A29] hover:bg-white/50 hover:shadow-[4px_4px_0px_0px_rgba(44,42,41,1)] hover:-translate-y-1 transition-all text-[#2C2A29]"
-                >
-                  <X size={28} />
-                </button>
-              </div>
-
-              {/* Scrollable content (Split layout on desktop) */}
-              <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto overscroll-contain bg-[#FAF3EB]">
-                {/* LEFT SIDE: Image */}
-                <div className="w-full lg:w-[45%] flex-shrink-0 border-b-4 lg:border-b-0 lg:border-r-4 border-[#2C2A29] bg-[#D1C2A5]/30 flex flex-col relative h-[300px] sm:h-[400px] lg:h-auto">
-                  <div className="flex-1 relative m-4 sm:m-6 border-4 border-[#2C2A29] bg-[#2C2A29] shadow-[6px_6px_0px_0px_rgba(44,42,41,1)]">
-                    <Image
-                      src={m.image}
-                      alt={m.headline}
-                      fill
-                      className="object-contain"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 45vw"
-                    />
-                  </div>
-                  <div className="bg-[#2C2A29] p-4 lg:p-6 border-t-4 border-[#2C2A29] mt-auto">
-                    <p className="text-[11px] sm:text-[13px] font-serif-body text-[#FAF3EB] italic leading-relaxed">{m.imageCaption}</p>
-                    
-                    {m.sourceLink && (
-                      <div className="mt-4 pt-4 border-t border-[#FAF3EB]/20 flex justify-end">
-                        <a 
-                          href={m.sourceLink} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="inline-flex items-center gap-2 text-xs font-sans font-bold text-[#F4D03F] hover:text-white uppercase tracking-wider hover:underline"
-                        >
-                          {/* <LinkIcon size={14} /> Xem tài liệu đối chiếu */}
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* RIGHT SIDE: Text Content */}
-                <div className="w-full lg:w-[55%] p-5 sm:p-8 lg:p-10 space-y-8 flex flex-col relative h-max lg:h-full lg:overflow-y-auto">
-                  {/* Highlight badge */}
-                  {m.highlight && (
-                    <div>
-                      <span
-                        className="inline-block px-4 py-1.5 border-4 border-[#2C2A29] text-xs font-sans font-black uppercase tracking-[.2em] text-[#2C2A29] shadow-[4px_4px_0px_0px_rgba(44,42,41,1)] bg-white"
-                      >
-                        {m.highlight}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Detail paragraphs */}
-                  <div className="space-y-5 prose prose-stone max-w-none">
-                    {m.detailContent.map((p, i) => (
-                      <p key={i} className="text-[15px] sm:text-[17px] font-serif-body text-[#2C2A29] leading-[1.9] text-justify font-medium">{p}</p>
-                    ))}
-                  </div>
-
-                  {/* Key facts */}
-                  <div className="bg-white border-4 border-[#2C2A29] p-6 lg:p-8 shadow-[8px_8px_0px_0px_rgba(44,42,41,1)] mt-auto">
-                    <h4 className="text-sm font-sans font-black uppercase tracking-[.2em] text-[#2C2A29] mb-5 border-b-4 border-[#2C2A29] pb-3 flex items-center gap-3">
-                      <span className="w-8 h-8 flex items-center justify-center bg-[#2C2A29] text-[#F4D03F]"><Info size={20} /></span>
-                      Trích yếu cốt lõi
-                    </h4>
-                    <ul className="space-y-4">
-                      {m.detailBullets.map((b, i) => (
-                        <li key={i} className="flex gap-4 items-start group">
-                          <span
-                            className="flex-shrink-0 w-3 h-3 mt-1.5 border-2 border-[#2C2A29] transition-colors group-hover:bg-[#2C2A29]"
-                            style={{ background: m.accent }}
-                          />
-                          <span className="text-[14px] sm:text-[15px] font-serif-body text-[#2C2A29] font-bold leading-relaxed">{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              {/* Footer close button (mobile friendly) */}
-              <div className="px-5 sm:px-6 py-4 border-t-4 border-[#2C2A29] bg-[#E3D6C1] lg:hidden">
-                <button
-                  onClick={onClose}
-                  className="w-full py-4 border-4 border-[#2C2A29] shadow-[4px_4px_0px_0px_rgba(44,42,41,1)] hover:translate-y-1 hover:shadow-[0px_0px_0px_0px_rgba(44,42,41,1)] font-sans font-black transition-all text-white uppercase tracking-widest text-sm"
-                  style={{ background: m.accent }}
-                >
-                   Đóng tài liệu
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        </>
-      )}
-    </AnimatePresence>
-  );
-}
-
-/** Single milestone card — alternating layout, clickable */
-function MilestoneCard({ m, index, onClick }: { m: Milestone; index: number; onClick: () => void }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-  const isEven = index % 2 === 0;
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 60 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: 0.1 }}
-      className="relative"
-    >
-      {/* connector line */}
-      {index > 0 && (
-        <div className="absolute left-1/2 -translate-x-1/2 -top-10 w-[2px] h-10 bg-gradient-to-b from-transparent to-black/10" />
-      )}
-
-      <div className={`flex flex-col ${isEven ? "md:flex-row" : "md:flex-row-reverse"} gap-6 md:gap-10 items-center`}>
-        {/* Date block */}
-        <div className="flex-shrink-0 w-full md:w-[200px] text-center md:text-right">
-          <div className="inline-block">
-            <p className="text-[11px] uppercase tracking-[.3em] font-semibold text-black/40 mb-1">{m.year}</p>
-            <p className="text-3xl md:text-4xl font-black leading-none" style={{ color: m.accent }}>{m.label}</p>
-          </div>
-        </div>
-
-        {/* Icon */}
-        <div
-          className="relative flex-shrink-0 w-16 h-16 rounded-2xl flex items-center justify-center text-white shadow-lg"
-          style={{ background: `linear-gradient(135deg, ${m.accent}, ${m.accent}dd)` }}
-        >
-          {m.icon}
-          <div className="absolute inset-0 rounded-2xl ring-4 ring-white/20" />
-        </div>
-
-        {/* Content */}
-        <div className="flex-1 w-full">
-          <button
-            onClick={onClick}
-            className="w-full text-left bg-[#FAF3EB] rounded-sm p-5 sm:p-6 border border-[#D1C2A5] shadow-[4px_4px_0px_0px_rgba(44,42,41,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(44,42,41,1)] transition-all group cursor-pointer"
-          >
-            {m.highlight && (
-              <span
-                className="inline-block px-2.5 py-0.5 text-[10px] font-sans font-bold uppercase tracking-wider text-[#FAF3EB] mb-3"
-                style={{ background: m.accent }}
-              >
-                {m.highlight}
-              </span>
-            )}
-            <h3 className="text-xl md:text-2xl font-serif-heading font-bold text-[#2C2A29] leading-snug mb-2">{m.headline}</h3>
-            <p className="font-serif-body text-[#5C554E] text-sm md:text-[15px] leading-relaxed mb-3">{m.body}</p>
-            <span className="inline-flex items-center gap-1.5 text-xs font-sans font-bold transition-colors group-hover:gap-2.5 uppercase tracking-wider" style={{ color: m.accent }}>
-              Xem chi tiết <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </span>
-          </button>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 /** Section divider with gradient */
 function Divider({ color }: { color: string }) {
   return (
@@ -579,119 +71,6 @@ function Divider({ color }: { color: string }) {
       <div className="flex-1 h-[1px]" style={{ background: `linear-gradient(to right, transparent, ${color}40)` }} />
       <div className="w-2 h-2 rounded-full" style={{ background: color }} />
       <div className="flex-1 h-[1px]" style={{ background: `linear-gradient(to left, transparent, ${color}40)` }} />
-    </div>
-  );
-}
-
-/** Quiz */
-function InlineQuiz({ data }: { data: QuizItem[] }) {
-  const [idx, setIdx] = useState(0);
-  const [pick, setPick] = useState<number | null>(null);
-  const [score, setScore] = useState(0);
-  const [done, setDone] = useState(false);
-
-  const q = data[idx];
-  const right = pick === q.correctIndex;
-
-  function select(i: number) {
-    if (pick !== null) return;
-    setPick(i);
-    if (i === q.correctIndex) setScore((s) => s + 1);
-  }
-  function next() {
-    if (idx + 1 >= data.length) setDone(true);
-    else { setIdx((i) => i + 1); setPick(null); }
-  }
-  function restart() { setIdx(0); setPick(null); setScore(0); setDone(false); }
-
-  if (done) {
-    const pct = Math.round((score / data.length) * 100);
-    return (
-      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-12">
-        <div className="relative inline-block mb-6">
-          <svg width="140" height="140" viewBox="0 0 140 140">
-            <circle cx="70" cy="70" r="62" fill="none" stroke="#e5e5e5" strokeWidth="8" />
-            <motion.circle
-              cx="70" cy="70" r="62" fill="none"
-              stroke={pct >= 70 ? "#27ae60" : "#DA251D"} strokeWidth="8"
-              strokeLinecap="round" strokeDasharray={390}
-              initial={{ strokeDashoffset: 390 }}
-              animate={{ strokeDashoffset: 390 - (390 * pct) / 100 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              style={{ transformOrigin: "center", transform: "rotate(-90deg)" }}
-            />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-3xl font-black" style={{ color: pct >= 70 ? "#27ae60" : "#DA251D" }}>{pct}%</span>
-            <span className="text-xs text-[#585858] font-medium">{score}/{data.length}</span>
-          </div>
-        </div>
-        <p className="text-lg font-bold text-[#1C1C1C] mb-1">
-          {pct >= 90 ? "Xuất sắc!" : pct >= 70 ? "Tốt lắm!" : pct >= 50 ? "Khá ổn!" : "Cố gắng thêm!"}
-        </p>
-        <p className="text-sm text-[#585858] mb-8">
-          {pct >= 70 ? "Bạn nắm vững kiến thức rồi." : "Hãy đọc lại nội dung và thử lại nhé."}
-        </p>
-        <button onClick={restart} className="inline-flex items-center gap-2 px-6 py-3 bg-[#DA251D] hover:bg-[#8B1923] text-white rounded-full font-semibold transition-colors">
-          <RotateCcw size={16} /> Làm lại
-        </button>
-      </motion.div>
-    );
-  }
-
-  return (
-    <div>
-      {/* progress */}
-      <div className="flex items-center gap-2 mb-6">
-        {data.map((_, i) => (
-          <div key={i} className={`h-1 flex-1 rounded-full transition-colors ${i < idx ? "bg-[#DA251D]" : i === idx ? "bg-[#DA251D]/60" : "bg-black/10"}`} />
-        ))}
-      </div>
-      <div className="flex justify-between mb-4">
-        <span className="text-xs font-bold text-[#585858]">Câu {idx + 1} / {data.length}</span>
-        <span className="text-xs font-bold text-[#DA251D]">{score} đúng</span>
-      </div>
-
-      <AnimatePresence mode="wait">
-        <motion.div key={idx} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -40 }} transition={{ duration: 0.3 }}>
-          <p className="text-lg md:text-xl font-serif-heading font-bold text-[#2C2A29] mb-5 leading-snug">{q.question}</p>
-          <div className="grid gap-3">
-            {q.options.map((opt, i) => {
-              const isCorrectOpt = i === q.correctIndex;
-              const isPicked = i === pick;
-              let cls = "w-full text-left px-5 py-4 rounded-sm border-2 font-serif-body text-base font-bold transition-all flex items-center gap-4 cursor-pointer hover:-translate-y-1 shadow-[2px_2px_0px_0px_rgba(44,42,41,1)]";
-              if (pick === null) cls += " border-[#D1C2A5] bg-white hover:bg-[#FAF3EB] hover:border-[#DA251D] text-[#5C554E]";
-              else if (isCorrectOpt) cls += " border-[#4A5D23] bg-[#eef5e6] text-[#4A5D23]";
-              else if (isPicked) cls += " border-[#DA251D] bg-[#fdf0f0] text-[#DA251D]";
-              else cls += " border-[#D1C2A5] bg-white text-[#999] opacity-70";
-              return (
-                <button key={i} onClick={() => select(i)} className={cls} disabled={pick !== null}>
-                  <span className={`flex-shrink-0 w-8 h-8 rounded-sm flex items-center justify-center text-sm font-bold border-2 ${
-                    pick === null ? "bg-[#FAF3EB] text-[#2C2A29] border-[#D1C2A5]" : isCorrectOpt ? "bg-[#4A5D23] text-white border-[#4A5D23]" : isPicked ? "bg-[#DA251D] text-white border-[#DA251D]" : "bg-[#f5f5f5] text-[#ccc] border-[#ddd]"
-                  }`}>
-                    {String.fromCharCode(65 + i)}
-                  </span>
-                  {opt}
-                </button>
-              );
-            })}
-          </div>
-
-          <AnimatePresence>
-            {pick !== null && (
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6">
-                <div className={`p-5 rounded-sm text-base leading-relaxed border-2 font-serif-body ${right ? "bg-[#eef5e6] border-[#4A5D23] text-[#4A5D23]" : "bg-[#fdf0f0] border-[#DA251D] text-[#DA251D]"}`}>
-                  <p className="font-bold mb-2 font-serif-heading text-lg">{right ? "Chính xác!" : "Chưa đúng!"}</p>
-                  <p>{q.explanation}</p>
-                </div>
-                <button onClick={next} className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-[#DA251D] hover:bg-[#b01e18] text-white border-2 border-[#2C2A29] rounded-sm font-sans text-sm font-bold uppercase tracking-wider transition-colors shadow-[2px_2px_0px_0px_rgba(44,42,41,1)] active:translate-y-1 active:shadow-none">
-                  {idx + 1 >= data.length ? "Xem kết quả" : "Tiếp theo"} <ChevronRight size={16} />
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </AnimatePresence>
     </div>
   );
 }
@@ -727,51 +106,65 @@ function Page() {
       />
 
       {/* ═══ HERO ═══ */}
-      <section className="relative pt-12 pb-20 overflow-hidden bg-[#F5E6D3] min-h-[500px]">
-        {/* decorative bg */}
-        <div className="absolute inset-0 pointer-events-none opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
+      <section className="relative pt-16 pb-24 overflow-hidden bg-[#F5E6D3] min-h-[600px] border-b-4 border-double border-[#2C2A29]">
+        {/* Decorative background textures */}
+        <div className="absolute inset-0 pointer-events-none opacity-40 bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
         
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#DA251D]/[.06] rounded-full blur-[100px]" />
-          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#1a5276]/[.05] rounded-full blur-[80px]" />
-        </div>
+        {/* Newspaper Borders */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-[#2C2A29]" />
+        <div className="absolute top-2 left-0 right-0 h-[2px] bg-[#2C2A29]" />
 
-        <div className="relative max-w-3xl mx-auto px-4 text-center mt-12">
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-            <p className="text-xs uppercase tracking-[.4em] text-[#DA251D] font-bold mb-4 font-sans">Chương 3.1</p>
+            {/* Masthead Header */}
+            <div className="flex items-center justify-between border-b-2 border-[#2C2A29] pb-4 mb-8">
+              <span className="text-[10px] font-bold uppercase tracking-[.3em] text-[#2C2A29] font-sans">Số đặc biệt: 1975-1986</span>
+              <span className="text-xl font-serif-heading font-black text-[#DA251D] uppercase tracking-tighter">KIẾN THIẾT QUỐC GIA</span>
+              <span className="text-[10px] font-bold uppercase tracking-[.3em] text-[#2C2A29] font-sans">Chương 3.1</span>
+            </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif-heading font-black text-[#2C2A29] leading-[1.1] mb-6 uppercase tracking-wider">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif-heading font-black text-[#2C2A29] leading-[0.95] mb-8 uppercase tracking-tight">
               Hành trình<br />
-              <span className="relative inline-block mt-2">
-                <span className="relative z-10 text-[#4A5D23]">Kiến thiết</span>
-                <span className="absolute bottom-1 left-0 w-full h-3 bg-[#DA251D]/15 -z-0 rounded" />
-              </span>
-              {" & "}
-              <span className="text-[#DA251D]">Bảo vệ Tổ quốc</span>
+              <span className="text-[#DA251D] drop-shadow-[2px_2px_0px_#FAF3EB]">Bảo vệ Tổ quốc</span>
             </h1>
 
-            <p className="font-serif-body text-[#5C554E] text-base md:text-lg max-w-xl mx-auto leading-relaxed mb-10">
-              Đất nước bước ra khỏi khói lửa chiến tranh, đón nhận hòa bình và thống nhất.
-              Nhưng hành trình quá độ lên CNXH mở đầu với vô vàn thách thức.
-            </p>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-12">
+              <div className="flex-1 max-w-md border-y border-[#2C2A29]/20 py-4 italic text-lg font-serif-body text-[#5C554E] leading-relaxed">
+                "Đất nước bước ra khỏi khói lửa chiến tranh, đón nhận hòa bình và thống nhất. Nhưng hành trình quá độ lên CNXH mở đầu với vô vàn thách thức."
+              </div>
+            </div>
           </motion.div>
 
-          {/* stat bar */}
+          {/* Stamped Stats Interface */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className="flex flex-wrap justify-center gap-4 md:gap-8"
+            className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {[
-              { n: 11, s: " năm", l: "1975 – 1986" },
-              { n: 3, s: " đột phá", l: "Tư duy kinh tế" },
-              { n: 23, s: " triệu", l: "Cử tri bầu cử" },
-              { n: 774, s: "%", l: "Lạm phát đỉnh" },
+              { n: 11, s: " năm", l: "1975 – 1986", label: "Thời gian" },
+              { n: 3, s: " đột phá", l: "Tư duy kinh tế", label: "Bước tiến" },
+              { n: 23, s: " triệu", l: "Cử tri bầu cử", label: "Thống nhất" },
+              { n: 774, s: "%", l: "Lạm phát đỉnh", label: "Kinh tế" },
             ].map((s, i) => (
-              <div key={i} className="bg-white/60 backdrop-blur-sm rounded-2xl px-5 py-4 border border-black/5 min-w-[130px]">
-                <p className="text-2xl font-black text-[#DA251D]"><Counter value={s.n} suffix={s.s} /></p>
-                <p className="text-[11px] text-[#888] font-medium uppercase tracking-wider mt-0.5">{s.l}</p>
+              <div 
+                key={i} 
+                className="relative bg-[#FAF3EB] border-2 border-[#2C2A29] p-4 flex flex-col items-center justify-center overflow-hidden group hover:bg-[#E8D9C5] transition-colors shadow-[4px_4px_0px_0px_#2C2A29]"
+              >
+                {/* Vintage Badge */}
+                <div className="absolute top-0 left-0 bg-[#2C2A29] text-[#FAF3EB] text-[8px] font-bold uppercase px-2 py-0.5">
+                  {s.label}
+                </div>
+                
+                <p className="text-3xl font-black text-[#DA251D] mt-2">
+                  <Counter value={s.n} suffix={s.s} />
+                </p>
+                <div className="w-full h-[1px] bg-[#2C2A29] my-2" />
+                <p className="text-[10px] text-[#2C2A29] font-bold uppercase tracking-wider">{s.l}</p>
+                
+                {/* Decorative textures overlay */}
+                <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/pinstriped-suit.png')]" />
               </div>
             ))}
           </motion.div>
@@ -779,8 +172,8 @@ function Page() {
       </section>
 
       {/* ═══ NAV TABS ═══ */}
-      <div className="sticky top-[72px] z-30 bg-white/70 backdrop-blur-xl border-y border-black/5">
-        <div className="max-w-3xl mx-auto px-4 flex">
+      <div className="sticky top-[72px] z-30 bg-[#FAF3EB]/90 backdrop-blur-xl border-y border-[#2C2A29]/10 shadow-sm">
+        <div className="max-w-4xl mx-auto px-6 flex">
           {([
             { id: 1 as const, label: "1975 – 1981", sub: "Bước chuyển mình" },
             { id: 2 as const, label: "1982 – 1986", sub: "Vượt khủng hoảng" },
@@ -789,12 +182,12 @@ function Page() {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`flex-1 py-3 text-center relative transition-colors ${tab === t.id ? "text-[#DA251D]" : "text-[#5C554E] hover:text-[#2C2A29]"}`}
+              className={`flex-1 py-5 md:py-6 text-center relative transition-all duration-300 ${tab === t.id ? "text-[#DA251D] scale-105" : "text-[#5C554E] hover:text-[#2C2A29]"}`}
             >
-              <span className="text-[10px] uppercase tracking-widest font-bold block font-sans">{t.label}</span>
-              <span className="text-[11px] font-medium font-serif-heading italic">{t.sub}</span>
+              <span className="text-[11px] md:text-[13px] uppercase tracking-[0.2em] font-black block font-sans mb-1">{t.label}</span>
+              <span className="text-[13px] md:text-[16px] font-bold font-serif-heading italic">{t.sub}</span>
               {tab === t.id && (
-                <motion.div layoutId="tab-indicator" className="absolute bottom-0 left-[15%] right-[15%] h-[2px] bg-[#DA251D] rounded-full" />
+                <motion.div layoutId="tab-indicator" className="absolute bottom-0 left-[10%] right-[10%] h-[3px] bg-[#DA251D] rounded-full" />
               )}
             </button>
           ))}
@@ -835,41 +228,47 @@ function Page() {
         )}
 
         {tab === 3 && (
-          <motion.section key="p3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-3xl mx-auto px-4 py-16">
-            <div className="text-center mb-14">
-              <span className="inline-block px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider text-[#FAF3EB] bg-[#7d3c98] mb-4">Tổng kết</span>
-              <h2 className="text-3xl md:text-4xl font-serif-heading font-bold text-[#2C2A29] mb-3">11 Năm Nhìn Lại</h2>
-              <p className="font-serif-body text-[#5C554E] max-w-lg mx-auto text-sm leading-relaxed">
-                Máu, mồ hôi và trí tuệ — giai đoạn "thai nghén" vĩ đại cho Đường lối Đổi mới toàn diện.
-              </p>
+          <motion.section key="p3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="max-w-5xl mx-auto px-6 py-16">
+            {/* Newspaper Header for Conclusion */}
+            <div className="text-center mb-16 border-b-2 border-[#2C2A29] pb-8">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="h-[1px] flex-1 bg-[#2C2A29]/30" />
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#DA251D]">SỐ ĐẶC BIỆT: TỔNG KẾT KỶ NGUYÊN</span>
+                <div className="h-[1px] flex-1 bg-[#2C2A29]/30" />
+              </div>
+              <h2 className="text-6xl md:text-8xl font-serif-heading font-black text-[#2C2A29] mb-4 uppercase tracking-tighter leading-[0.8]">
+                11 Năm<br />
+                <span className="text-[#DA251D]">Nhìn Lại</span>
+              </h2>
+              <div className="max-w-2xl mx-auto border-t border-[#2C2A29]/10 pt-4 italic font-serif-body text-[#5C554E] text-xl">
+                "Từ khói lửa chiến tranh đến bình minh Đổi mới — nền tảng cho một Việt Nam hùng cường năm 2026."
+              </div>
             </div>
 
-            {/* Key achievements */}
-            <div className="grid md:grid-cols-2 gap-5 mb-12">
+            {/* Key achievements - Column Layout */}
+            <div className="grid md:grid-cols-2 gap-12 mb-20 relative">
+              <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#2C2A29]/20 -translate-x-1/2" />
+              
               {[
                 { 
-                  icon: <Flag size={24} />, 
-                  color: "#DA251D", 
-                  title: "Thanh toán chia cắt, thống nhất non sông", 
-                  desc: "Xác lập chủ quyền Nhà nước duy nhất trên toàn bộ lãnh thổ. Hoàn thành về mặt pháp lý việc hợp nhất bộ máy chính quyền, quốc kỳ, quốc ca và hệ thống chính trị từ Trung ương đến địa phương." 
+                  icon: <Flag size={20} />, 
+                  title: "Thống nhất pháp lý và hành chính", 
+                  desc: "Sau 1975, thách thức lớn nhất không chỉ là địa lý mà là sự hòa hợp hai hệ thống hành chính khác biệt hoàn toàn. Tổng tuyển cử 25/4/1976 đã khai sinh nước CHXHCN Việt Nam, thống nhất quốc kỳ, quốc hiệu và đặc biệt là hệ thống luật pháp xuyên suốt từ Bắc vào Nam. Bài học về sự tập trung thống nhất này chính là nền tảng để năm 2026, Việt Nam thực hiện thành công 'Chính phủ số', nơi dữ liệu dân cư được số hóa đồng bộ, không còn ranh giới hành chính rườm rà." 
                 },
                 { 
-                  icon: <Shield size={24} />, 
-                  color: "#1a5276", 
-                  title: "Bảo vệ vững chắc chủ quyền lãnh thổ", 
-                  desc: "Vừa tái thiết sau chiến tranh chống Mỹ, vừa phải tiến hành hai cuộc chiến đấu chính nghĩa bảo vệ biên giới Tây Nam và phía Bắc, đập tan âm mưu bao vây, cô lập và phá hoại của các thế lực thù địch." 
+                  icon: <Shield size={20} />, 
+                  title: "Bảo vệ chủ quyền trong vòng vây", 
+                  desc: "Giai đoạn 1975-1986 là thời điểm thử thách cực độ của quốc phòng. Vừa cầm súng bảo vệ biên giới Tây Nam và phía Bắc năm 1979, vừa chịu lệnh cấm vận nghiệt ngã. Tinh thần độc lập, tự chủ thời bấy giờ đã hun đúc nên chiến lược 'Ngoại giao Cây tre' lừng lẫy của năm 2026 — giúp Việt Nam giữ vững chủ quyền Biển Đảo (Hoàng Sa, Trường Sa) và duy trì hòa bình, là điểm đến an toàn nhất khu vực cho dòng vốn công nghệ cao." 
                 },
                 { 
-                  icon: <Sparkles size={24} />, 
-                  color: "#e67e22", 
-                  title: "Ba bước đột phá tư duy kinh tế", 
-                  desc: "Từng bước chuyển dịch từ cơ chế quản lý mệnh lệnh hành chính sang hạch toán kinh doanh. Các 'thử nghiệm' như Khoán 100 hay Nghị quyết TW 8 đã dọn đường cho quy luật giá trị phát huy tác dụng." 
+                  icon: <Sparkles size={20} />, 
+                  title: "Khởi nguồn tư duy kinh tế thị trường", 
+                  desc: "Những 'đốm lửa' từ Khoán 100 năm 1981 hay việc bù giá vào lương tại Long An đã dũng cảm xé rào cơ chế cũ. Đó là sự thừa nhận quy luật giá trị khách quan sau thời gian dài duy ý chí. Tinh thần 'xé rào' đó đang tiếp nối mạnh mẽ ở năm 2026 thông qua các 'Sandbox' pháp lý cho AI và Blockchain, đưa Việt Nam từ một nước thiếu đói năm 1986 trở thành mắt xích không thể thiếu trong chuỗi cung ứng bán dẫn toàn cầu." 
                 },
                 { 
-                  icon: <Star size={24} />, 
-                  color: "#7d3c98", 
-                  title: "Tiền đề trực tiếp cho Đại hội VI", 
-                  desc: "Thời kỳ 1975 - 1986 là giai đoạn 'thai nghén' lý luận và thực tiễn khốc liệt nhất. Đây là bước đệm lịch sử không thể thiếu để Đảng đi đến quyết định Đổi mới toàn diện đất nước vào tháng 12/1986." 
+                  icon: <Star size={20} />, 
+                  title: "Bản lề lịch sử cho Đại hội VI", 
+                  desc: "11 năm 'thai nghén' đầy đau thương và mất mát đã tôi luyện nên một thế hệ lãnh đạo dám nhìn thẳng vào sự thật. Đại hội VI (12/1986) không phải là sự ngẫu nhiên, mà là kết quả tất yếu của trí tuệ tập thể. Bước sang năm 2026, chúng ta đang đứng trước vận hội mới — 'Kỷ nguyên vươn mình' của dân tộc, nơi sức mạnh nội lực từ công cuộc 'Đốt lò' làm trong sạch bộ máy đã tạo ra niềm tin tuyệt đối để toàn dân đồng lòng phấn đấu vì mục tiêu nước phát triển." 
                 },
               ].map((item, i) => (
                 <motion.div
@@ -878,59 +277,98 @@ function Page() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-black/5 hover:shadow-lg transition-shadow"
+                  className="space-y-4"
                 >
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white mb-4" style={{ background: item.color }}>
-                    {item.icon}
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full border border-[#DA251D] flex items-center justify-center text-[#DA251D] shrink-0">
+                      {item.icon}
+                    </div>
+                    <h3 className="font-serif-heading font-black text-2xl text-[#2C2A29] uppercase tracking-tighter leading-none">{item.title}</h3>
                   </div>
-                  <h3 className="font-bold text-[#1C1C1C] mb-2">{item.title}</h3>
-                  <p className="text-sm text-[#555] leading-relaxed">{item.desc}</p>
+                  <p className="font-serif-body text-[#333] text-[15px] leading-relaxed text-justify indent-8">
+                    {item.desc}
+                  </p>
                 </motion.div>
               ))}
             </div>
 
-            {/* Lessons */}
-            <div className="bg-gradient-to-br from-[#7d3c98]/10 via-white/60 to-[#DA251D]/5 rounded-3xl p-8 border border-black/5 mb-8">
-              <h3 className="text-lg font-bold text-[#1C1C1C] mb-6 flex items-center gap-2">
-                <BookOpen size={20} className="text-[#7d3c98]" /> Bài học lịch sử
-              </h3>
-              <div className="space-y-4">
+            {/* Link to 2026 - Modern Newspaper Section */}
+            <div className="grid md:grid-cols-3 gap-8 mb-20">
+              <div className="col-span-full border-t-4 border-[#2C2A29] pt-2 mb-4">
+                <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-[#2C2A29]">PHÂN TÍCH CHUYÊN SÂU: VIỆT NAM 2026</span>
+              </div>
+              
+              {[
+                { 
+                  label: "CÔNG NGHỆ SỐ", 
+                  title: "Kế thừa 'Khoán' số", 
+                  desc: "Nếu năm 1981 ta 'khoán' sản phẩm đến tay người lao động, thì năm 2026 ta 'khoán' trách nhiệm số hóa đến từng công dân. Toàn bộ hạ tầng dữ liệu quốc gia là thành quả của sự thống nhất bền vững suốt 50 năm qua." 
+                },
+                { 
+                  label: "NĂNG LƯỢNG XANH", 
+                  title: "Nền kinh tế tuần hoàn", 
+                  desc: "Từ bài học tiết kiệm thời bao cấp, Việt Nam 2026 chuyển mình mạnh mẽ thành trung tâm năng lượng tái tạo của ASEAN, hiện thực hóa cam kết Net Zero bằng trí tuệ và công nghệ xanh." 
+                },
+                { 
+                  label: "QUẢN TRỊ QUỐC GIA", 
+                  title: "Minh bạch là sức mạnh", 
+                  desc: "Phương châm 'Dân biết, dân bàn, dân làm, dân kiểm tra' từ thời kỳ tiền Đổi mới đã được nâng tầm bởi công nghệ giám sát trực tuyến, giúp bộ máy chính trị 2026 sạch và mạnh hơn bao giờ hết." 
+                },
+              ].map((box, i) => (
+                <div key={i} className="bg-[#FAF3EB] border border-[#2C2A29]/20 p-6 flex flex-col items-center text-center shadow-inner group hover:border-[#DA251D] transition-colors">
+                  <span className="text-[9px] font-bold text-[#DA251D] tracking-widest mb-3">{box.label}</span>
+                  <h4 className="font-serif-heading font-black text-lg text-[#2C2A29] mb-3 uppercase tracking-tight">{box.title}</h4>
+                  <p className="font-serif-body text-xs text-[#5C554E] leading-loose">{box.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Lessons - Editorial Box */}
+            <div className="bg-[#E8D9C5] border-2 border-[#2C2A29] p-8 md:p-12 mb-16 relative shadow-[10px_10px_0px_0px_#2C2A29]">
+              <div className="absolute -top-4 left-10 bg-[#DA251D] text-[#FAF3EB] px-8 py-1.5 text-sm font-bold uppercase tracking-[0.2em] shadow-lg skew-x-[-12deg]">
+                Bài học cho tương lai
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-12 mt-4">
                 {[
-                  "Phải luôn xuất phát từ thực tiễn khách quan, tôn trọng và vận dụng đúng quy luật kinh tế — tuyệt đối tránh nóng vội, chủ quan duy ý chí hoặc áp đặt các mô hình rập khuôn.",
-                  "Đổi mới là đòi hỏi sống còn và tất yếu — cơ chế tập trung quan liêu bao cấp nếu kéo dài sẽ dẫn đến sự đình trệ và tiêu vong động lực phát triển của xã hội.",
-                  "Kết hợp chặt chẽ giữa phát triển kinh tế và củng cố quốc phòng an ninh — bảo vệ Tổ quốc là tiền đề để xây dựng đất nước và ngược lại.",
-                  "Đổi mới là một quá trình liên tục, có bước đi và lộ trình phù hợp — cần sự dũng cảm nhìn thẳng vào sự thật để tự phê bình và sửa chữa sai lầm tư duy.",
-                ].map((lesson, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="flex gap-3 items-start"
-                  >
-                    <span className="flex-shrink-0 w-7 h-7 rounded-lg bg-[#7d3c98] text-white flex items-center justify-center text-xs font-bold mt-0.5">
-                      {i + 1}
-                    </span>
-                    <p className="text-sm text-[#333] leading-relaxed">{lesson}</p>
-                  </motion.div>
+                  { tag: "Tư duy", text: "Thực tiễn là thước đo duy nhất của chân lý. Năm 2026, mọi chính sách đều phải dựa trên dữ liệu thực và nhu cầu thực của nhân dân." },
+                  { tag: "Ý chí", text: "Khó khăn là động lực cho sự sáng tạo. Cuộc khủng hoảng 1985 đã cho thấy người Việt càng bị dồn vào đường cùng càng bứt phá mạnh mẽ." },
+                  { tag: "Chiến lược", text: "Nội lực là quyết định, ngoại lực là quan trọng. Giữ vững chủ quyền để hội nhập sâu rộng là kim chỉ nam từ 1975 đến nay." },
+                  { tag: "Công tác cán bộ", text: "Dũng cảm nhận sai và sửa sai là phẩm chất của một Đảng mạnh. Đây là bài học sống còn để duy trì niềm tin bền vững đến 2026." },
+                ].map((item, i) => (
+                  <div key={i} className="space-y-2">
+                    <span className="inline-block text-[10px] font-black uppercase text-[#DA251D] underline decoration-2 underline-offset-4">{item.tag}</span>
+                    <p className="text-[14px] font-serif-body text-[#2C2A29] leading-relaxed text-justify italic">{item.text}</p>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Pull quote */}
-            <motion.blockquote
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+            {/* Pull quote - Stamped Style */}
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
-              className="relative bg-[#DA251D] text-white rounded-3xl p-8 md:p-10 text-center"
+              className="relative py-16 px-10 border-4 border-double border-[#2C2A29] text-center rounded-sm bg-[#FAF3EB] overflow-hidden"
             >
-              <div className="absolute top-4 left-6 text-6xl leading-none text-white/20 font-serif">&ldquo;</div>
-              <p className="text-lg md:text-xl font-semibold leading-relaxed max-w-lg mx-auto relative z-10">
-                Nhìn thẳng vào sự thật, đánh giá đúng sự thật, nói rõ sự thật.
-              </p>
-              <p className="text-sm text-white/60 mt-4 font-medium">— Phương châm Đại hội VI, tháng 12/1986</p>
-            </motion.blockquote>
+              <div className="absolute inset-0 opacity-[0.1] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/pinstriped-suit.png')]" />
+              <div className="absolute -left-10 -top-10 text-[120px] font-black text-[#2C2A29]/5 select-none font-serif">"</div>
+              
+              <div className="relative z-10">
+                <div className="text-[#DA251D] mb-8">
+                  <Trophy size={48} className="mx-auto" />
+                </div>
+                <h4 className="text-3xl md:text-5xl font-serif-heading font-black text-[#2C2A29] uppercase tracking-tighter mb-6 px-4 leading-[0.9]">
+                  "Nhìn thẳng vào sự thật, đánh giá đúng sự thật, nói rõ sự thật."
+                </h4>
+                <div className="w-24 h-[3px] bg-[#DA251D] mx-auto mb-6" />
+                <p className="text-sm font-bold uppercase tracking-[0.4em] text-[#5C554E] max-w-lg mx-auto leading-relaxed">
+                  Phương châm Đại hội VI (12/1986) — Ngọn đuốc soi đường cho Việt Nam vươn mình trong thế kỷ 21.
+                </p>
+              </div>
+              
+              <div className="absolute -right-10 -bottom-10 text-[120px] font-black text-[#2C2A29]/5 select-none font-serif">"</div>
+            </motion.div>
           </motion.section>
         )}
       </AnimatePresence>

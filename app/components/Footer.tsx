@@ -16,16 +16,16 @@ const Footer = () => {
         {/* Magazine Style Header */}
         <div className="text-center mb-12 pb-12 border-b border-black/20">
           <h2 className="font-bold text-3xl tracking-wider uppercase mb-4">
-            <span className="text-black">CHỦ NGHĨA </span>
-            <span className="text-[#A61F2B]">XÃ HỘI</span>
+            <span className="text-black">KIẾN THIẾT & </span>
+            <span className="text-[#A61F2B]">BẢO VỆ TỔ QUỐC</span>
           </h2>
           <p className="italic text-lg max-w-2xl mx-auto text-black/70 p-4">
-            &ldquo;Dân chủ xã hội chủ nghĩa là bản chất của chế độ ta, vừa là mục tiêu, 
-            vừa là động lực của công cuộc xây dựng chủ nghĩa xã hội và bảo vệ Tổ quốc.&rdquo;
+            &ldquo;11 năm máu, mồ hôi và trí tuệ — giai đoạn thai nghén vĩ đại
+            cho Đường lối Đổi mới toàn diện của dân tộc.&rdquo;
           </p>
           <div className="mt-4 flex justify-center items-center">
             <div className="w-6 h-[1px] bg-[#A61F2B]"></div>
-            <p className="mx-3 text-sm font-medium uppercase">Lý luận chính trị & Thực tiễn</p>
+            <p className="mx-3 text-sm font-medium uppercase">Chương 3.1 · 1975 – 1986</p>
             <div className="w-6 h-[1px] bg-[#A61F2B]"></div>
           </div>
         </div>
@@ -42,9 +42,9 @@ const Footer = () => {
               <div className="w-12 h-[1px] bg-[#A61F2B] mt-2"></div>
             </div>
             <p className="text-black/80 text-sm leading-relaxed">
-              Hệ thống cung cấp kiến thức chuyên sâu về thời kỳ quá độ lên CNXH tại Việt Nam 
-              và sự phát triển của các hình thái dân chủ. Chúng tôi hướng tới mục tiêu lan tỏa 
-              giá trị lý luận khoa học, góp phần xây dựng đất nước phồn vinh và hạnh phúc.
+              Hệ thống hóa kiến thức Chương 3.1: Hành trình kiến thiết và bảo vệ Tổ quốc
+              giai đoạn 1975 – 1986 — từ thống nhất đất nước đến ba bước đột phá thai nghén
+              Đường lối Đổi mới toàn diện.
             </p>
           </div>
           
@@ -56,10 +56,10 @@ const Footer = () => {
             </div>
             <div className="space-y-3 mt-6">
               {[
-                { name: "Quá độ lên CNXH ở Việt Nam", path: "/noi-dung-chinh?topic=1" },
-                { name: "Dân chủ và sự ra đời, phát triển của dân chủ", path: "/noi-dung-chinh?topic=2" },
-                { name: "Dân chủ xã hội chủ nghĩa", path: "/noi-dung-chinh?topic=3" },
-                { name: "Tổng kết bài học", path: "/noi-dung-chinh#tong-ket" },
+                { name: "Giai đoạn 1: Bước chuyển mình (1975–1981)", path: "/noi-dung-chinh?topic=1" },
+                { name: "Giai đoạn 2: Vượt khủng hoảng (1982–1986)", path: "/noi-dung-chinh?topic=2" },
+                { name: "Tổng kết giai đoạn 1975–1986", path: "/noi-dung-chinh?topic=3" },
+                { name: "Quiz ôn tập Chương 3.1", path: "/noi-dung-chinh#quiz-on-tap" },
                 { name: "Video bài giảng", path: "/on-tap-quiz" }
               ].map((item) => (
                 <Link

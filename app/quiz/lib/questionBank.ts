@@ -5,169 +5,184 @@ type BankItem = QuizQuestion & { timeLimit?: number; image?: string };
 
 const bankItems: BankItem[] = [
   {
-    question: 'Đặc điểm nổi bật nhất của con đường quá độ lên chủ nghĩa xã hội ở Việt Nam là gì?',
+    question: 'Hội nghị nào đã chốt chủ trương thống nhất đất nước về mặt Nhà nước sau 1975?',
     options: [
-      'Quá độ trực tiếp từ xã hội tư bản chủ nghĩa phát triển',
-      'Quá độ bỏ qua chế độ tư bản chủ nghĩa',
-      'Quá độ từ xã hội phong kiến lâu đời đã phát triển công nghiệp',
-      'Tiến thẳng lên chủ nghĩa cộng sản không cần thời kỳ quá độ'
-    ],
-    correctIndex: 1,
-    timeLimit: 20,
-    explanation: 'Việt Nam tiến lên chủ nghĩa xã hội bỏ qua chế độ tư bản chủ nghĩa, tức là bỏ qua việc xác lập vị trí thống trị của quan hệ sản xuất và kiến trúc thượng tầng tư bản chủ nghĩa [1], [2].',
-  },
-  {
-    question: 'Việc "bỏ qua" chế độ tư bản chủ nghĩa ở Việt Nam cần được hiểu như thế nào cho đúng?',
-    options: [
-      'Bỏ qua toàn bộ những thành tựu mà nhân loại đạt được dưới chủ nghĩa tư bản',
-      'Bỏ qua việc phát triển lực lượng sản xuất và khoa học công nghệ',
-      'Bỏ qua vị trí thống trị của quan hệ sản xuất và kiến trúc thượng tầng tư bản chủ nghĩa',
-      'Bỏ qua việc giao lưu kinh tế với các nước tư bản chủ nghĩa'
-    ],
-    correctIndex: 2,
-    timeLimit: 20,
-    explanation: 'Bỏ qua chế độ tư bản chủ nghĩa là bỏ qua việc xác lập vị trí thống trị của quan hệ sản xuất và kiến trúc thượng tầng tư bản chủ nghĩa, nhưng phải tiếp thu, kế thừa những thành tựu mà nhân loại đã đạt được dưới chế độ này [2].',
-  },
-  {
-    question: 'Theo Cương lĩnh năm 2011, mô hình xã hội xã hội chủ nghĩa ở Việt Nam có bao nhiêu đặc trưng cơ bản?',
-    options: ['6 đặc trưng', '7 đặc trưng', '8 đặc trưng', '9 đặc trưng'],
-    correctIndex: 2,
-    timeLimit: 15,
-    explanation: 'Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên chủ nghĩa xã hội (bổ sung, phát triển năm 2011) đã xác định mô hình gồm 8 đặc trưng cơ bản [3], [4].',
-  },
-  {
-    question: 'Thuật ngữ "Dân chủ" (demoskratos) có nguồn gốc từ quốc gia cổ đại nào?',
-    options: ['La Mã cổ đại', 'Ai Cập cổ đại', 'Hy Lạp cổ đại', 'Ấn Độ cổ đại'],
-    correctIndex: 2,
-    timeLimit: 15,
-    explanation: 'Thuật ngữ dân chủ ra đời vào khoảng thế kỷ VII - VI trước Công nguyên tại Hy Lạp cổ đại [5].',
-  },
-  {
-    question: 'Dưới góc độ chính trị, dân chủ được hiểu là gì?',
-    options: [
-      'Một giá trị đạo đức cá nhân',
-      'Một hình thức nhà nước hay một chế độ chính trị',
-      'Sự tự do tuyệt đối của mỗi công dân',
-      'Sự thoả hiệp giữa các giai cấp đối kháng'
-    ],
-    correctIndex: 1,
-    timeLimit: 20,
-    explanation: 'Dân chủ là một hình thức nhà nước, là một trong những hình thái của nhà nước gắn với các giai cấp cầm quyền [6].',
-  },
-  {
-    question: 'Nền dân chủ đầu tiên trong lịch sử nhân loại là nền dân chủ nào?',
-    options: [
-      'Dân chủ nguyên thuỷ',
-      'Dân chủ chủ nô',
-      'Dân chủ tư sản',
-      'Dân chủ xã hội chủ nghĩa'
+      'Hội nghị TW 21 (7/1973)',
+      'Hội nghị TW 24 (8/1975)',
+      'Hội nghị TW 6 (8/1979)',
+      'Đại hội IV (12/1976)',
     ],
     correctIndex: 1,
     timeLimit: 15,
-    explanation: 'Nền dân chủ chủ nô được coi là nền dân chủ đầu tiên trong lịch sử, mặc dù nó chỉ dành cho giai cấp chủ nô và một số công dân tự do [7].',
+    explanation: 'Tháng 8/1975, Hội nghị Trung ương 24 chốt chủ trương cấp bách: Phải thống nhất đất nước về mặt Nhà nước.',
   },
   {
-    question: 'Tại sao thời kỳ phong kiến bị coi là "thời kỳ đen tối" đối với dân chủ?',
+    question: 'Hội nghị Hiệp thương chính trị Bắc – Nam (11/1975) diễn ra tại đâu?',
     options: [
-      'Vì kinh tế không phát triển',
-      'Vì chế độ độc tài chuyên chế phong kiến đã xoá bỏ các giá trị dân chủ của thời cổ đại',
-      'Vì không có các cuộc khởi nghĩa của nhân dân',
-      'Vì con người không có nhu cầu làm chủ xã hội'
-    ],
-    correctIndex: 1,
-    timeLimit: 20,
-    explanation: 'Chế độ độc tài chuyên chế phong kiến đã xoá bỏ nền dân chủ chủ nô và thay thế bằng sự thống trị tuyệt đối của vua chúa [7].',
-  },
-  {
-    question: 'Nền dân chủ xã hội chủ nghĩa chính thức được xác lập sau sự kiện lịch sử nào?',
-    options: [
-      'Công xã Pari năm 1871',
-      'Cách mạng Tháng Mười Nga năm 1917',
-      'Chiến tranh thế giới thứ hai kết thúc',
-      'Sự sụp đổ của Liên Xô và Đông Âu'
-    ],
-    correctIndex: 1,
-    timeLimit: 15,
-    explanation: 'Dân chủ xã hội chủ nghĩa được xác lập chính thức sau thắng lợi của Cách mạng Tháng Mười Nga năm 1917 với sự ra đời của nhà nước xã hội chủ nghĩa đầu tiên [8], [9].',
-  },
-  {
-    question: 'Bản chất chính trị của nền dân chủ xã hội chủ nghĩa thể hiện ở điểm nào?',
-    options: [
-      'Sự đa đảng đối lập quyền lực',
-      'Sự lãnh đạo của giai cấp công nhân thông qua Đảng Cộng sản',
-      'Sự cai trị của thiểu số đối với đa số',
-      'Việc duy trì quyền lực tuyệt đối của cá nhân lãnh đạo'
-    ],
-    correctIndex: 1,
-    timeLimit: 20,
-    explanation: 'Bản chất chính trị của nền dân chủ xã hội chủ nghĩa là sự lãnh đạo của giai cấp công nhân thông qua Đảng của nó đối với toàn xã hội [10].',
-  },
-  {
-    question: 'Về bản chất kinh tế, nền dân chủ xã hội chủ nghĩa dựa trên chế độ sở hữu nào?',
-    options: [
-      'Chế độ tư hữu về tư liệu sản xuất',
-      'Chế độ sở hữu hỗn hợp của các tập đoàn tư nhân',
-      'Chế độ công hữu về tư liệu sản xuất chủ yếu',
-      'Chế độ sở hữu của nước ngoài'
+      'Hà Nội',
+      'Huế',
+      'Sài Gòn',
+      'Đà Nẵng',
     ],
     correctIndex: 2,
     timeLimit: 15,
-    explanation: 'Nền dân chủ xã hội chủ nghĩa dựa trên chế độ sở hữu xã hội về những tư liệu sản xuất chủ yếu của toàn xã hội [11], [12].',
+    explanation: 'Tháng 11/1975, Hội nghị Hiệp thương chính trị Bắc – Nam diễn ra tại Sài Gòn, đạt kết quả thành công rực rỡ.',
   },
   {
-    question: 'Chủ tịch Hồ Chí Minh khẳng định địa vị cao nhất trong nước ta thuộc về ai?',
-    options: ['Giai cấp tư sản', 'Nhân dân', 'Các quan chức nhà nước', 'Đội ngũ trí thức'],
-    correctIndex: 1,
-    timeLimit: 15,
-    explanation: 'Hồ Chí Minh khẳng định: "Nước ta là nước dân chủ, địa vị cao nhất là dân, vì dân là chủ" [13].',
-  },
-  {
-    question: 'Đặc điểm của Nhà nước pháp quyền xã hội chủ nghĩa Việt Nam là gì?',
+    question: 'Tổng tuyển cử bầu Quốc hội chung (25/4/1976) có tỷ lệ cử tri tham gia là bao nhiêu?',
     options: [
-      'Sự phân chia quyền lực giữa các giai cấp đối lập',
-      'Do Đảng Cộng sản Việt Nam lãnh đạo',
-      'Tổ chức theo mô hình tam quyền phân lập tuyệt đối',
-      'Duy trì quyền lợi của giai cấp tư sản'
-    ],
-    correctIndex: 1,
-    timeLimit: 20,
-    explanation: 'Nhà nước pháp quyền xã hội chủ nghĩa Việt Nam do Đảng Cộng sản Việt Nam lãnh đạo theo quy định tại Điều 4 Hiến pháp năm 2013 [14], [15].',
-  },
-  {
-    question: 'Một trong những phương hướng cơ bản để xây dựng CNXH ở Việt Nam là gì?',
-    options: [
-      'Tập trung phát triển kinh tế tư nhân làm chủ đạo',
-      'Đẩy mạnh công nghiệp hoá, hiện đại hoá đất nước',
-      'Hạn chế giao lưu kinh tế với các nước phát triển',
-      'Xây dựng nền văn hoá tách rời bản sắc dân tộc'
-    ],
-    correctIndex: 1,
-    timeLimit: 20,
-    explanation: 'Phương hướng quan trọng là đẩy mạnh công nghiệp hoá, hiện đại hoá đất nước gắn với phát triển kinh tế tri thức và bảo vệ tài nguyên, môi trường [2], [16].',
-  },
-  {
-    question: 'Dân chủ xã hội chủ nghĩa ở Việt Nam được thực hiện qua những hình thức nào?',
-    options: [
-      'Chỉ thông qua dân chủ trực tiếp',
-      'Chỉ thông qua dân chủ gián tiếp (đại diện)',
-      'Thông qua cả dân chủ trực tiếp và dân chủ gián tiếp',
-      'Thông qua sự chỉ định của cấp trên'
+      '95,50%',
+      '97,23%',
+      '98,77%',
+      '99,15%',
     ],
     correctIndex: 2,
     timeLimit: 15,
-    explanation: 'Bản chất dân chủ xã hội chủ nghĩa ở Việt Nam được thực hiện thông qua các hình thức dân chủ gián tiếp và dân chủ trực tiếp [17].',
+    explanation: 'Ngày 25/4/1976, hơn 23 triệu cử tri (98,77%) nô nức tham gia Tổng tuyển cử bầu Quốc hội chung.',
   },
   {
-    question: 'Theo lý luận Mác - Lênin, dân chủ xã hội chủ nghĩa sẽ như thế nào khi xã hội cộng sản phát triển cao?',
+    question: 'Kỳ họp thứ nhất Quốc hội khóa VI đã quyết định Quốc hiệu là gì?',
     options: [
-      'Trở nên độc tài hơn',
-      'Tiếp tục tồn tại như một hình thức nhà nước vĩnh viễn',
-      'Tự tiêu vong và trở thành thói quen sinh hoạt xã hội',
-      'Bị thay thế bởi nền dân chủ tư sản'
+      'Việt Nam Dân chủ Cộng hòa',
+      'Cộng hòa Xã hội Chủ nghĩa Việt Nam',
+      'Cộng hòa Nhân dân Việt Nam',
+      'Việt Nam Cộng hòa Thống Nhất',
+    ],
+    correctIndex: 1,
+    timeLimit: 15,
+    explanation: 'Kỳ họp thứ nhất Quốc hội khóa VI (24/6 – 3/7/1976) quyết định Quốc hiệu: Cộng hòa Xã hội Chủ nghĩa Việt Nam.',
+  },
+  {
+    question: 'Đại hội IV (12/1976) xác định tiến hành đồng thời mấy cuộc cách mạng?',
+    options: [
+      '2 cuộc cách mạng',
+      '3 cuộc cách mạng',
+      '4 cuộc cách mạng',
+      '5 cuộc cách mạng',
+    ],
+    correctIndex: 1,
+    timeLimit: 15,
+    explanation: 'Đại hội IV xác định tiến hành đồng thời 3 cuộc cách mạng: Quan hệ sản xuất, Khoa học – kỹ thuật, Tư tưởng và văn hóa.',
+  },
+  {
+    question: 'Chỉ thị 100-CT/TW (Khoán 100) có ý nghĩa gì đối với nông nghiệp?',
+    options: [
+      'Tập thể hóa toàn bộ nông nghiệp',
+      'Thổi bùng sức sống mới cho nông nghiệp Việt Nam',
+      'Hạn chế sản xuất nông nghiệp tư nhân',
+      'Chuyển nông nghiệp sang công nghiệp nặng',
+    ],
+    correctIndex: 1,
+    timeLimit: 20,
+    explanation: 'Chỉ thị 100-CT/TW (Khoán 100) thuộc Bước đột phá thứ 1 (8/1979 – 1/1981), thổi bùng sức sống mới cho nông nghiệp Việt Nam.',
+  },
+  {
+    question: 'Sự kiện Giải phóng Phnôm Pênh trong chiến tranh biên giới Tây Nam diễn ra khi nào?',
+    options: [
+      '30/4/1975',
+      '7/1/1979',
+      '17/2/1979',
+      '25/4/1976',
+    ],
+    correctIndex: 1,
+    timeLimit: 15,
+    explanation: 'Chiến thắng chiến tranh biên giới Tây Nam: Giải phóng Phnôm Pênh ngày 7/1/1979.',
+  },
+  {
+    question: 'Cuộc chiến tranh biên giới phía Bắc bắt đầu từ ngày nào?',
+    options: [
+      '7/1/1979',
+      '17/2/1979',
+      '30/4/1975',
+      '25/4/1976',
+    ],
+    correctIndex: 1,
+    timeLimit: 15,
+    explanation: 'Cuộc chiến tranh biên giới phía Bắc bắt đầu từ ngày 17/2/1979, quân và dân ta đã đánh trả anh dũng bảo vệ Tổ quốc.',
+  },
+  {
+    question: 'Đại hội V (3/1982) xác định mặt trận hàng đầu là gì?',
+    options: [
+      'Công nghiệp nặng',
+      'Nông nghiệp',
+      'Thương mại xuất khẩu',
+      'Quốc phòng an ninh',
+    ],
+    correctIndex: 1,
+    timeLimit: 15,
+    explanation: 'Đại hội V nhận định đất nước đang ở "chặng đường đầu tiên" và xác định nông nghiệp là mặt trận hàng đầu.',
+  },
+  {
+    question: 'Hai nhiệm vụ cốt lõi được Đại hội V đề ra là gì?',
+    options: [
+      'Công nghiệp hóa và Hiện đại hóa',
+      'Xây dựng CNXH và Bảo vệ vững chắc Tổ quốc',
+      'Phát triển kinh tế và Mở cửa hội nhập',
+      'Chống tham nhũng và Cải cách hành chính',
+    ],
+    correctIndex: 1,
+    timeLimit: 20,
+    explanation: 'Đại hội V (3/1982) đề ra hai nhiệm vụ cốt lõi: Xây dựng CNXH và Bảo vệ vững chắc Tổ quốc.',
+  },
+  {
+    question: 'Hội nghị TW 8 (6/1985) chọn khâu đột phá nào để xóa bỏ cơ chế bao cấp?',
+    options: [
+      'Giáo dục – Y tế – Quốc phòng',
+      'Giá – Lương – Tiền',
+      'Sản xuất – Xuất khẩu – Đầu tư',
+      'Công nghiệp – Nông nghiệp – Dịch vụ',
+    ],
+    correctIndex: 1,
+    timeLimit: 15,
+    explanation: 'Hội nghị TW 8 (6/1985) – Bước đột phá thứ 2 – chọn "Giá – Lương – Tiền" làm khâu đột phá, chuyển sang hạch toán kinh doanh XHCN.',
+  },
+  {
+    question: 'Bước đột phá thứ 3 (Hội nghị Bộ Chính trị, 8/1986) định hình tư duy cho Đại hội nào?',
+    options: [
+      'Đại hội IV',
+      'Đại hội V',
+      'Đại hội VI',
+      'Đại hội VII',
     ],
     correctIndex: 2,
+    timeLimit: 15,
+    explanation: 'Hội nghị Bộ Chính trị (8/1986) đưa ra kết luận về quan điểm kinh tế, định hình tư duy cho Đại hội VI — Đại hội Đổi Mới.',
+  },
+  {
+    question: 'Đại hội IV (12/1976) đã chính thức đổi tên Đảng thành gì?',
+    options: [
+      'Đảng Lao động Việt Nam',
+      'Đảng Cộng sản Việt Nam',
+      'Đảng Nhân dân Cách mạng Việt Nam',
+      'Đảng Xã hội Việt Nam',
+    ],
+    correctIndex: 1,
+    timeLimit: 15,
+    explanation: 'Đại hội IV (12/1976) chính thức đổi tên thành Đảng Cộng sản Việt Nam.',
+  },
+  {
+    question: 'Hội nghị TW 6 (8/1979) đưa ra chủ trương gì?',
+    options: [
+      '"Tập trung quan liêu bao cấp"',
+      '"Sản xuất bung ra"',
+      '"Giá – Lương – Tiền"',
+      '"Đổi mới toàn diện"',
+    ],
+    correctIndex: 1,
+    timeLimit: 15,
+    explanation: 'Hội nghị TW 6 (8/1979) lịch sử đưa ra chủ trương "sản xuất bung ra", mở đầu cho bước đột phá thứ nhất.',
+  },
+  {
+    question: 'Giai đoạn 1975–1986 được coi là giai đoạn "thai nghén" cho đường lối nào?',
+    options: [
+      'Đường lối kháng chiến chống Mỹ',
+      'Đường lối Đổi mới toàn diện',
+      'Đường lối ngoại giao đa phương',
+      'Đường lối công nghiệp hóa XHCN',
+    ],
+    correctIndex: 1,
     timeLimit: 20,
-    explanation: 'Càng hoàn thiện bao nhiêu, nền dân chủ xã hội chủ nghĩa lại càng tự tiêu vong bấy nhiêu để trở thành một thói quen, một tập quán trong sinh hoạt xã hội [18], [19].',
+    explanation: '11 năm (1975–1986) là giai đoạn "thai nghén" vĩ đại, trải qua những phép thử đau đớn để hình thành Đường lối Đổi mới toàn diện.',
   },
 ];
 

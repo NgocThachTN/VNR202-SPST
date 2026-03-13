@@ -65,19 +65,18 @@ export default function Navbar() {
         <div className="container mx-auto py-6 px-4 border-b border-black/40 relative">
           <div className="flex flex-col md:flex-row items-center justify-between text-center relative z-10">
             {/* Thay đổi Label trái */}
-            <p className="text-xs uppercase tracking-widest mb-3 md:mb-0 font-medium">Lý Luận Chính Trị</p>
+            <p className="text-xs uppercase tracking-widest mb-3 md:mb-0 font-medium">Chương 3.1</p>
 
-            {/* Centered Title - Thay đổi tiêu đề chính */}
+            {/* Centered Title */}
             <Link href="/" className="md:absolute md:left-1/2 md:transform md:-translate-x-1/2 group mb-3 md:mb-0">
               <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl tracking-wider uppercase text-center inline-block relative">
-                <span className="text-black">CHỦ NGHĨA </span>
-                <span className="text-[#A61F2B]">XÃ HỘI</span>
+                <span className="text-black">KIẾN THIẾT & </span>
+                <span className="text-[#A61F2B]">BẢO VỆ</span>
                 <span className="absolute -top-2 -right-2 text-[#A61F2B] text-xs">®</span>
               </h1>
             </Link>
 
-            {/* Thay đổi Label phải */}
-            <p className="text-xs uppercase tracking-widest font-medium">Dân Chủ Xã Hội Chủ Nghĩa</p>
+            <p className="text-xs uppercase tracking-widest font-medium">1975 – 1986</p>
           </div>
         </div>
       </motion.div>
@@ -102,8 +101,8 @@ export default function Navbar() {
             >
               <Link href="/" className="group">
                 <h1 className="font-bold text-lg tracking-wider uppercase inline-block relative whitespace-nowrap">
-                  <span className="text-black">CN </span>
-                  <span className="text-[#A61F2B]">XÃ HỘI</span>
+                  <span className="text-black">KIẾN THIẾT </span>
+                  <span className="text-[#A61F2B]">& BẢO VỆ</span>
                   <span className="absolute -top-1 -right-1 text-[#A61F2B] text-[8px]">®</span>
                 </h1>
               </Link>

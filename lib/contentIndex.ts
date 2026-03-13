@@ -1,33 +1,34 @@
 // Short indexed snippets distilled from the site content to ground quiz generation.
+// Chương 3.1: Hành trình kiến thiết & bảo vệ Tổ quốc (1975 – 1986)
 export const contentIndex = [
   {
-    title: 'Khái quát đường lối 1930-1945',
+    title: 'Thống nhất đất nước về mặt Nhà nước (1975–1976)',
     summary:
-      'Đường lối xuyên suốt: độc lập dân tộc gắn liền với chủ nghĩa xã hội. Công-nông là động lực chính; Đảng Cộng sản lãnh đạo; đoàn kết các giai cấp trong mặt trận dân tộc; kết hợp bí mật-công khai, chính trị-vũ trang.',
+      'Hội nghị TW 24 (8/1975) chốt chủ trương thống nhất. Hội nghị Hiệp thương Bắc–Nam tại Sài Gòn (11/1975). Tổng tuyển cử 25/4/1976 với 98,77% cử tri. Quốc hội khóa VI quyết định: Quốc hiệu CHXHCN Việt Nam, Thủ đô Hà Nội, đổi tên Sài Gòn thành TP.HCM.',
   },
   {
-    title: 'Phong trào 1930-1931 và Xô Viết Nghệ Tĩnh',
+    title: 'Đại hội IV (12/1976) và đổi tên Đảng',
     summary:
-      'Nhiệm vụ: đánh đổ đế quốc Pháp và phong kiến, độc lập dân tộc, người cày có ruộng. Khẩu hiệu tịch thu ruộng đất, ủng hộ công nhân, xây chính quyền Xô Viết ở cơ sở.',
+      'Đổi tên thành Đảng Cộng sản Việt Nam. Xác định tiến hành đồng thời 3 cuộc cách mạng: Quan hệ sản xuất, Khoa học–kỹ thuật, Tư tưởng và văn hóa.',
   },
   {
-    title: 'Mặt trận Dân chủ 1936-1939',
+    title: 'Bước đột phá thứ 1 (8/1979 – 1/1981)',
     summary:
-      'Chống phát xít, chống chiến tranh, chống phản động thuộc địa; đòi tự do, dân chủ, cơm áo, hòa bình. Tạm gác khẩu hiệu đánh đổ đế quốc, tịch thu ruộng đất; mở rộng mặt trận dân chủ.',
+      'Hội nghị TW 6 (8/1979) với chủ trương "sản xuất bung ra". Chỉ thị 100-CT/TW (Khoán 100) thổi bùng sức sống mới cho nông nghiệp Việt Nam.',
   },
   {
-    title: 'Chuyển hướng 1939-1945 và Việt Minh',
+    title: 'Bảo vệ Tổ quốc (1979)',
     summary:
-      'Đặt giải phóng dân tộc lên hàng đầu, tạm gác cách mạng ruộng đất, thay bằng giảm tô giảm tức. Thành lập Mặt trận Việt Minh, chuẩn bị khởi nghĩa vũ trang, phương châm khởi nghĩa từng phần tiến tới tổng khởi nghĩa.',
+      'Chiến thắng chiến tranh biên giới Tây Nam, giải phóng Phnôm Pênh 7/1/1979. Đánh trả chiến tranh biên giới phía Bắc từ 17/2/1979.',
   },
   {
-    title: 'Tổng khởi nghĩa Tháng Tám 1945',
+    title: 'Đại hội V (3/1982) và bước đột phá thứ 2',
     summary:
-      'Thời cơ vàng sau khi Nhật đầu hàng, trước khi Đồng minh vào. Lãnh đạo chớp thời cơ: Quân lệnh số 1 (13/8), Hội nghị Tân Trào, khởi nghĩa 19/8 Hà Nội, 23/8 Huế, 25/8 Sài Gòn, 2/9 Tuyên ngôn Độc lập.',
+      'Nhận định "chặng đường đầu tiên" của thời kỳ quá độ. Hai nhiệm vụ: Xây dựng CNXH và Bảo vệ Tổ quốc. Nông nghiệp là mặt trận hàng đầu. Hội nghị TW 8 (6/1985) chọn Giá–Lương–Tiền làm khâu đột phá xóa bao cấp.',
   },
   {
-    title: 'Luận cương chính trị 10/1930',
+    title: 'Bước đột phá thứ 3 (8/1986) và tổng kết',
     summary:
-      'Đặt cách mạng tư sản dân quyền thổ địa phản đế; lực lượng công-nông; lãnh đạo Đảng Cộng sản. Hạn chế: nhấn mạnh đấu tranh giai cấp, chưa nổi bật mâu thuẫn dân tộc, đánh giá thấp tiểu tư sản và tư sản dân tộc.',
-  }
+      'Hội nghị Bộ Chính trị (8/1986) kết luận về quan điểm kinh tế, định hình tư duy cho Đại hội VI (Đổi Mới). Giai đoạn 1975–1986 là "thai nghén" vĩ đại cho Đường lối Đổi mới toàn diện.',
+  },
 ];

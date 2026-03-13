@@ -114,7 +114,7 @@ export default function Navbar() {
               { name: "Trang chủ", path: ROUTES.HOME },
               { name: "Nội dung", path: ROUTES.NOIDUNG },
               { name: "Tư liệu", path: ROUTES.ONTAP },
-              { name: "Tham gia", path: ROUTES.QUIZ_JOIN },
+              { name: "Ôn Tập Quiz", path: ROUTES.QUIZ_JOIN },
               { name: "Mini Game", path: ROUTES.GAME },
               { name: "Về dự án", path: ROUTES.THANHVIEN }
             ].map((item, index) => (

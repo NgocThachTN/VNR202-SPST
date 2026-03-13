@@ -73,7 +73,7 @@ export default function QuizJoinPage() {
         <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
         <div className="w-full max-w-sm p-8 bg-[#FAF3EB] border-2 border-[#D1C2A5] rounded-sm shadow-[8px_8px_0px_0px_rgba(44,42,41,1)] relative z-10">
           <div className="text-center mb-6">
-            <h2 className="text-3xl font-serif-heading font-black text-[#2C2A29] uppercase tracking-wider">Trạm Kết Nối</h2>
+            <h2 className="text-3xl font-serif-heading font-black text-[#2C2A29] uppercase tracking-wider">Ôn Tập Quiz</h2>
             <div className="w-12 h-1 bg-[#DA251D] mx-auto mt-2"></div>
             <p className="mt-3 text-sm font-serif-body text-[#5C554E] italic">Chế độ đào tạo cá nhân</p>
           </div>

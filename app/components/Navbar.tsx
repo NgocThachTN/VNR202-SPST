@@ -14,6 +14,7 @@ const ROUTES = {
   ONTAP: "/on-tap-quiz",
   QUIZ_HOST: "/quiz-host",
   QUIZ_JOIN: "/quiz-join",
+  GAME: "/game",
   THANHVIEN: "/thanh-vien"
 };
 
@@ -114,6 +115,7 @@ export default function Navbar() {
               { name: "Nội dung", path: ROUTES.NOIDUNG },
               { name: "Tư liệu", path: ROUTES.ONTAP },
               { name: "Tham gia", path: ROUTES.QUIZ_JOIN },
+              { name: "Mini Game", path: ROUTES.GAME },
               { name: "Về dự án", path: ROUTES.THANHVIEN }
             ].map((item, index) => (
               <div key={item.name} className="relative flex items-center">
@@ -130,7 +132,7 @@ export default function Navbar() {
                     }`}></span>
                   </span>
                 </Link>
-                {index < 4 && (
+                {index < 5 && (
                   <span className="ml-4 lg:ml-6 xl:ml-8 text-[#D1C2A5] font-serif-heading font-bold">/</span>
                 )}
               </div>
@@ -186,6 +188,7 @@ export default function Navbar() {
                   { name: "Nội dung", path: ROUTES.NOIDUNG },
                   { name: "Tư liệu", path: ROUTES.ONTAP },
                   { name: "Tham gia", path: ROUTES.QUIZ_JOIN },
+                  { name: "Mini Game", path: ROUTES.GAME },
                   { name: "Về dự án", path: ROUTES.THANHVIEN }
                 ].map((item) => (
                   <Link

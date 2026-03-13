@@ -113,7 +113,6 @@ export default function Navbar() {
               { name: "Trang chủ", path: ROUTES.HOME },
               { name: "Nội dung", path: ROUTES.NOIDUNG },
               { name: "Tư liệu", path: ROUTES.ONTAP },
-              { name: "Quiz Lịch sử", path: ROUTES.QUIZ_HOST },
               { name: "Tham gia", path: ROUTES.QUIZ_JOIN },
               { name: "Về dự án", path: ROUTES.THANHVIEN }
             ].map((item, index) => (
@@ -131,7 +130,7 @@ export default function Navbar() {
                     }`}></span>
                   </span>
                 </Link>
-                {index < 5 && (
+                {index < 4 && (
                   <span className="ml-4 lg:ml-6 xl:ml-8 text-[#D1C2A5] font-serif-heading font-bold">/</span>
                 )}
               </div>
@@ -186,7 +185,6 @@ export default function Navbar() {
                   { name: "Trang chủ", path: ROUTES.HOME },
                   { name: "Nội dung", path: ROUTES.NOIDUNG },
                   { name: "Tư liệu", path: ROUTES.ONTAP },
-                  { name: "Quiz Lịch sử", path: ROUTES.QUIZ_HOST },
                   { name: "Tham gia", path: ROUTES.QUIZ_JOIN },
                   { name: "Về dự án", path: ROUTES.THANHVIEN }
                 ].map((item) => (

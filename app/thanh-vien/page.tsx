@@ -5,10 +5,10 @@ import PageHeader from "../components/PageHeader";
 import { Users, Bot, Sparkles, Code, Video, MessageSquare } from "lucide-react";
 
 const members = [
-  { id: "SE183713", name: "Trương Bảo Ngọc", role: "Leader" },
-  { id: "SE184410", name: "Trương Tấn Triệu", role: "Member" },
-  { id: "SE182524", name: "Trương Phúc Lộc", role: "Member" },
- 
+  { id: "1", name: "Trương Nguyễn Ngọc Thạch", role: "Member" },
+  { id: "2", name: "Hoàng Hồng Quân", role: "Member" },
+  { id: "3", name: "Hoàng Minh Đạt", role: "Member" },
+  { id: "4", name: "Nguyễn Minh Tuấn", role: "Member" },
 ];
 
 const aiTools = [
@@ -86,7 +86,6 @@ export default function ThanhVienPage() {
                 >
                   <div>
                     <h3 className="font-serif-heading text-lg font-bold text-[#2C2A29]">{member.name}</h3>
-                    <p className="text-xs font-sans font-bold text-[#5C554E] tracking-widest uppercase mt-1">MSSV: {member.id}</p>
                   </div>
                   {member.role === "Leader" && (
                     <span className="px-3 py-1 text-[10px] font-sans font-bold uppercase tracking-wider text-[#FAF3EB] bg-[#DA251D] rounded-sm border border-[#2C2A29]">

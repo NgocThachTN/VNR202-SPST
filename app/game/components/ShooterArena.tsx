@@ -76,6 +76,7 @@ export default function ShooterArena({
   }, []);
 
   const mouseRef = useRef({ x: sizeRef.current.w / 2, y: 0 });
+  const mouseDownRef = useRef(false);
   const stateRef = useRef({
     player: { x: sizeRef.current.w / 2, y: sizeRef.current.h / 2 },
     aimAngle: -Math.PI / 2,
@@ -107,6 +108,20 @@ export default function ShooterArena({
       width: ALLY_TANK_843.width,
       height: ALLY_TANK_843.height,
     } as AllyTank : null as AllyTank | null,
+    // Screen shake
+    shakeX: 0,
+    shakeY: 0,
+    shakeIntensity: 0,
+    // Muzzle flash
+    muzzleFlash: 0,
+    // Floating damage numbers
+    damageNumbers: [] as { id: number; x: number; y: number; text: string; color: string; frame: number }[],
+    // Hit markers
+    hitMarkers: [] as { id: number; x: number; y: number; frame: number }[],
+    // Kill combo
+    combo: 0,
+    comboTimer: 0,
+    comboDisplay: 0,
   });
 
   const ammoRef = useRef(ammo);
@@ -132,6 +147,11 @@ export default function ShooterArena({
     const cooldown = SHOOT_COOLDOWN * Math.pow(0.8, fireRateStacks);
     if (now - s.lastShot < cooldown) return;
     s.lastShot = now;
+
+    // Screen shake on shoot
+    s.shakeIntensity = Math.max(s.shakeIntensity, 3);
+    // Muzzle flash
+    s.muzzleFlash = 4;
 
     // Bullet speed upgrade: +25% per stack
     const bsStacks = u["bullet_speed"] || 0;
@@ -198,6 +218,15 @@ export default function ShooterArena({
     s.spawned = 0;
     s.killed = 0;
     s.hitFlash = 0;
+    s.shakeX = 0;
+    s.shakeY = 0;
+    s.shakeIntensity = 0;
+    s.muzzleFlash = 0;
+    s.damageNumbers = [];
+    s.hitMarkers = [];
+    s.combo = 0;
+    s.comboTimer = 0;
+    s.comboDisplay = 0;
     s.spawnedByType = { soldier: 0, fortified: 0, tank: 0 };
     s.waveComposition = getWaveComposition(levelIndex, waveNum);
     const comp = s.waveComposition;
@@ -220,7 +249,6 @@ export default function ShooterArena({
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
         e.preventDefault();
       }
-      if (e.key === " ") shoot();
     }
     function handleKeyUp(e: KeyboardEvent) {
       s.keys.delete(e.key);
@@ -232,9 +260,9 @@ export default function ShooterArena({
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [waveNum, shoot]);
+  }, [waveNum, shoot, levelIndex]);
 
-  // mouse tracking + click to shoot
+  // mouse tracking + click/hold to shoot (auto-fire)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -253,15 +281,23 @@ export default function ShooterArena({
         mouseRef.current.x - s.player.x
       );
     }
-    function handleClick() {
+    function handleMouseDown() {
+      mouseDownRef.current = true;
       shoot();
+    }
+    function handleMouseUp() {
+      mouseDownRef.current = false;
     }
 
     canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("click", handleClick);
+    canvas.addEventListener("mousedown", handleMouseDown);
+    canvas.addEventListener("mouseup", handleMouseUp);
+    canvas.addEventListener("mouseleave", handleMouseUp);
     return () => {
       canvas.removeEventListener("mousemove", handleMouseMove);
-      canvas.removeEventListener("click", handleClick);
+      canvas.removeEventListener("mousedown", handleMouseDown);
+      canvas.removeEventListener("mouseup", handleMouseUp);
+      canvas.removeEventListener("mouseleave", handleMouseUp);
     };
   }, [shoot]);
 
@@ -1267,21 +1303,58 @@ export default function ShooterArena({
       // Bonus score per kill
       const bonusScore = (u["damage_up"] || 0) * 50;
 
+      // ---- Auto-fire when mouse is held ----
+      if (mouseDownRef.current || s.keys.has(" ")) {
+        shoot();
+      }
+
+      // ---- Update screen shake ----
+      if (s.shakeIntensity > 0) {
+        s.shakeX = (Math.random() - 0.5) * s.shakeIntensity * 2;
+        s.shakeY = (Math.random() - 0.5) * s.shakeIntensity * 2;
+        s.shakeIntensity *= 0.85;
+        if (s.shakeIntensity < 0.3) { s.shakeIntensity = 0; s.shakeX = 0; s.shakeY = 0; }
+      }
+
+      // ---- Update muzzle flash ----
+      if (s.muzzleFlash > 0) s.muzzleFlash--;
+
+      // ---- Update combo timer ----
+      if (s.comboTimer > 0) {
+        s.comboTimer--;
+        if (s.comboTimer <= 0) {
+          s.combo = 0;
+        }
+      }
+      if (s.comboDisplay > 0) s.comboDisplay--;
+
       // Rocket AoE explosion helper
       function rocketExplode(rx: number, ry: number, radius: number) {
         s.explosions.push({ id: s.nextId++, x: rx, y: ry, frame: 0, scale: 2.5 });
+        s.shakeIntensity = Math.max(s.shakeIntensity, 10);
         for (const e of s.enemies) {
           if (e.hp <= 0) continue;
           const ddx = e.x - rx;
           const ddy = e.y - ry;
           const edist = Math.sqrt(ddx * ddx + ddy * ddy);
           if (edist < radius + e.size / 2) {
+            s.hitMarkers.push({ id: s.nextId++, x: e.x, y: e.y, frame: 0 });
             e.hp--;
             if (e.hp <= 0) {
               s.killed++;
+              s.combo++;
+              s.comboTimer = 120;
+              s.comboDisplay = 60;
+              const comboBonus = (Math.min(s.combo, 10) - 1) * 25;
               const typeConfig = ENEMY_TYPES[e.type];
-              setScore((sc) => sc + typeConfig.scoreValue + bonusScore);
+              const totalKillScore = typeConfig.scoreValue + bonusScore + comboBonus;
+              setScore((sc) => sc + totalKillScore);
               s.explosions.push({ id: s.nextId++, x: e.x, y: e.y, frame: 0 });
+              s.damageNumbers.push({
+                id: s.nextId++, x: e.x, y: e.y - 10,
+                text: s.combo > 1 ? `+${totalKillScore} x${s.combo}` : `+${totalKillScore}`,
+                color: "#FFD700", frame: 0,
+              });
             }
           }
         }
@@ -1378,6 +1451,8 @@ export default function ShooterArena({
           b.x = -999;
           setHp((h) => Math.max(0, h - 1));
           s.hitFlash = 10;
+          s.shakeIntensity = Math.max(s.shakeIntensity, 8);
+          s.combo = 0; // reset combo on hit
           s.explosions.push({ id: s.nextId++, x: p.x, y: p.y, frame: 0 });
         }
       }
@@ -1491,6 +1566,8 @@ export default function ShooterArena({
           s.killed++;
           setHp((h) => Math.max(0, h - 1));
           s.hitFlash = 10;
+          s.shakeIntensity = Math.max(s.shakeIntensity, 8);
+          s.combo = 0;
           s.explosions.push({ id: s.nextId++, x: e.x, y: e.y, frame: 0 });
         }
 
@@ -1528,12 +1605,37 @@ export default function ShooterArena({
             if (b.isRocket && b.aoeRadius) {
               rocketExplode(b.x, b.y, b.aoeRadius);
             } else {
+              // Hit marker
+              s.hitMarkers.push({ id: s.nextId++, x: b.x, y: b.y, frame: 0 });
               e.hp--;
               if (e.hp <= 0) {
                 s.killed++;
+                // Combo system
+                s.combo++;
+                s.comboTimer = 120; // ~2 seconds at 60fps
+                const comboMultiplier = Math.min(s.combo, 10);
+                const comboBonus = (comboMultiplier - 1) * 25;
+                s.comboDisplay = 60;
                 const typeConfig = ENEMY_TYPES[e.type];
-                setScore((sc) => sc + typeConfig.scoreValue + bonusScore);
+                const totalKillScore = typeConfig.scoreValue + bonusScore + comboBonus;
+                setScore((sc) => sc + totalKillScore);
                 s.explosions.push({ id: s.nextId++, x: e.x, y: e.y, frame: 0 });
+                // Damage number (kill)
+                const killText = s.combo > 1
+                  ? `+${totalKillScore} x${s.combo}`
+                  : `+${totalKillScore}`;
+                s.damageNumbers.push({
+                  id: s.nextId++, x: e.x, y: e.y - 10,
+                  text: killText, color: "#FFD700", frame: 0,
+                });
+                // Bigger shake on kill
+                s.shakeIntensity = Math.max(s.shakeIntensity, 5);
+              } else {
+                // Damage number (hit)
+                s.damageNumbers.push({
+                  id: s.nextId++, x: b.x, y: b.y - 5,
+                  text: "HIT", color: "#ffffff", frame: 0,
+                });
               }
             }
             b.x = -999;
@@ -1547,6 +1649,14 @@ export default function ShooterArena({
       s.explosions = s.explosions
         .map((ex) => ({ ...ex, frame: ex.frame + 0.3 }))
         .filter((ex) => ex.frame < 6);
+      // Update damage numbers
+      s.damageNumbers = s.damageNumbers
+        .map((dn) => ({ ...dn, frame: dn.frame + 1, y: dn.y - 0.8 }))
+        .filter((dn) => dn.frame < 40);
+      // Update hit markers
+      s.hitMarkers = s.hitMarkers
+        .map((hm) => ({ ...hm, frame: hm.frame + 1 }))
+        .filter((hm) => hm.frame < 10);
 
       // ---- Ally Tank 843 update ----
       const ally = s.allyTank;
@@ -1589,6 +1699,10 @@ export default function ShooterArena({
       }
 
       // ──── DRAW ────
+      // Apply screen shake
+      ctx.save();
+      ctx.translate(s.shakeX, s.shakeY);
+
       drawGround();
 
       // Decorations (below everything) — skip tank_active when ally tank is active
@@ -1604,7 +1718,7 @@ export default function ShooterArena({
       // Ally Tank 843 (draws on top of obstacles, provides cover)
       drawAllyTank843();
 
-      // Bullets (player) — with shotgun fade and rocket visuals
+      // Bullets (player) — with shotgun fade, rocket visuals, improved trails
       for (const b of s.bullets) {
         if (b.isRocket) {
           // Rocket rendering
@@ -1625,11 +1739,13 @@ export default function ShooterArena({
           ctx.fillStyle = "#FFD700";
           ctx.fillRect(-14, -1, 3, 2);
           ctx.restore();
-          // Smoke trail
-          ctx.fillStyle = "#55555540";
-          ctx.beginPath();
-          ctx.arc(b.x - b.dx * 3, b.y - b.dy * 3, 4, 0, Math.PI * 2);
-          ctx.fill();
+          // Smoke trail (multiple)
+          for (let t = 1; t <= 4; t++) {
+            ctx.fillStyle = `rgba(85,85,85,${0.25 - t * 0.05})`;
+            ctx.beginPath();
+            ctx.arc(b.x - b.dx * t * 2, b.y - b.dy * t * 2, 3 + t, 0, Math.PI * 2);
+            ctx.fill();
+          }
         } else {
           let alpha = 1.0;
           let size = BULLET_SIZE;
@@ -1639,22 +1755,47 @@ export default function ShooterArena({
             alpha = Math.max(0.3, 1 - traveled / b.maxRange);
             size = Math.max(2, BULLET_SIZE * alpha);
           }
+          // Glow trail (3-segment tracer)
+          for (let t = 3; t >= 1; t--) {
+            ctx.globalAlpha = alpha * (0.15 / t);
+            ctx.fillStyle = "#FFD700";
+            const trailSize = size + t * 2;
+            ctx.beginPath();
+            ctx.arc(b.x - b.dx * t * 1.5, b.y - b.dy * t * 1.5, trailSize / 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          // Bullet core with glow
           ctx.globalAlpha = alpha;
-          ctx.fillStyle = "#FFD700";
+          ctx.fillStyle = "#fff";
           ctx.fillRect(b.x - size / 2, b.y - size / 2, size, size);
-          ctx.fillStyle = "#FFD70055";
-          ctx.fillRect(b.x - b.dx * 2 - 1, b.y - b.dy * 2 - 1, 3, 3);
+          ctx.fillStyle = "#FFD700";
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, size, 0, Math.PI * 2);
+          ctx.fill();
           ctx.globalAlpha = 1;
         }
       }
 
-      // Bullets (enemy — red/orange)
+      // Bullets (enemy — red/orange with trails)
       for (const b of s.enemyBullets) {
         const bSize = b.fromTank ? TANK_BULLET_SIZE : ENEMY_BULLET_SIZE;
-        ctx.fillStyle = b.fromTank ? "#ff4400" : "#ff2222";
+        const bColor = b.fromTank ? "#ff4400" : "#ff2222";
+        // Trail
+        ctx.globalAlpha = 0.15;
+        ctx.fillStyle = bColor;
+        ctx.beginPath();
+        ctx.arc(b.x - b.dx * 2, b.y - b.dy * 2, bSize + 1, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 0.08;
+        ctx.beginPath();
+        ctx.arc(b.x - b.dx * 4, b.y - b.dy * 4, bSize + 2, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        // Core
+        ctx.fillStyle = bColor;
         ctx.fillRect(b.x - bSize / 2, b.y - bSize / 2, bSize, bSize);
-        ctx.fillStyle = b.fromTank ? "#ff440055" : "#ff222255";
-        ctx.fillRect(b.x - b.dx * 2 - 1, b.y - b.dy * 2 - 1, bSize - 1, bSize - 1);
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(b.x - 1, b.y - 1, 2, 2);
       }
 
       // Enemies
@@ -1663,8 +1804,55 @@ export default function ShooterArena({
       // Explosions
       for (const ex of s.explosions) drawExplosion(ex.x, ex.y, ex.frame, ex.scale);
 
+      // Hit markers (X flash on hit)
+      for (const hm of s.hitMarkers) {
+        const hmAlpha = Math.max(0, 1 - hm.frame / 10);
+        const hmSize = 6 + hm.frame * 0.5;
+        ctx.globalAlpha = hmAlpha;
+        ctx.strokeStyle = "#fff";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(hm.x - hmSize, hm.y - hmSize);
+        ctx.lineTo(hm.x + hmSize, hm.y + hmSize);
+        ctx.moveTo(hm.x + hmSize, hm.y - hmSize);
+        ctx.lineTo(hm.x - hmSize, hm.y + hmSize);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      // Floating damage numbers
+      for (const dn of s.damageNumbers) {
+        const dnAlpha = Math.max(0, 1 - dn.frame / 40);
+        const scale = dn.frame < 5 ? 1 + (5 - dn.frame) * 0.1 : 1;
+        ctx.globalAlpha = dnAlpha;
+        ctx.fillStyle = dn.color;
+        ctx.font = `bold ${Math.round(10 * scale)}px 'Press Start 2P', monospace`;
+        ctx.textAlign = "center";
+        ctx.fillText(dn.text, dn.x, dn.y);
+        ctx.textAlign = "start";
+        ctx.globalAlpha = 1;
+      }
+
       // Player
       drawPixelSoldier(p.x, p.y, s.aimAngle);
+
+      // Muzzle flash effect
+      if (s.muzzleFlash > 0) {
+        const flashDist = PLAYER_SIZE / 2 + 14;
+        const fx = p.x + Math.cos(s.aimAngle) * flashDist;
+        const fy = p.y + Math.sin(s.aimAngle) * flashDist;
+        const flashSize = 4 + s.muzzleFlash * 2;
+        ctx.globalAlpha = s.muzzleFlash / 4;
+        ctx.fillStyle = "#FFD700";
+        ctx.beginPath();
+        ctx.arc(fx, fy, flashSize, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.arc(fx, fy, flashSize * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
 
       // Aim line (faint)
       ctx.strokeStyle = "#FFD70030";
@@ -1685,6 +1873,20 @@ export default function ShooterArena({
       // Crosshair
       drawCrosshair();
 
+      // Combo display
+      if (s.combo > 1 && s.comboDisplay > 0) {
+        const comboAlpha = Math.min(1, s.comboDisplay / 20);
+        const comboScale = s.comboDisplay > 50 ? 1 + (s.comboDisplay - 50) * 0.03 : 1;
+        ctx.globalAlpha = comboAlpha;
+        ctx.fillStyle = s.combo >= 5 ? "#ff4444" : s.combo >= 3 ? "#FFD700" : "#4fc3f7";
+        ctx.font = `bold ${Math.round(14 * comboScale)}px 'Press Start 2P', monospace`;
+        ctx.textAlign = "center";
+        const comboText = s.combo >= 10 ? `COMBO x${s.combo}!!!` : s.combo >= 5 ? `COMBO x${s.combo}!` : `COMBO x${s.combo}`;
+        ctx.fillText(comboText, AW / 2, 50);
+        ctx.textAlign = "start";
+        ctx.globalAlpha = 1;
+      }
+
       // Weather effects (on top of everything)
       drawWeather();
 
@@ -1695,7 +1897,10 @@ export default function ShooterArena({
         s.hitFlash--;
       }
 
-      // HUD on canvas
+      // End screen shake
+      ctx.restore();
+
+      // HUD on canvas (outside shake transform)
       ctx.fillStyle = "#ffffff88";
       ctx.font = "9px 'Press Start 2P', monospace";
       ctx.fillText(`WAVE ${waveNum + 1}  HA: ${s.killed}/${s.enemyCount}`, 10, AH - 10);

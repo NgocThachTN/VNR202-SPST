@@ -109,14 +109,17 @@ export default function GamePage() {
   const spreadStacks = upgradeCounts["spread_shot"] || 0;
   const bonusScore = (upgradeCounts["damage_up"] || 0) * 50;
 
-  // Derive effective weaponId from upgrades
+  // Derive effective weaponId from upgrades (specialty weapons not overridden by extra_bullet)
+  const isSpecialtyWeapon = weaponId === "rocket" || weaponId === "shotgun";
   const effectiveWeaponId = hasCircleShot
     ? "circle"
+    : isSpecialtyWeapon
+    ? weaponId
     : extraBullets >= 2
     ? "triple"
     : extraBullets >= 1
     ? "double"
-    : "single";
+    : weaponId;
 
   function startGame() {
     setLevel(0);

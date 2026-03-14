@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useRef, useState } from "react";
-import type { LevelData, Bullet, Enemy, EnemyBullet, Explosion, Obstacle, MapDecoration, WeaponType } from "../data";
+import type { LevelData, Bullet, Enemy, EnemyBullet, Explosion, Obstacle, MapDecoration, WeaponType, AllyTank } from "../data";
 import {
   ARENA_W,
   ARENA_H,
@@ -19,18 +19,9 @@ import {
   FORTIFIED_ANCHOR_RANGE,
   ENEMY_BULLET_SIZE,
   TANK_BULLET_SIZE,
+  ALLY_TANK_843,
   getWaveComposition,
 } from "../data";
-
-interface AllyTank {
-  id: number;
-  x: number;
-  y: number;
-  type: "843" | "390";
-  angle: number;
-  lastShot: number;
-  speed: number;
-}
 
 /* ═══════════════════════════════════════════════════════════════════ */
 /*  SHOOTER ARENA — canvas top-down shooter with mouse aim             */
@@ -104,7 +95,18 @@ export default function ShooterArena({
     hitFlash: 0,
     spawnedByType: { soldier: 0, fortified: 0, tank: 0 },
     waveComposition: getWaveComposition(levelIndex, waveNum),
-    allies: [] as AllyTank[],
+    allyTank: levelIndex === 0 ? {
+      x: ALLY_TANK_843.startX,
+      y: ALLY_TANK_843.startY,
+      targetY: ALLY_TANK_843.targetY,
+      speed: ALLY_TANK_843.speed,
+      lastShot: Date.now(),
+      shootCooldown: ALLY_TANK_843.shootCooldown,
+      bulletSpeed: ALLY_TANK_843.bulletSpeed,
+      active: true,
+      width: ALLY_TANK_843.width,
+      height: ALLY_TANK_843.height,
+    } as AllyTank : null as AllyTank | null,
   });
 
   const ammoRef = useRef(ammo);
@@ -133,24 +135,32 @@ export default function ShooterArena({
 
     // Bullet speed upgrade: +25% per stack
     const bsStacks = u["bullet_speed"] || 0;
-    const bSpeed = BULLET_SPEED * (1 + bsStacks * 0.25);
+    const weapon = WEAPONS.find(w => w.id === weaponRef.current) || WEAPONS[0];
+    const speedMult = weapon.bulletSpeedMultiplier ?? 1.0;
+    const bSpeed = BULLET_SPEED * (1 + bsStacks * 0.25) * speedMult;
 
     // Spread upgrade: wider angle per stack
     const spreadBonus = (u["spread_shot"] || 0) * 0.08;
 
-    const weapon = WEAPONS.find(w => w.id === weaponRef.current) || WEAPONS[0];
     const baseAngle = s.aimAngle;
+
+    const makeBullet = (angle: number): Bullet => ({
+      id: s.nextId++,
+      x: s.player.x,
+      y: s.player.y,
+      dx: Math.cos(angle) * bSpeed,
+      dy: Math.sin(angle) * bSpeed,
+      spawnX: s.player.x,
+      spawnY: s.player.y,
+      maxRange: weapon.maxRange,
+      isRocket: weapon.isRocket,
+      aoeRadius: weapon.aoeRadius,
+    });
 
     if (weapon.id === "circle") {
       for (let i = 0; i < weapon.bulletCount; i++) {
         const angle = baseAngle + (i * Math.PI * 2) / weapon.bulletCount;
-        s.bullets.push({
-          id: s.nextId++,
-          x: s.player.x,
-          y: s.player.y,
-          dx: Math.cos(angle) * bSpeed,
-          dy: Math.sin(angle) * bSpeed,
-        });
+        s.bullets.push(makeBullet(angle));
       }
     } else {
       const spread = weapon.spreadAngle + spreadBonus;
@@ -160,13 +170,7 @@ export default function ShooterArena({
         const angle = weapon.bulletCount === 1
           ? baseAngle
           : startAngle + i * spread;
-        s.bullets.push({
-          id: s.nextId++,
-          x: s.player.x,
-          y: s.player.y,
-          dx: Math.cos(angle) * bSpeed,
-          dy: Math.sin(angle) * bSpeed,
-        });
+        s.bullets.push(makeBullet(angle));
       }
     }
 
@@ -198,24 +202,18 @@ export default function ShooterArena({
     s.waveComposition = getWaveComposition(levelIndex, waveNum);
     const comp = s.waveComposition;
     s.enemyCount = comp.soldiers + comp.fortified + comp.tanks;
-
-    // Initialize allies for Level 1
-    if (levelIndex === 0) {
-      const decs = levelData.map?.decorations || [];
-      s.allies = decs
-        .filter(d => d.type === "tank_active" || d.type === "tank_390")
-        .map(d => ({
-          id: s.nextId++,
-          x: d.x,
-          y: d.y,
-          type: d.type === "tank_390" ? "390" : "843",
-          angle: -Math.PI / 2,
-          lastShot: Date.now() - Math.random() * 2000,
-          speed: 0.6,
-        }));
-    } else {
-      s.allies = [];
-    }
+    s.allyTank = levelIndex === 0 ? {
+      x: ALLY_TANK_843.startX,
+      y: ALLY_TANK_843.startY,
+      targetY: ALLY_TANK_843.targetY,
+      speed: ALLY_TANK_843.speed,
+      lastShot: Date.now(),
+      shootCooldown: ALLY_TANK_843.shootCooldown,
+      bulletSpeed: ALLY_TANK_843.bulletSpeed,
+      active: true,
+      width: ALLY_TANK_843.width,
+      height: ALLY_TANK_843.height,
+    } : null;
 
     function handleKeyDown(e: KeyboardEvent) {
       s.keys.add(e.key);
@@ -275,6 +273,21 @@ export default function ShooterArena({
     const s = stateRef.current;
 
     const obstacles = levelData.map?.obstacles || [];
+
+    // Dynamic obstacles: includes ally tank bounding box for enemy collision
+    function getDynamicObstacles(): Obstacle[] {
+      const ally = s.allyTank;
+      if (ally && ally.active) {
+        return [...obstacles, {
+          x: ally.x - ally.width / 2,
+          y: ally.y - ally.height / 2,
+          w: ally.width,
+          h: ally.height,
+          type: "tank" as const,
+        }];
+      }
+      return obstacles;
+    }
 
     function spawnEnemy() {
       const AW = sizeRef.current.w, AH = sizeRef.current.h;
@@ -589,14 +602,14 @@ export default function ShooterArena({
       );
     }
 
-    function drawExplosion(ex: number, ey: number, frame: number) {
+    function drawExplosion(ex: number, ey: number, frame: number, scale: number = 1) {
       const colors = ["#FFD700", "#FF6600", "#FF2222", "#FF8800"];
       for (let i = 0; i < 8; i++) {
         const angle = (i * Math.PI) / 4 + frame * 0.3;
-        const dist = frame * 5;
+        const dist = frame * 5 * scale;
         const px = ex + Math.cos(angle) * dist;
         const py = ey + Math.sin(angle) * dist;
-        const sz = 3 + frame * 2;
+        const sz = (3 + frame * 2) * scale;
         ctx.fillStyle = colors[i % colors.length];
         ctx.globalAlpha = Math.max(0, 1 - frame / 6);
         ctx.fillRect(px - sz / 2, py - sz / 2, sz, sz);
@@ -923,6 +936,34 @@ export default function ShooterArena({
           ctx.stroke();
           break;
         }
+
+        case "vehicle": {
+          // Burned/destroyed military vehicle
+          const vx = obs.x, vy = obs.y, vw = obs.w, vh = obs.h;
+          // Chassis
+          ctx.fillStyle = "#3a3530";
+          ctx.fillRect(vx + 4, vy + vh * 0.4, vw - 8, vh * 0.6);
+          // Hood/cab
+          ctx.fillStyle = "#4a4540";
+          ctx.fillRect(vx + 2, vy + vh * 0.2, vw * 0.4, vh * 0.5);
+          // Burn marks
+          ctx.fillStyle = "#1a1510";
+          ctx.fillRect(vx + vw * 0.3, vy + vh * 0.3, vw * 0.3, vh * 0.3);
+          // Wheels
+          ctx.fillStyle = "#111";
+          ctx.beginPath();
+          ctx.arc(vx + 10, vy + vh - 4, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(vx + vw - 10, vy + vh - 4, 5, 0, Math.PI * 2);
+          ctx.fill();
+          // Smoke
+          ctx.fillStyle = "#44444430";
+          ctx.beginPath();
+          ctx.arc(vx + vw * 0.4, vy, 6 + Math.sin(Date.now() * 0.003) * 2, 0, Math.PI * 2);
+          ctx.fill();
+          break;
+        }
       }
     }
 
@@ -1015,67 +1056,131 @@ export default function ShooterArena({
           ctx.fillRect(dec.x + 8, dec.y + 5, 2, 5);
           break;
 
-        case "tank_active":
-        case "tank_390":
-          // Handled by dynamic ally rendering
+        case "tank_active": {
+          // Xe tăng T-54 số 843 — active, tiến về phía Dinh Độc Lập
+          const tx = dec.x, ty = dec.y;
+          const tt = Date.now() * 0.001;
+          // Tracks
+          ctx.fillStyle = "#2a2a1a";
+          ctx.fillRect(tx - 22, ty + 8, 44, 12);
+          ctx.fillRect(tx - 24, ty + 6, 48, 4);
+          // Track wheels
+          ctx.fillStyle = "#1a1a0a";
+          for (let i = 0; i < 5; i++) {
+            ctx.beginPath();
+            ctx.arc(tx - 18 + i * 9, ty + 14, 3, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          // Hull
+          ctx.fillStyle = "#4a5a30";
+          ctx.fillRect(tx - 18, ty - 2, 36, 12);
+          ctx.fillStyle = "#3a4a20";
+          ctx.fillRect(tx - 20, ty + 4, 40, 6);
+          // Turret
+          ctx.fillStyle = "#5a6a38";
+          ctx.fillRect(tx - 10, ty - 8, 20, 10);
+          ctx.fillStyle = "#4a5a28";
+          ctx.fillRect(tx - 8, ty - 6, 16, 6);
+          // Barrel (pointing up/forward)
+          ctx.fillStyle = "#3a3a2a";
+          ctx.fillRect(tx - 2, ty - 22, 4, 16);
+          ctx.fillStyle = "#2a2a1a";
+          ctx.fillRect(tx - 1, ty - 24, 2, 4);
+          // Number 843
+          ctx.fillStyle = "#FFD700";
+          ctx.font = "bold 7px monospace";
+          ctx.fillText("843", tx - 8, ty + 3);
+          // Red star on turret
+          ctx.fillStyle = "#DA251D";
+          ctx.fillRect(tx - 2, ty - 5, 4, 3);
+          // Exhaust smoke
+          ctx.fillStyle = "#55555540";
+          ctx.beginPath();
+          ctx.arc(tx, ty + 22 + Math.sin(tt) * 2, 5 + Math.sin(tt * 2) * 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = "#44444425";
+          ctx.beginPath();
+          ctx.arc(tx + 3, ty + 28 + Math.sin(tt + 1) * 3, 7, 0, Math.PI * 2);
+          ctx.fill();
           break;
+        }
       }
     }
 
-    function drawDynamicAlly(ally: AllyTank) {
-      const tx = ally.x, ty = ally.y;
-      const angle = ally.angle;
-      const tt = Date.now() * 0.001;
-      const is390 = ally.type === "390";
+    function drawAllyTank843() {
+      const ally = s.allyTank;
+      if (!ally || !ally.active) return;
 
-      ctx.save();
-      ctx.translate(tx, ty);
-      ctx.rotate(angle + Math.PI / 2); // Base asset is vertical
+      const tx = ally.x, ty = ally.y;
+      const tt = Date.now() * 0.001;
+
+      // Find nearest enemy for barrel direction
+      let barrelAngle = -Math.PI / 2; // default: point up
+      if (s.enemies.length > 0) {
+        let nearest = s.enemies[0];
+        let nd = Infinity;
+        for (const e of s.enemies) {
+          if (e.hp <= 0) continue;
+          const d = Math.sqrt((e.x - tx) ** 2 + (e.y - ty) ** 2);
+          if (d < nd) { nd = d; nearest = e; }
+        }
+        if (nd < Infinity) {
+          barrelAngle = Math.atan2(nearest.y - ty, nearest.x - tx);
+        }
+      }
 
       // Tracks
       ctx.fillStyle = "#2a2a1a";
-      ctx.fillRect(-22, 8, 44, 12);
-      ctx.fillRect(-24, 6, 48, 4);
-      // Track wheels
+      ctx.fillRect(tx - 22, ty + 8, 44, 12);
+      ctx.fillRect(tx - 24, ty + 6, 48, 4);
+      // Track wheels (animated)
       ctx.fillStyle = "#1a1a0a";
       for (let i = 0; i < 5; i++) {
         ctx.beginPath();
-        ctx.arc(-18 + i * 9, 14, 3, 0, Math.PI * 2);
+        ctx.arc(tx - 18 + i * 9, ty + 14, 3, 0, Math.PI * 2);
         ctx.fill();
       }
       // Hull
       ctx.fillStyle = "#4a5a30";
-      ctx.fillRect(-18, -2, 36, 12);
+      ctx.fillRect(tx - 18, ty - 2, 36, 12);
       ctx.fillStyle = "#3a4a20";
-      ctx.fillRect(-20, 4, 40, 6);
+      ctx.fillRect(tx - 20, ty + 4, 40, 6);
       // Turret
       ctx.fillStyle = "#5a6a38";
-      ctx.fillRect(-10, -8, 20, 10);
+      ctx.fillRect(tx - 10, ty - 8, 20, 10);
       ctx.fillStyle = "#4a5a28";
-      ctx.fillRect(-8, -6, 16, 6);
-      // Barrel
-      ctx.fillStyle = "#3a3a2a";
-      ctx.fillRect(-2, -22, 4, 16);
+      ctx.fillRect(tx - 8, ty - 6, 16, 6);
+      // Barrel (rotating toward nearest enemy)
+      const barrelLen = 18;
+      ctx.strokeStyle = "#3a3a2a";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(tx, ty - 4);
+      ctx.lineTo(tx + Math.cos(barrelAngle) * barrelLen, ty - 4 + Math.sin(barrelAngle) * barrelLen);
+      ctx.stroke();
+      // Muzzle tip
       ctx.fillStyle = "#2a2a1a";
-      ctx.fillRect(-1, -24, 2, 4);
-      // Number
-      ctx.rotate(-(angle + Math.PI / 2)); // Draw text upright
+      ctx.fillRect(
+        tx + Math.cos(barrelAngle) * barrelLen - 2,
+        ty - 4 + Math.sin(barrelAngle) * barrelLen - 2,
+        4, 4
+      );
+      // Number 843
       ctx.fillStyle = "#FFD700";
       ctx.font = "bold 7px monospace";
-      ctx.fillText(is390 ? "390" : "843", -8, 3);
+      ctx.fillText("843", tx - 8, ty + 3);
       // Red star on turret
       ctx.fillStyle = "#DA251D";
-      ctx.fillRect(-2, -5, 4, 3);
-      
-      ctx.restore();
-
+      ctx.fillRect(tx - 2, ty - 5, 4, 3);
       // Exhaust smoke
-      if (Math.sin(tt * 5) > 0) {
-        ctx.fillStyle = "#55555530";
-        ctx.beginPath();
-        ctx.arc(tx - Math.cos(angle) * 20, ty - Math.sin(angle) * 20, 5, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      ctx.fillStyle = "#55555540";
+      ctx.beginPath();
+      ctx.arc(tx, ty + 22 + Math.sin(tt) * 2, 5 + Math.sin(tt * 2) * 2, 0, Math.PI * 2);
+      ctx.fill();
+      // Ally glow outline
+      ctx.strokeStyle = "#FFD70030";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(tx - ally.width / 2 - 2, ty - ally.height / 2 - 2, ally.width + 4, ally.height + 4);
     }
 
     function drawWeather() {
@@ -1147,7 +1252,6 @@ export default function ShooterArena({
     }
 
     let running = true;
-    let allyShootTimer = 0;
 
     function gameLoop() {
       if (!running) return;
@@ -1155,63 +1259,6 @@ export default function ShooterArena({
       const AW = sizeRef.current.w, AH = sizeRef.current.h;
       const p = s.player;
       const u = upgradesRef.current;
-      const now = Date.now();
-
-      // ---- Ally Support AI (Tank 843 & 390) ----
-      if (levelIndex === 0 && s.allies.length > 0) {
-        for (const ally of s.allies) {
-          // Find nearest enemy
-          let nearest: Enemy | null = null;
-          let minDist = 9999;
-          for (const e of s.enemies) {
-            const d = Math.sqrt((e.x - ally.x)**2 + (e.y - ally.y)**2);
-            if (d < minDist) { minDist = d; nearest = e; }
-          }
-
-          if (nearest) {
-            // AI Movement & Rotation
-            const targetAngle = Math.atan2(nearest.y - ally.y, nearest.x - ally.x);
-            // Smoothly rotate
-            let diff = targetAngle - ally.angle;
-            while (diff > Math.PI) diff -= Math.PI * 2;
-            while (diff < -Math.PI) diff += Math.PI * 2;
-            ally.angle += diff * 0.05;
-
-            // Move if too far (keep distance 150-250)
-            if (minDist > 200) {
-              const nx = ally.x + Math.cos(ally.angle) * ally.speed;
-              const ny = ally.y + Math.sin(ally.angle) * ally.speed;
-              
-              // Simple check for obstacles
-              let blocked = false;
-              for (const obs of obstacles) {
-                if (obs.type === "palace" || obs.type === "gate") {
-                  if (nx > obs.x - 20 && nx < obs.x + obs.w + 20 && ny > obs.y - 20 && ny < obs.y + obs.h + 20) {
-                    blocked = true; break;
-                  }
-                }
-              }
-              if (!blocked) {
-                ally.x = nx;
-                ally.y = ny;
-              }
-            }
-
-            // Shooting
-            if (now - ally.lastShot > 2500 && minDist < 450) {
-              ally.lastShot = now;
-              s.bullets.push({
-                id: s.nextId++,
-                x: ally.x + Math.cos(ally.angle) * 25,
-                y: ally.y + Math.sin(ally.angle) * 25,
-                dx: Math.cos(ally.angle) * BULLET_SPEED,
-                dy: Math.sin(ally.angle) * BULLET_SPEED,
-              });
-              s.explosions.push({ id: s.nextId++, x: ally.x + Math.cos(ally.angle) * 30, y: ally.y + Math.sin(ally.angle) * 30, frame: 2 });
-            }
-          }
-        }
-      }
 
       // Speed upgrade: +15% per stack
       const speedStacks = u["speed_up"] || 0;
@@ -1219,6 +1266,26 @@ export default function ShooterArena({
 
       // Bonus score per kill
       const bonusScore = (u["damage_up"] || 0) * 50;
+
+      // Rocket AoE explosion helper
+      function rocketExplode(rx: number, ry: number, radius: number) {
+        s.explosions.push({ id: s.nextId++, x: rx, y: ry, frame: 0, scale: 2.5 });
+        for (const e of s.enemies) {
+          if (e.hp <= 0) continue;
+          const ddx = e.x - rx;
+          const ddy = e.y - ry;
+          const edist = Math.sqrt(ddx * ddx + ddy * ddy);
+          if (edist < radius + e.size / 2) {
+            e.hp--;
+            if (e.hp <= 0) {
+              s.killed++;
+              const typeConfig = ENEMY_TYPES[e.type];
+              setScore((sc) => sc + typeConfig.scoreValue + bonusScore);
+              s.explosions.push({ id: s.nextId++, x: e.x, y: e.y, frame: 0 });
+            }
+          }
+        }
+      }
 
       // ---- Input (with obstacle collision) ----
       const oldX = p.x;
@@ -1233,8 +1300,9 @@ export default function ShooterArena({
       if (s.keys.has("d") || s.keys.has("D") || s.keys.has("ArrowRight"))
         p.x = Math.min(AW - PLAYER_SIZE / 2, p.x + pSpeed);
 
-      // Check player collision with solid obstacles
-      for (const obs of obstacles) {
+      // Check player collision with solid obstacles (including ally tank)
+      const playerObs = getDynamicObstacles();
+      for (const obs of playerObs) {
         if (obs.type === "crater" || obs.type === "wire") continue; // non-blocking
         const half = PLAYER_SIZE / 2;
         if (
@@ -1266,24 +1334,35 @@ export default function ShooterArena({
       s.bullets = s.bullets.filter((b) => {
         b.x += b.dx;
         b.y += b.dy;
-        // Check obstacle collision
+        // Range-limited bullets (shotgun)
+        if (b.maxRange != null && b.spawnX != null && b.spawnY != null) {
+          const traveled = Math.sqrt(
+            (b.x - b.spawnX) ** 2 + (b.y - b.spawnY) ** 2
+          );
+          if (traveled > b.maxRange) return false;
+        }
+        // Check obstacle collision (player bullets pass through ally tank — use static obstacles)
         for (const obs of obstacles) {
           if (obs.type === "crater" || obs.type === "wire") continue;
           if (
             b.x > obs.x && b.x < obs.x + obs.w &&
             b.y > obs.y && b.y < obs.y + obs.h
           ) {
+            if (b.isRocket && b.aoeRadius) {
+              rocketExplode(b.x, b.y, b.aoeRadius);
+            }
             return false;
           }
         }
         return b.x > -10 && b.x < AW + 10 && b.y > -10 && b.y < AH + 10;
       });
 
-      // ---- Move enemy bullets ----
+      // ---- Move enemy bullets (uses dynamic obstacles — blocked by ally tank) ----
+      const dynObs = getDynamicObstacles();
       s.enemyBullets = s.enemyBullets.filter((b) => {
         b.x += b.dx;
         b.y += b.dy;
-        for (const obs of obstacles) {
+        for (const obs of dynObs) {
           if (obs.type === "crater" || obs.type === "wire") continue;
           if (b.x > obs.x && b.x < obs.x + obs.w && b.y > obs.y && b.y < obs.y + obs.h) return false;
         }
@@ -1305,6 +1384,8 @@ export default function ShooterArena({
       s.enemyBullets = s.enemyBullets.filter((b) => b.x > -10);
 
       // ---- Move enemies (type-specific AI) ----
+      const now = Date.now();
+      const moveObs = getDynamicObstacles(); // enemies blocked by ally tank too
       for (const e of s.enemies) {
         if (e.hp <= 0) continue;
         const dx = p.x - e.x;
@@ -1323,12 +1404,58 @@ export default function ShooterArena({
               e.y += (ady / anchorDist) * e.speed;
             }
           }
+        } else if (e.type === "tank") {
+          // ---- SMART TANK AI ----
+          const PREFERRED_DIST = 200;
+          const TOO_CLOSE = 130;
+          const TOO_FAR = 280;
+
+          let desiredAngle: number;
+
+          if (dist < TOO_CLOSE) {
+            // Back away from player
+            desiredAngle = Math.atan2(e.y - p.y, e.x - p.x);
+          } else if (dist > TOO_FAR) {
+            // Advance toward player
+            desiredAngle = Math.atan2(p.y - e.y, p.x - e.x);
+          } else {
+            // At good range: strafe/flank
+            const baseAngle = Math.atan2(p.y - e.y, p.x - e.x);
+            const strafeDir = ((e.id % 2) * 2 - 1);
+            const timeFactor = Math.sin(now * 0.001 + e.id * 1.7);
+            desiredAngle = baseAngle + (Math.PI / 2) * strafeDir + timeFactor * 0.3;
+          }
+
+          // Multi-angle pathfinding
+          const tryAngles = [0, Math.PI / 6, -Math.PI / 6, Math.PI / 3, -Math.PI / 3, Math.PI / 2, -Math.PI / 2];
+          for (const offset of tryAngles) {
+            const tryAngle = desiredAngle + offset;
+            const newX = e.x + Math.cos(tryAngle) * e.speed;
+            const newY = e.y + Math.sin(tryAngle) * e.speed;
+            if (newX < e.size / 2 || newX > AW - e.size / 2 ||
+                newY < e.size / 2 || newY > AH - e.size / 2) continue;
+            let blocked = false;
+            for (const obs of moveObs) {
+              if (obs.type === "crater" || obs.type === "wire") continue;
+              const half = e.size / 2;
+              if (newX + half > obs.x && newX - half < obs.x + obs.w &&
+                  newY + half > obs.y && newY - half < obs.y + obs.h) {
+                blocked = true;
+                break;
+              }
+            }
+            if (!blocked) {
+              e.x = newX;
+              e.y = newY;
+              break;
+            }
+          }
         } else if (dist > 1) {
-          // Soldiers & tanks: move toward player
+          // Soldiers: move toward player
           const newX = e.x + (dx / dist) * e.speed;
           const newY = e.y + (dy / dist) * e.speed;
           let blocked = false;
-          for (const obs of obstacles) {
+          for (const obs of moveObs) {
             if (obs.type === "crater" || obs.type === "wire") continue;
             const half = e.size / 2;
             if (newX + half > obs.x && newX - half < obs.x + obs.w &&
@@ -1341,7 +1468,7 @@ export default function ShooterArena({
             const perpX = e.x + (dy / dist) * e.speed * 1.5;
             const perpY = e.y + (-dx / dist) * e.speed * 1.5;
             let perpBlocked = false;
-            for (const obs of obstacles) {
+            for (const obs of moveObs) {
               if (obs.type === "crater" || obs.type === "wire") continue;
               const half = e.size / 2;
               if (perpX + half > obs.x && perpX - half < obs.x + obs.w &&
@@ -1389,21 +1516,27 @@ export default function ShooterArena({
         }
       }
 
-      // ---- Bullet-enemy collision (multi-HP support) ----
+      // ---- Bullet-enemy collision (multi-HP support + rocket AoE) ----
       for (const b of s.bullets) {
+        if (b.x < -10) continue;
         for (const e of s.enemies) {
           if (e.hp <= 0) continue;
           const dx = b.x - e.x;
           const dy = b.y - e.y;
-          if (Math.sqrt(dx * dx + dy * dy) < e.size / 2 + BULLET_SIZE) {
-            e.hp--;
-            b.x = -999;
-            if (e.hp <= 0) {
-              s.killed++;
-              const typeConfig = ENEMY_TYPES[e.type];
-              setScore((sc) => sc + typeConfig.scoreValue + bonusScore);
-              s.explosions.push({ id: s.nextId++, x: e.x, y: e.y, frame: 0 });
+          const hitRadius = e.size / 2 + (b.isRocket ? 8 : BULLET_SIZE);
+          if (Math.sqrt(dx * dx + dy * dy) < hitRadius) {
+            if (b.isRocket && b.aoeRadius) {
+              rocketExplode(b.x, b.y, b.aoeRadius);
+            } else {
+              e.hp--;
+              if (e.hp <= 0) {
+                s.killed++;
+                const typeConfig = ENEMY_TYPES[e.type];
+                setScore((sc) => sc + typeConfig.scoreValue + bonusScore);
+                s.explosions.push({ id: s.nextId++, x: e.x, y: e.y, frame: 0 });
+              }
             }
+            b.x = -999;
             break;
           }
         }
@@ -1415,6 +1548,40 @@ export default function ShooterArena({
         .map((ex) => ({ ...ex, frame: ex.frame + 0.3 }))
         .filter((ex) => ex.frame < 6);
 
+      // ---- Ally Tank 843 update ----
+      const ally = s.allyTank;
+      if (ally && ally.active) {
+        // Advance toward palace gate
+        if (ally.y > ally.targetY) {
+          ally.y -= ally.speed;
+        }
+        // Shoot at nearest enemy
+        if (s.enemies.length > 0 && now - ally.lastShot >= ally.shootCooldown) {
+          let nearest: Enemy | null = null;
+          let nearDist = Infinity;
+          for (const e of s.enemies) {
+            if (e.hp <= 0) continue;
+            const edx = e.x - ally.x;
+            const edy = e.y - ally.y;
+            const ed = Math.sqrt(edx * edx + edy * edy);
+            if (ed < nearDist) { nearDist = ed; nearest = e; }
+          }
+          if (nearest && nearDist < 400) {
+            ally.lastShot = now;
+            const adx = nearest.x - ally.x;
+            const ady = nearest.y - ally.y;
+            const adist = Math.sqrt(adx * adx + ady * ady);
+            s.bullets.push({
+              id: s.nextId++,
+              x: ally.x,
+              y: ally.y - 14,
+              dx: (adx / adist) * ally.bulletSpeed,
+              dy: (ady / adist) * ally.bulletSpeed,
+            });
+          }
+        }
+      }
+
       // ---- Wave clear ----
       if (s.killed >= s.enemyCount && s.enemies.length === 0 && !s.waveCleared) {
         s.waveCleared = true;
@@ -1424,20 +1591,61 @@ export default function ShooterArena({
       // ──── DRAW ────
       drawGround();
 
-      // Decorations (below everything)
+      // Decorations (below everything) — skip tank_active when ally tank is active
       const decorations = levelData.map?.decorations || [];
-      for (const dec of decorations) drawDecoration(dec);
+      for (const dec of decorations) {
+        if (dec.type === "tank_active" && s.allyTank?.active) continue;
+        drawDecoration(dec);
+      }
 
       // Obstacles
       for (const obs of obstacles) drawObstacle(obs);
 
-      // Bullets (player)
-      ctx.fillStyle = "#FFD700";
+      // Ally Tank 843 (draws on top of obstacles, provides cover)
+      drawAllyTank843();
+
+      // Bullets (player) — with shotgun fade and rocket visuals
       for (const b of s.bullets) {
-        ctx.fillRect(b.x - BULLET_SIZE / 2, b.y - BULLET_SIZE / 2, BULLET_SIZE, BULLET_SIZE);
-        ctx.fillStyle = "#FFD70055";
-        ctx.fillRect(b.x - b.dx * 2 - 1, b.y - b.dy * 2 - 1, 3, 3);
-        ctx.fillStyle = "#FFD700";
+        if (b.isRocket) {
+          // Rocket rendering
+          const angle = Math.atan2(b.dy, b.dx);
+          ctx.save();
+          ctx.translate(b.x, b.y);
+          ctx.rotate(angle);
+          ctx.fillStyle = "#8B4513";
+          ctx.fillRect(-8, -3, 16, 6);
+          ctx.fillStyle = "#cc3300";
+          ctx.beginPath();
+          ctx.moveTo(8, -3);
+          ctx.lineTo(12, 0);
+          ctx.lineTo(8, 3);
+          ctx.fill();
+          ctx.fillStyle = "#FF6600";
+          ctx.fillRect(-12, -2, 5, 4);
+          ctx.fillStyle = "#FFD700";
+          ctx.fillRect(-14, -1, 3, 2);
+          ctx.restore();
+          // Smoke trail
+          ctx.fillStyle = "#55555540";
+          ctx.beginPath();
+          ctx.arc(b.x - b.dx * 3, b.y - b.dy * 3, 4, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          let alpha = 1.0;
+          let size = BULLET_SIZE;
+          // Shotgun fade near max range
+          if (b.maxRange && b.spawnX != null && b.spawnY != null) {
+            const traveled = Math.sqrt((b.x - b.spawnX) ** 2 + (b.y - b.spawnY) ** 2);
+            alpha = Math.max(0.3, 1 - traveled / b.maxRange);
+            size = Math.max(2, BULLET_SIZE * alpha);
+          }
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = "#FFD700";
+          ctx.fillRect(b.x - size / 2, b.y - size / 2, size, size);
+          ctx.fillStyle = "#FFD70055";
+          ctx.fillRect(b.x - b.dx * 2 - 1, b.y - b.dy * 2 - 1, 3, 3);
+          ctx.globalAlpha = 1;
+        }
       }
 
       // Bullets (enemy — red/orange)
@@ -1452,11 +1660,8 @@ export default function ShooterArena({
       // Enemies
       for (const e of s.enemies) drawEnemyByType(e);
 
-      // Allies
-      for (const a of s.allies) drawDynamicAlly(a);
-
       // Explosions
-      for (const ex of s.explosions) drawExplosion(ex.x, ex.y, ex.frame);
+      for (const ex of s.explosions) drawExplosion(ex.x, ex.y, ex.frame, ex.scale);
 
       // Player
       drawPixelSoldier(p.x, p.y, s.aimAngle);

@@ -117,9 +117,7 @@ export default function HeritageSection() {
             </div>
 
             <div className="pt-4 text-center">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2C2A29]/40">
-                — Antigravity History Lab —
-              </span>
+            
             </div>
           </div>
         </div>

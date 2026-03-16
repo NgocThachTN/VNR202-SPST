@@ -92,9 +92,8 @@ export default function GamePage() {
   const [upgradeCounts, setUpgradeCounts] = useState<Record<string, number>>({});
   const [upgradeChoices, setUpgradeChoices] = useState<Upgrade[]>([]);
   // Track what happens after upgrade: "next-wave" or "level-complete" or "resume-combat"
-  const afterUpgradeRef = useRef<"next-wave" | "level-complete" | "resume-combat">("next-wave");
   // Track whether quiz was triggered by wave clear or ammo empty
-  const quizSourceRef = useRef<"wave-clear" | "ammo-empty">("wave-clear");
+  const afterUpgradeRef = useRef<"next-wave" | "level-complete" | "resume-combat">("next-wave");
 
   // Quiz randomization — pick from pool without repeating
   const [currentQuestion, setCurrentQuestion] = useState<GameQuestion | null>(null);
@@ -166,18 +165,24 @@ export default function GamePage() {
     setScreen("combat");
   }
 
+  // Wave cleared → skip quiz, go straight to upgrade then next wave
   const onWaveCleared = useCallback(() => {
     setAmmoQuizUsed(false);
-    quizSourceRef.current = "wave-clear";
-    setCurrentQuestion(pickQuestion());
-    setQuizRetry(0);
-    setScreen("quiz");
-  }, [level]);
+    const isLastWave = waveIdx + 1 >= totalQ;
+    afterUpgradeRef.current = isLastWave ? "level-complete" : "next-wave";
+    setScore((s) => s + 150); // bonus score for clearing a wave
+    setUpgradeCounts((prev) => {
+      const choices = pickUpgradeChoices(prev, 3);
+      setUpgradeChoices(choices);
+      return prev;
+    });
+    setScreen("upgrade");
+  }, [level, waveIdx]);
 
+  // Ammo empty mid-wave → quiz to earn more ammo
   const onAmmoEmpty = useCallback(() => {
     setAmmoQuizUsed((used) => {
       if (used) return true;
-      quizSourceRef.current = "ammo-empty";
       setCurrentQuestion(pickQuestion());
       setQuizRetry(0);
       setScreen("quiz");
@@ -187,19 +192,12 @@ export default function GamePage() {
 
   function onQuizAnswer(correct: boolean) {
     if (correct) {
+      // Correct → get reward, pick upgrade, then resume same wave
       setHp((h) => Math.min(5, h + 1));
-      setAmmo((a) => a + 10);
+      setAmmo((a) => a + 15);
       setScore((s) => s + 100);
       setCorrectCount((c) => c + 1);
-
-      // Correct answer → upgrade screen
-      if (quizSourceRef.current === "ammo-empty") {
-        afterUpgradeRef.current = "resume-combat";
-      } else {
-        const isLastWave = waveIdx + 1 >= totalQ;
-        afterUpgradeRef.current = isLastWave ? "level-complete" : "next-wave";
-      }
-
+      afterUpgradeRef.current = "resume-combat";
       setUpgradeCounts((prev) => {
         const choices = pickUpgradeChoices(prev, 3);
         setUpgradeChoices(choices);
@@ -207,24 +205,9 @@ export default function GamePage() {
       });
       setScreen("upgrade");
     } else {
-      // Wrong answer
-      if (quizSourceRef.current === "ammo-empty") {
-        // Ammo empty + wrong → no ammo, show NEW question (must answer correctly)
-        setCurrentQuestion(pickQuestion());
-        setQuizRetry((r) => r + 1);
-        // Stay on quiz screen — new question will render via key change
-      } else {
-        // Wave clear + wrong → no upgrade, skip directly to next state
-        setAmmo((a) => a + 5); // small consolation ammo
-        const isLastWave = waveIdx + 1 >= totalQ;
-        if (isLastWave) {
-          setScreen("level-complete");
-        } else {
-          setWaveIdx((w) => w + 1);
-          setAmmoQuizUsed(false);
-          setScreen("combat");
-        }
-      }
+      // Wrong → new question, must answer correctly to get ammo
+      setCurrentQuestion(pickQuestion());
+      setQuizRetry((r) => r + 1);
     }
   }
 
@@ -408,7 +391,6 @@ export default function GamePage() {
                 key={`quiz-${level}-${waveIdx}-${quizRetry}`}
                 question={currentQuestion}
                 onAnswer={onQuizAnswer}
-                isAmmoEmpty={quizSourceRef.current === "ammo-empty"}
               />
             )}
 

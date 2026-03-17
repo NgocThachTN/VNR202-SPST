@@ -5,40 +5,88 @@ import { useRef } from 'react';
 
 const events = [
   {
-    year: '1975',
-    title: 'Hoàn thành thống nhất đất nước về mặt nhà nước',
-    desc: 'Hội nghị lần thứ 24 (8/1975) đề ra nhiệm vụ. Tháng 11/1975, Hội nghị Hiệp thương chính trị tại Sài Gòn. Ngày 25/4/1976 Tổng tuyển cử bầu Quốc hội chung.',
+    year: '8/1975',
+    title: 'Hội nghị lần thứ 24 BCH Trung ương Đảng',
+    desc: 'Đề ra nhiệm vụ hoàn thành thống nhất đất nước về mặt nhà nước nhằm phát huy sức mạnh tổng hợp của cả nước.',
     color: 'border-[#DA251D]',
+    image: '/images/wiki/tw24.jpg',
   },
   {
-    year: '1976',
-    title: 'Đại hội IV của Đảng',
-    desc: 'Xác định đường lối chung: nắm vững chuyên chính vô sản, tiến hành 3 cuộc cách mạng. Đổi tên nước thành CHXHCN Việt Nam.',
+    year: '11/1975',
+    title: 'Hội nghị Hiệp thương chính trị',
+    desc: 'Hai đoàn đại biểu Bắc - Nam họp tại Sài Gòn, khẳng định sự nhất trí hoàn toàn về yêu cầu thống nhất nước nhà trên mọi lĩnh vực.',
     color: 'border-[#4A5D23]',
+    image: '/images/wiki/hiep-thuong.jpg',
   },
   {
-    year: '1979',
-    title: 'Bảo vệ biên giới & Bước đột phá đầu tiên',
-    desc: 'Bảo vệ biên giới Tây Nam (7/1/1979) và phía Bắc (17/2/1979). Hội nghị TW 6 (8/1979) khắc phục khuyết điểm quản lý, cho phép "sản xuất bung ra".',
+    year: '25/4/1976',
+    title: 'Tổng tuyển cử bầu Quốc hội chung',
+    desc: 'Tiến hành thành công rực rỡ với sự tham gia của hơn 23 triệu cử tri (đạt tỉ lệ 98,77%), bầu ra 492 đại biểu đại diện cho nhân dân.',
     color: 'border-[#DA251D]',
+    image: '/images/wiki/tong-tuyen-cu.png',
   },
   {
-    year: '1981',
-    title: 'Khoán 100',
-    desc: 'Chỉ thị số 100-CT/TW (1/1981) về khoán sản phẩm đến nhóm và người lao động trong hợp tác xã nông nghiệp tạo động lực mới.',
+    year: '6-7/1976',
+    title: 'Kỳ họp thứ nhất Quốc hội chung',
+    desc: 'Quyết định tên nước là Cộng hòa Xã hội Chủ nghĩa Việt Nam, Thủ đô Hà Nội, Quốc ca là Tiến quân ca, đổi tên Sài Gòn thành TP.Hồ Chí Minh.',
+    color: 'border-[#4A5D23]',
+    image: '/images/wiki/quoc-hoi.png',
+  },
+  {
+    year: '12/1976',
+    title: 'Đại hội Đại biểu toàn quốc lần thứ IV',
+    desc: 'Xác định đường lối chung của cách mạng XHCN, tiến hành đồng thời 3 cuộc cách mạng. Đổi tên Đảng thành Đảng Cộng sản Việt Nam.',
+    color: 'border-[#DA251D]',
+    image: '/images/wiki/le-duan.jpg',
+  },
+  {
+    year: '1/1979',
+    title: 'Bảo vệ biên giới Tây Nam',
+    desc: 'Quân dân ta tham gia chiến đấu và đánh bại sự xâm lược của tập đoàn Pol Pot, giải phóng Phnôm Pênh vào ngày 7/1/1979.',
     color: 'border-[#F4D03F]',
+    image: '/images/wiki/tay-nam.jpg',
   },
   {
-    year: '1982',
-    title: 'Đại hội V',
-    desc: 'Đang ở chặng đường đầu tiên quá độ. Hai nhiệm vụ: Xây dựng CNXH và Bảo vệ Tổ quốc. Ưu tiên phát triển nông nghiệp.',
-    color: 'border-[#4A5D23]',
-  },
-  {
-    year: '1985-1986',
-    title: 'Những bước đột phá tiếp theo',
-    desc: 'HNTW 8 (6/1985): Xóa bỏ bao cấp, chuyển sang hạch toán. Hội nghị Bộ Chính trị (8/1986): Định hướng cơ cấu sản xuất, báo cáo tại Đại hội VI.',
+    year: '2/1979',
+    title: 'Bảo vệ biên giới phía Bắc',
+    desc: 'Bắt đầu từ 17/2/1979, quân và dân ta kiên cường chống lại cuộc chiến tranh xâm lược quy mô lớn, bảo vệ chủ quyền lãnh thổ quốc gia.',
     color: 'border-[#DA251D]',
+    image: '/images/wiki/phia-bac.jpg',
+  },
+  {
+    year: '8/1979',
+    title: 'Đột phá đầu tiên: Hội nghị TW 6',
+    desc: 'Chủ trương khắc phục khuyết điểm cơ chế quản lý kinh tế, cho phép "sản xuất bung ra", là bước đột phá mở đầu quá trình đổi mới.',
+    color: 'border-[#4A5D23]',
+    image: '/images/wiki/tw6-bung-ra.jpg',
+  },
+  {
+    year: '1/1981',
+    title: 'Chỉ thị 100 (Khoán 100)',
+    desc: 'Ban Bí thư ra Chỉ thị 100-CT/TW về khoán sản phẩm đến nhóm và người lao động trong nông nghiệp, tạo ra động lực sản xuất mới.',
+    color: 'border-[#F4D03F]',
+    image: '/images/timeline/1981.jpg',
+  },
+  {
+    year: '3/1982',
+    title: 'Đại hội V của Đảng',
+    desc: 'Xác định nước ta đang ở "chặng đường đầu tiên" quá độ. Đề ra 2 nhiệm vụ chiến lược: Xây dựng CNXH và Bảo vệ Tổ quốc, ưu tiên nông nghiệp.',
+    color: 'border-[#4A5D23]',
+    image: '/images/timeline/1982.jpg',
+  },
+  {
+    year: '6/1985',
+    title: 'Đột phá thứ hai: Hội nghị TW 8',
+    desc: 'Quyết định dứt khoát xóa bỏ cơ chế tập trung quan liêu bao cấp, lấy mũi nhọn giá - lương - tiền để chuyển sang hạch toán kinh doanh.',
+    color: 'border-[#DA251D]',
+    image: '/images/wiki/gia-luong-tien.jpg',
+  },
+  {
+    year: '8/1986',
+    title: 'Đột phá thứ ba: Hội nghị Bộ Chính trị',
+    desc: 'Nhấn mạnh đổi mới cơ cấu sản xuất, cải tạo XHCN và cơ chế quản lý; đưa ra kết luận định hướng soạn thảo Báo cáo chính trị Đại hội VI.',
+    color: 'border-[#F4D03F]',
+    image: '/images/timeline/1986.jpg',
   }
 ];
 
@@ -80,7 +128,7 @@ export default function InteractiveTimeline() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.6 }}
-                className={`relative flex items-center justify-between md:justify-normal w-full 
+                className={`relative flex items-center justify-between w-full 
                   ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}
                 `}
               >
@@ -100,6 +148,19 @@ export default function InteractiveTimeline() {
                       {event.desc}
                     </p>
                   </div>
+                </div>
+
+                {/* Image Card */}
+                <div className="hidden md:block md:w-5/12">
+                  {event.image && (
+                    <div className="vintage-box p-2 bg-[#FAF3EB] border-4 border-[#2C2A29] rotate-1 hover:-rotate-1 transition-transform duration-300">
+                      <img 
+                        src={event.image} 
+                        alt={event.title} 
+                        className="w-full h-[200px] object-cover border-2 border-[#5C554E] filter sepia-[0.3]"
+                      />
+                    </div>
+                  )}
                 </div>
 
               </motion.div>

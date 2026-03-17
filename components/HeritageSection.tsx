@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { BookOpen, Star, Sparkles, Quote, ArrowRight, Zap, Target } from 'lucide-react';
+import { BookOpen, Star, ArrowRight, Target } from 'lucide-react';
 import Link from 'next/link';
 
 export default function HeritageSection() {
@@ -21,58 +21,114 @@ export default function HeritageSection() {
             Góc Nhìn <span className="text-[#DA251D]">Di Sản</span>
           </h2>
           <p className="font-serif-body text-xl italic text-[#5C554E] max-w-2xl mx-auto">
-            "Khi những dòng Nghị quyết khô khan trở thành kim chỉ nam cho tinh thần Startup và Khát vọng vươn mình."
+            "Những trang văn kiện tưởng chừng khô khan lại chứa đựng những quyết sách thay đổi vận mệnh hàng chục triệu con người."
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Column - Editorial */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="relative p-8 border-2 border-[#2C2A29] bg-[#FAF3EB] shadow-[8px_8px_0px_0px_#2C2A29]">
-              <div className="absolute -top-4 -left-2 bg-[#DA251D] text-white px-4 py-1 text-xs font-bold uppercase tracking-widest -rotate-2">
-                GIẢI MÃ GEN Z
-              </div>
-              <h3 className="text-3xl font-serif-heading font-black text-[#2C2A29] mb-4 uppercase leading-tight">
-                Văn Kiện Đảng: "Source Code" Của Công Cuộc Đổi Mới
-              </h3>
-              <div className="columns-1 md:columns-2 gap-8 font-serif-body text-[#333] text-sm leading-relaxed text-justify">
-                <p className="mb-4">
-                  <span className="text-4xl font-black float-left mr-2 mt-1 leading-none text-[#DA251D]">V</span>
-                  ới nhiều bạn trẻ, "Văn kiện" nghe có vẻ xa vời, nhưng thực chất đó là những bản "thiết kế hệ thống" (System Design) định hình nên diện mạo đất nước. Nếu xem Việt Nam là một Startup khổng lồ, thì các Nghị quyết Đại hội Đảng chính là những bản Roadmap chiến lược giúp con thuyền quốc gia vượt qua "thung lũng chết" của khủng hoảng kinh tế những năm 80.
+            <div className="relative border-4 border-double border-[#2C2A29] bg-[#FAF3EB] shadow-[8px_8px_0px_0px_#2C2A29] overflow-hidden">
+              {/* Newspaper header */}
+              <div className="px-8 pt-6 pb-5 border-b-4 border-double border-[#2C2A29] bg-[#F5E6D3]">
+                <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#5C554E] mb-2">
+                  Chuyên đề · Văn kiện Đảng
                 </p>
-                <p className="mb-4">
-                  Ví dụ, Chỉ thị 100 (Khoán 100) năm 1981 không chỉ là một văn bản hành chính, mà là một cú "Update" cực mạnh vào tư duy quản lý, trao quyền tự chủ cho người nông dân — tinh thần 'Decentralization' (phi tập trung) đầu tiên giúp giải phóng sức sản xuất thần kỳ.
-                </p>
-                <p>
-                  Đến Hội nghị Trung ương 8 (Khóa V) năm 1985, việc quyết định xóa bỏ bao cấp, chuyển sang hạch toán kinh doanh chính là bước "Pivot" (chuyển hướng) vĩ đại, dọn đường cho quy luật thị trường — nền tảng để thế hệ trẻ năm 2026 có thể tự do khởi nghiệp và hội nhập toàn cầu.
+                <h3 className="text-2xl md:text-3xl font-serif-heading font-black text-[#2C2A29] uppercase leading-tight mb-2">
+                  Ba Bước Chuyển Mình Định Hình Lại Nền Kinh Tế
+                </h3>
+                <p className="font-serif-body text-sm italic text-[#5C554E]">
+                  Từ khủng hoảng thiếu gạo đến mở cửa thị trường — hiểu rõ từng quyết định then chốt.
                 </p>
               </div>
-              
-              <div className="mt-8 flex items-center justify-between border-t border-[#2C2A29]/10 pt-6">
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-[#2C2A29] flex items-center justify-center text-[#FAF3EB]">
-                    <Zap size={18} />
+
+              {/* 3 articles */}
+              <div className="divide-y divide-[#2C2A29]/15">
+
+                {/* Article 1 */}
+                <div className="flex gap-5 px-8 py-6 hover:bg-[#F0E7D8] transition-colors group">
+                  <div className="shrink-0 flex flex-col items-center gap-1.5 pt-0.5">
+                    <div className="border-2 border-[#2C2A29] overflow-hidden w-14 text-center shadow-[2px_2px_0px_0px_#2C2A29]">
+                      <div className="bg-[#2C2A29] text-[#FAF3EB] text-[8px] font-bold uppercase tracking-wider px-1 py-0.5">NĂM</div>
+                      <div className="font-serif-heading font-black text-lg text-[#DA251D] py-1 leading-none">1976</div>
+                    </div>
+                    <span className="text-[8px] font-bold uppercase tracking-wider text-[#2C2A29] text-center leading-tight">Đường Lối</span>
                   </div>
-                  <span className="text-xs font-bold italic text-[#5C554E]">Trend "Xé Rào" Lịch Sử</span>
+                  <div>
+                    <h4 className="font-serif-heading font-black text-base md:text-lg text-[#2C2A29] uppercase leading-tight mb-1.5 group-hover:text-[#DA251D] transition-colors">
+                      Nghị Quyết Đảng — Kim Chỉ Nam Quốc Gia
+                    </h4>
+                    <p className="font-serif-body text-sm text-[#5C554E] leading-relaxed text-justify">
+                      Cuối thập niên 70, Việt Nam đối mặt với thiếu lương thực, lạm phát gần <strong className="text-[#2C2A29]">700%</strong>, hàng hóa khan hiếm toàn diện. Thay vì chờ khủng hoảng tự tan, Đảng dùng Nghị quyết như một <strong className="text-[#2C2A29]">kế hoạch hành động rõ ràng</strong> — xác định đúng vấn đề, đặt mục tiêu cụ thể, phân công trách nhiệm từng cấp. Nhờ đó cả hệ thống vận hành cùng một hướng thay vì mỗi nơi làm một kiểu.
+                    </p>
+                  </div>
                 </div>
-                <Link href="/noi-dung-chinh" className="flex items-center gap-2 text-[#DA251D] font-black uppercase text-xs tracking-widest hover:gap-4 transition-all">
-                  Đọc thêm về các văn kiện <ArrowRight size={16} />
+
+                {/* Article 2 */}
+                <div className="flex gap-5 px-8 py-6 hover:bg-[#F0E7D8] transition-colors group">
+                  <div className="shrink-0 flex flex-col items-center gap-1.5 pt-0.5">
+                    <div className="border-2 border-[#2C2A29] overflow-hidden w-14 text-center shadow-[2px_2px_0px_0px_#2C2A29]">
+                      <div className="bg-[#2C2A29] text-[#FAF3EB] text-[8px] font-bold uppercase tracking-wider px-1 py-0.5">NĂM</div>
+                      <div className="font-serif-heading font-black text-lg text-[#DA251D] py-1 leading-none">1981</div>
+                    </div>
+                    <span className="text-[8px] font-bold uppercase tracking-wider text-[#2C2A29] text-center leading-tight">Nông Nghiệp</span>
+                  </div>
+                  <div>
+                    <h4 className="font-serif-heading font-black text-base md:text-lg text-[#2C2A29] uppercase leading-tight mb-1.5 group-hover:text-[#DA251D] transition-colors">
+                      Khoán 100 — Trao Quyền Cho Người Nông Dân
+                    </h4>
+                    <p className="font-serif-body text-sm text-[#5C554E] leading-relaxed text-justify">
+                      Trước 1981, nông dân làm chung trong hợp tác xã — <strong className="text-[#2C2A29]">ai làm ít hay làm nhiều đều nhận phần bằng nhau</strong>. Không ai có động lực làm thêm nên năng suất rất thấp. Khoán 100 phá vỡ điều đó: khoán thẳng sản lượng tới từng hộ gia đình — <strong className="text-[#DA251D]">làm nhiều hưởng nhiều, làm ít hưởng ít</strong>. Chỉ một vụ sau khi áp dụng, sản lượng lương thực tăng vọt rõ rệt.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Article 3 */}
+                <div className="flex gap-5 px-8 py-6 hover:bg-[#F0E7D8] transition-colors group">
+                  <div className="shrink-0 flex flex-col items-center gap-1.5 pt-0.5">
+                    <div className="border-2 border-[#2C2A29] overflow-hidden w-14 text-center shadow-[2px_2px_0px_0px_#2C2A29]">
+                      <div className="bg-[#2C2A29] text-[#FAF3EB] text-[8px] font-bold uppercase tracking-wider px-1 py-0.5">NĂM</div>
+                      <div className="font-serif-heading font-black text-lg text-[#DA251D] py-1 leading-none">1985</div>
+                    </div>
+                    <span className="text-[8px] font-bold uppercase tracking-wider text-[#2C2A29] text-center leading-tight">Kinh Tế</span>
+                  </div>
+                  <div>
+                    <h4 className="font-serif-heading font-black text-base md:text-lg text-[#2C2A29] uppercase leading-tight mb-1.5 group-hover:text-[#DA251D] transition-colors">
+                      Hội Nghị TW 8 — Xóa Bao Cấp, Mở Thị Trường
+                    </h4>
+                    <p className="font-serif-body text-sm text-[#5C554E] leading-relaxed text-justify">
+                      Thời bao cấp, Nhà nước định giá mọi thứ và phân phối qua tem phiếu — <strong className="text-[#2C2A29]">giá không phản ánh cung cầu thực tế</strong>, doanh nghiệp không có lợi nhuận để tái đầu tư. Hội nghị TW 8 quyết định để <strong className="text-[#DA251D]">thị trường tự định giá</strong>, doanh nghiệp tự hạch toán lãi lỗ. Lần đầu tiên Nhà nước thừa nhận kinh tế phải vận hành theo quy luật cung — cầu, dọn đường thẳng cho Đổi Mới 1986.
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Footer */}
+              <div className="px-8 py-4 bg-[#E8D9C5] border-t-2 border-[#2C2A29]/20 flex items-center justify-between">
+                <span className="font-serif-body text-[11px] italic text-[#5C554E]">
+                  Nguồn: tulieuvankien.dangcongsan.vn
+                </span>
+                <Link href="/noi-dung-chinh" className="flex items-center gap-1.5 text-[#DA251D] font-black uppercase text-[11px] tracking-widest hover:gap-3 transition-all">
+                  Xem tư liệu đầy đủ <ArrowRight size={14} />
                 </Link>
               </div>
             </div>
 
             {/* Sub-articles */}
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="border-l-4 border-[#2C2A29] pl-6 hover:bg-[#2C2A29]/5 p-4 transition-colors group">
-                <h4 className="font-serif-heading font-black text-xl text-[#2C2A29] mb-2 uppercase group-hover:text-[#DA251D]">Đại hội IV (1976)</h4>
+              <div className="border-l-4 border-[#DA251D] pl-6 hover:bg-[#2C2A29]/5 p-4 transition-colors group">
+                <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#DA251D] mb-1">1976</p>
+                <h4 className="font-serif-heading font-black text-lg text-[#2C2A29] mb-2 uppercase group-hover:text-[#DA251D] transition-colors">Đại hội IV — Thống Nhất Nhà Nước</h4>
                 <p className="font-serif-body text-xs text-[#5C554E] leading-relaxed">
-                  Bản "văn kiện thống nhất" lịch sử, xác lập chủ quyền nhà nước duy nhất. Đây là bước "Setup" nền móng vững chắc cho một quốc gia độc lập, thống nhất mà chúng ta đang sống ngày nay.
+                  Tổng tuyển cử 25/4/1976 lần đầu tiên hợp nhất hai hệ thống chính quyền Bắc – Nam thành một nhà nước duy nhất. Đây là nền móng pháp lý vững chắc để cả nước cùng đi một hướng trong công cuộc xây dựng đất nước.
                 </p>
               </div>
-              <div className="border-l-4 border-[#2C2A29] pl-6 hover:bg-[#2C2A29]/5 p-4 transition-colors group">
-                <h4 className="font-serif-heading font-black text-xl text-[#2C2A29] mb-2 uppercase group-hover:text-[#DA251D]">Tư duy Đại hội VI</h4>
+              <div className="border-l-4 border-[#DA251D] pl-6 hover:bg-[#2C2A29]/5 p-4 transition-colors group">
+                <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#DA251D] mb-1">1986</p>
+                <h4 className="font-serif-heading font-black text-lg text-[#2C2A29] mb-2 uppercase group-hover:text-[#DA251D] transition-colors">Đại hội VI — Dũng Cảm Nhìn Thẳng Sự Thật</h4>
                 <p className="font-serif-body text-xs text-[#5C554E] leading-relaxed">
-                  Phương châm "Nhìn thẳng vào sự thật" chính là tinh thần "Keep it real" mạnh mẽ nhất, giúp Đảng và nhân dân dũng cảm sửa sai, mở ra kỷ nguyên Đổi mới huy hoàng.
+                  Phương châm "Nhìn thẳng vào sự thật" buộc toàn Đảng thẳng thắn thừa nhận những yếu kém trong quản lý kinh tế. Chính sự dũng cảm đó đã mở ra cuộc Đổi Mới toàn diện — bước ngoặt lớn nhất của lịch sử kinh tế Việt Nam hiện đại.
                 </p>
               </div>
             </div>
@@ -85,20 +141,20 @@ export default function HeritageSection() {
                 <Target size={32} className="mx-auto" />
               </div>
               <h4 className="font-serif-heading font-black text-xl text-[#2C2A29] mb-2 uppercase tracking-tighter">
-                Key Takeaways
+                Bài Học Cốt Lõi
               </h4>
               <ul className="text-left space-y-3 font-serif-body text-xs text-[#333]">
                 <li className="flex items-start gap-2">
                   <Star size={12} className="mt-1 shrink-0 text-[#DA251D]" />
-                  <span>Văn kiện là kim chỉ nam cho mọi bước đi chiến lược của dân tộc.</span>
+                  <span>Văn kiện là nền tảng định hướng cho mọi quyết sách lớn của đất nước.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Star size={12} className="mt-1 shrink-0 text-[#DA251D]" />
-                  <span>Tinh thần "xé rào" từ các văn bản chính trị là bài học về sự sáng tạo.</span>
+                  <span>Dám thừa nhận sai lầm và sửa đổi kịp thời là bản lĩnh của một Đảng mạnh.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Star size={12} className="mt-1 shrink-0 text-[#DA251D]" />
-                  <span>Hiểu lịch sử qua văn kiện giúp giới trẻ nắm vững "luật chơi" toàn cầu.</span>
+                  <span>Mỗi đổi mới lớn trong lịch sử đều bắt đầu từ việc lắng nghe thực tiễn.</span>
                 </li>
               </ul>
             </div>

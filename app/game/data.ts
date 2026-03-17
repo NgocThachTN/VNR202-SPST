@@ -103,6 +103,16 @@ export interface Explosion {
   scale?: number;
 }
 
+export interface Grenade {
+  id: number;
+  startX: number;
+  startY: number;
+  targetX: number;
+  targetY: number;
+  frame: number;
+  maxFrame: number;
+}
+
 export interface AllyTank {
   x: number;
   y: number;
@@ -189,6 +199,11 @@ export const ALLY_TANK_843 = {
   width: 44,
   height: 28,
 };
+
+export const BOMB_INITIAL_COUNT = 3;
+export const BOMB_AOE_RADIUS = 90;
+export const BOMB_FLIGHT_FRAMES = 50;
+export const BOMB_COOLDOWN = 1200;
 
 export interface WaveComposition {
   soldiers: number;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback, useRef, useState } from "react";
-import type { LevelData, Bullet, Enemy, EnemyBullet, Explosion, Obstacle, MapDecoration, WeaponType, AllyTank } from "../data";
+import type { LevelData, Bullet, Enemy, EnemyBullet, Explosion, Grenade, Obstacle, MapDecoration, WeaponType, AllyTank } from "../data";
 import {
   ARENA_W,
   ARENA_H,
@@ -21,6 +21,9 @@ import {
   TANK_BULLET_SIZE,
   ALLY_TANK_843,
   getWaveComposition,
+  BOMB_AOE_RADIUS,
+  BOMB_FLIGHT_FRAMES,
+  BOMB_COOLDOWN,
 } from "../data";
 
 /* ═══════════════════════════════════════════════════════════════════ */
@@ -39,6 +42,11 @@ export default function ShooterArena({
   waveNum,
   weaponId,
   upgrades,
+  bombs,
+  setBombs,
+  ownedWeapons,
+  onWeaponSwitch,
+  paused = false,
 }: {
   levelData: LevelData;
   levelIndex: number;
@@ -51,6 +59,11 @@ export default function ShooterArena({
   waveNum: number;
   weaponId: string;
   upgrades?: Record<string, number>;
+  bombs: number;
+  setBombs: React.Dispatch<React.SetStateAction<number>>;
+  ownedWeapons: string[];
+  onWeaponSwitch: (id: string) => void;
+  paused?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -97,7 +110,7 @@ export default function ShooterArena({
     spawnedByType: { soldier: 0, fortified: 0, tank: 0 },
     waveComposition: getWaveComposition(levelIndex, waveNum),
     allyTank: levelIndex === 0 ? {
-      x: ALLY_TANK_843.startX,
+      x: getRoadAxisX(),
       y: ALLY_TANK_843.startY,
       targetY: ALLY_TANK_843.targetY,
       speed: ALLY_TANK_843.speed,
@@ -108,6 +121,7 @@ export default function ShooterArena({
       width: ALLY_TANK_843.width,
       height: ALLY_TANK_843.height,
     } as AllyTank : null as AllyTank | null,
+    gateBreached: false,
     // Screen shake
     shakeX: 0,
     shakeY: 0,
@@ -122,6 +136,9 @@ export default function ShooterArena({
     combo: 0,
     comboTimer: 0,
     comboDisplay: 0,
+    // Grenades (bombs thrown by player)
+    grenades: [] as Grenade[],
+    lastBombTime: 0,
   });
 
   const ammoRef = useRef(ammo);
@@ -135,6 +152,29 @@ export default function ShooterArena({
 
   const onAmmoEmptyRef = useRef(onAmmoEmpty);
   onAmmoEmptyRef.current = onAmmoEmpty;
+
+  const bombsRef = useRef(bombs);
+  bombsRef.current = bombs;
+
+  const ownedWeaponsRef = useRef(ownedWeapons);
+  ownedWeaponsRef.current = ownedWeapons;
+
+  const onWeaponSwitchRef = useRef(onWeaponSwitch);
+  onWeaponSwitchRef.current = onWeaponSwitch;
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
+
+  function getLevelMapOffsetX() {
+    if (levelIndex !== 0) return 0;
+    const palace = levelData.map?.obstacles?.find((obs) => obs.type === "palace");
+    if (!palace) return 0;
+    return sizeRef.current.w / 2 - (palace.x + palace.w / 2);
+  }
+
+  function getRoadAxisX() {
+    if (levelIndex === 0) return sizeRef.current.w / 2;
+    return ALLY_TANK_843.startX + getLevelMapOffsetX();
+  }
 
   const shoot = useCallback(() => {
     const s = stateRef.current;
@@ -196,7 +236,7 @@ export default function ShooterArena({
 
     setAmmo((a) => {
       const next = a - 1;
-      if (next <= 0) {
+      if (next <= 0 && !stateRef.current.waveCleared) {
         // Defer to avoid state update during render
         setTimeout(() => onAmmoEmptyRef.current(), 0);
       }
@@ -227,12 +267,15 @@ export default function ShooterArena({
     s.combo = 0;
     s.comboTimer = 0;
     s.comboDisplay = 0;
+    s.grenades = [];
+    s.lastBombTime = 0;
+    s.gateBreached = false;
     s.spawnedByType = { soldier: 0, fortified: 0, tank: 0 };
     s.waveComposition = getWaveComposition(levelIndex, waveNum);
     const comp = s.waveComposition;
     s.enemyCount = comp.soldiers + comp.fortified + comp.tanks;
     s.allyTank = levelIndex === 0 ? {
-      x: ALLY_TANK_843.startX,
+      x: getRoadAxisX(),
       y: ALLY_TANK_843.startY,
       targetY: ALLY_TANK_843.targetY,
       speed: ALLY_TANK_843.speed,
@@ -248,6 +291,42 @@ export default function ShooterArena({
       s.keys.add(e.key);
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "].includes(e.key)) {
         e.preventDefault();
+      }
+
+      // ---- Throw grenade (E key) ----
+      if (e.key === "e" || e.key === "E") {
+        if (bombsRef.current > 0 && Date.now() - s.lastBombTime >= BOMB_COOLDOWN) {
+          s.lastBombTime = Date.now();
+          setBombs((b) => b - 1);
+          s.grenades.push({
+            id: s.nextId++,
+            startX: s.player.x,
+            startY: s.player.y,
+            targetX: mouseRef.current.x,
+            targetY: mouseRef.current.y,
+            frame: 0,
+            maxFrame: BOMB_FLIGHT_FRAMES,
+          });
+        }
+      }
+
+      // ---- Weapon switch (Q to cycle) ----
+      if (e.key === "q" || e.key === "Q") {
+        const owned = ownedWeaponsRef.current;
+        if (owned.length > 1) {
+          const currentIdx = owned.indexOf(weaponRef.current);
+          const nextIdx = (currentIdx + 1) % owned.length;
+          onWeaponSwitchRef.current(owned[nextIdx]);
+        }
+      }
+
+      // ---- Weapon switch (number keys 1-9) ----
+      const numKey = parseInt(e.key);
+      if (!isNaN(numKey) && numKey >= 1 && numKey <= 9) {
+        const owned = ownedWeaponsRef.current;
+        if (owned[numKey - 1]) {
+          onWeaponSwitchRef.current(owned[numKey - 1]);
+        }
       }
     }
     function handleKeyUp(e: KeyboardEvent) {
@@ -308,13 +387,51 @@ export default function ShooterArena({
     const ctx = canvas.getContext("2d")!;
     const s = stateRef.current;
 
-    const obstacles = levelData.map?.obstacles || [];
+    const baseObstacles = levelData.map?.obstacles || [];
+    const baseDecorations = levelData.map?.decorations || [];
+
+    function getMapOffset() {
+      return { x: getLevelMapOffsetX(), y: 0 };
+    }
+
+    function getFrontGateObstacle(mapObstacles: Obstacle[]): Obstacle | null {
+      if (levelIndex !== 0 || s.gateBreached) return null;
+      const gatePillars = mapObstacles
+        .filter((obs) => obs.type === "gate")
+        .sort((a, b) => a.x - b.x);
+      if (gatePillars.length < 2) return null;
+      const left = gatePillars[0];
+      const right = gatePillars[1];
+      const doorX = left.x + left.w;
+      const doorW = right.x - doorX;
+      const doorY = Math.min(left.y, right.y) + 6;
+      const doorH = Math.min(left.h, right.h) - 6;
+      if (doorW <= 0 || doorH <= 0) return null;
+      return { x: doorX, y: doorY, w: doorW, h: doorH, type: "wall" };
+    }
+
+    function getMapObstacles(): Obstacle[] {
+      const { x, y } = getMapOffset();
+      const shifted = (x === 0 && y === 0)
+        ? baseObstacles
+        : baseObstacles.map((obs) => ({ ...obs, x: obs.x + x, y: obs.y + y }));
+      const frontGate = getFrontGateObstacle(shifted);
+      if (!frontGate) return shifted;
+      return [...shifted, frontGate];
+    }
+
+    function getMapDecorations(): MapDecoration[] {
+      const { x, y } = getMapOffset();
+      if (x === 0 && y === 0) return baseDecorations;
+      return baseDecorations.map((dec) => ({ ...dec, x: dec.x + x, y: dec.y + y }));
+    }
 
     // Dynamic obstacles: includes ally tank bounding box for enemy collision
     function getDynamicObstacles(): Obstacle[] {
+      const mapObstacles = getMapObstacles();
       const ally = s.allyTank;
       if (ally && ally.active) {
-        return [...obstacles, {
+        return [...mapObstacles, {
           x: ally.x - ally.width / 2,
           y: ally.y - ally.height / 2,
           w: ally.width,
@@ -322,7 +439,7 @@ export default function ShooterArena({
           type: "tank" as const,
         }];
       }
-      return obstacles;
+      return mapObstacles;
     }
 
     function spawnEnemy() {
@@ -347,7 +464,7 @@ export default function ShooterArena({
 
       if (etype === "fortified") {
         // Spawn near a sandbag/bunker (defensive position)
-        const defenseObs = obstacles.filter(
+        const defenseObs = getMapObstacles().filter(
           (o) => o.type === "sandbag" || o.type === "bunker"
         );
         if (defenseObs.length > 0) {
@@ -680,17 +797,18 @@ export default function ShooterArena({
         ctx.quadraticCurveTo(AW * 0.8, AH * 0.65, AW, AH * 0.6);
         ctx.stroke();
       } else if (terrain === "urban") {
+        const roadAxisX = levelIndex === 0 ? AW / 2 : AW * 0.3;
         // Road grid
         ctx.fillStyle = "#2a2a3a";
-        ctx.fillRect(AW * 0.3 - 15, 0, 30, AH);
+        ctx.fillRect(roadAxisX - 15, 0, 30, AH);
         ctx.fillRect(0, AH * 0.45 - 15, AW, 30);
         // Road markings
         ctx.strokeStyle = "#4a4a5a";
         ctx.lineWidth = 1;
         ctx.setLineDash([8, 12]);
         ctx.beginPath();
-        ctx.moveTo(AW * 0.3, 0);
-        ctx.lineTo(AW * 0.3, AH);
+        ctx.moveTo(roadAxisX, 0);
+        ctx.lineTo(roadAxisX, AH);
         ctx.moveTo(0, AH * 0.45);
         ctx.lineTo(AW, AH * 0.45);
         ctx.stroke();
@@ -834,6 +952,29 @@ export default function ShooterArena({
           break;
 
         case "wall":
+          // Front gate (closed) at Dinh level before tank ram
+          if (levelIndex === 0 && !s.gateBreached && obs.w >= 120 && obs.h <= 30 && obs.y < 180) {
+            ctx.fillStyle = "#2f3238";
+            ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+            ctx.strokeStyle = "#555b66";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(obs.x, obs.y, obs.w, obs.h);
+            ctx.strokeStyle = "#7a818d";
+            ctx.lineWidth = 1;
+            for (let i = 6; i < obs.w; i += 8) {
+              ctx.beginPath();
+              ctx.moveTo(obs.x + i, obs.y + 2);
+              ctx.lineTo(obs.x + i, obs.y + obs.h - 2);
+              ctx.stroke();
+            }
+            ctx.strokeStyle = "#6a707a";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(obs.x, obs.y + obs.h / 2);
+            ctx.lineTo(obs.x + obs.w, obs.y + obs.h / 2);
+            ctx.stroke();
+            break;
+          }
           ctx.fillStyle = "#4a4040";
           ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
           // Brick pattern
@@ -1292,6 +1433,11 @@ export default function ShooterArena({
     function gameLoop() {
       if (!running) return;
 
+      if (pausedRef.current) {
+        s.frameId = requestAnimationFrame(gameLoop);
+        return;
+      }
+
       const AW = sizeRef.current.w, AH = sizeRef.current.h;
       const p = s.player;
       const u = upgradesRef.current;
@@ -1405,6 +1551,7 @@ export default function ShooterArena({
 
       // ---- Move bullets (with obstacle collision) ----
       s.bullets = s.bullets.filter((b) => {
+        const mapObstacles = getMapObstacles();
         b.x += b.dx;
         b.y += b.dy;
         // Range-limited bullets (shotgun)
@@ -1415,7 +1562,7 @@ export default function ShooterArena({
           if (traveled > b.maxRange) return false;
         }
         // Check obstacle collision (player bullets pass through ally tank — use static obstacles)
-        for (const obs of obstacles) {
+        for (const obs of mapObstacles) {
           if (obs.type === "crater" || obs.type === "wire") continue;
           if (
             b.x > obs.x && b.x < obs.x + obs.w &&
@@ -1658,11 +1805,47 @@ export default function ShooterArena({
         .map((hm) => ({ ...hm, frame: hm.frame + 1 }))
         .filter((hm) => hm.frame < 10);
 
+      // ---- Update grenades (arc trajectory) ----
+      s.grenades = s.grenades
+        .map((g) => ({ ...g, frame: g.frame + 1 }))
+        .filter((g) => {
+          if (g.frame >= g.maxFrame) {
+            rocketExplode(g.targetX, g.targetY, BOMB_AOE_RADIUS);
+            return false;
+          }
+          return true;
+        });
+
       // ---- Ally Tank 843 update ----
       const ally = s.allyTank;
       if (ally && ally.active) {
-        // Advance toward palace gate
-        if (ally.y > ally.targetY) {
+        ally.x = getRoadAxisX();
+        const frontGate = getFrontGateObstacle(getMapObstacles());
+        if (!s.gateBreached && frontGate) {
+          const tankFrontY = ally.y - ally.height / 2;
+          const gateBottomY = frontGate.y + frontGate.h;
+          if (tankFrontY > gateBottomY) {
+            ally.y -= ally.speed;
+          } else {
+            s.gateBreached = true;
+            s.shakeIntensity = Math.max(s.shakeIntensity, 14);
+            s.explosions.push({
+              id: s.nextId++,
+              x: frontGate.x + frontGate.w / 2,
+              y: frontGate.y + frontGate.h / 2,
+              frame: 0,
+              scale: 2.2,
+            });
+            // Objective clear: tank 843 rams the front gate of Independence Palace
+            s.enemies = [];
+            s.enemyBullets = [];
+            if (!s.waveCleared) {
+              s.waveCleared = true;
+              setTimeout(() => onWaveCleared(), 400);
+            }
+          }
+        } else if (ally.y > ally.targetY) {
+          // Continue advancing into palace after the gate is broken
           ally.y -= ally.speed;
         }
         // Shoot at nearest enemy
@@ -1706,14 +1889,15 @@ export default function ShooterArena({
       drawGround();
 
       // Decorations (below everything) — skip tank_active when ally tank is active
-      const decorations = levelData.map?.decorations || [];
+      const decorations = getMapDecorations();
       for (const dec of decorations) {
         if (dec.type === "tank_active" && s.allyTank?.active) continue;
         drawDecoration(dec);
       }
 
       // Obstacles
-      for (const obs of obstacles) drawObstacle(obs);
+      const mapObstacles = getMapObstacles();
+      for (const obs of mapObstacles) drawObstacle(obs);
 
       // Ally Tank 843 (draws on top of obstacles, provides cover)
       drawAllyTank843();
@@ -1774,6 +1958,62 @@ export default function ShooterArena({
           ctx.fill();
           ctx.globalAlpha = 1;
         }
+      }
+
+      // Grenades in flight (arc trajectory)
+      for (const g of s.grenades) {
+        const t = g.frame / g.maxFrame;
+        const gx = g.startX + (g.targetX - g.startX) * t;
+        const groundY = g.startY + (g.targetY - g.startY) * t;
+        const arcH = Math.min(120, Math.sqrt((g.targetX - g.startX) ** 2 + (g.targetY - g.startY) ** 2) * 0.4);
+        const gy = groundY - Math.sin(t * Math.PI) * arcH;
+
+        // Shadow on ground (scales with height)
+        const shadowAlpha = 0.25 - Math.sin(t * Math.PI) * 0.15;
+        const shadowScale = 0.3 + (1 - Math.sin(t * Math.PI)) * 0.7;
+        ctx.globalAlpha = shadowAlpha;
+        ctx.fillStyle = "#000";
+        ctx.beginPath();
+        ctx.ellipse(gx, groundY, 8 * shadowScale, 4 * shadowScale, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        // Landing zone indicator at target
+        const pulseT = (Date.now() % 600) / 600;
+        ctx.globalAlpha = 0.5 - pulseT * 0.3;
+        ctx.strokeStyle = "#ff4400";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath();
+        ctx.arc(g.targetX, g.targetY, BOMB_AOE_RADIUS * (0.5 + pulseT * 0.5), 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+
+        // Grenade body (spinning)
+        const spinAngle = (g.frame / g.maxFrame) * Math.PI * 6;
+        ctx.save();
+        ctx.translate(gx, gy);
+        ctx.rotate(spinAngle);
+        ctx.fillStyle = "#3a5a20";
+        ctx.fillRect(-5, -4, 10, 8);
+        ctx.fillStyle = "#2a4a10";
+        ctx.fillRect(-4, -3, 8, 2);
+        ctx.fillRect(-4, 1, 8, 2);
+        // Fuse
+        ctx.strokeStyle = "#FFD700";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.moveTo(0, -4);
+        ctx.lineTo(2, -7);
+        ctx.stroke();
+        // Fuse spark
+        if (g.frame % 6 < 3) {
+          ctx.fillStyle = "#FFD700";
+          ctx.fillRect(1, -8, 2, 2);
+        }
+        ctx.restore();
       }
 
       // Bullets (enemy — red/orange with trails)
@@ -1904,6 +2144,63 @@ export default function ShooterArena({
       ctx.fillStyle = "#ffffff88";
       ctx.font = "9px 'Press Start 2P', monospace";
       ctx.fillText(`WAVE ${waveNum + 1}  HA: ${s.killed}/${s.enemyCount}`, 10, AH - 10);
+
+      // ---- Weapon Selector HUD (bottom-center) ----
+      const owned = ownedWeaponsRef.current;
+      if (owned.length > 0) {
+        const slotW = 60;
+        const slotH = 50;
+        const gap = 6;
+        const totalW = owned.length * (slotW + gap) - gap;
+        const startX = (AW - totalW) / 2;
+        const startY = AH - slotH - 10;
+
+        for (let i = 0; i < owned.length; i++) {
+          const wid = owned[i];
+          const weaponData = WEAPONS.find((w) => w.id === wid);
+          const isActive = wid === weaponRef.current;
+          const slotX = startX + i * (slotW + gap);
+
+          // Slot background
+          ctx.fillStyle = isActive ? "rgba(255,215,0,0.25)" : "rgba(0,0,0,0.5)";
+          ctx.fillRect(slotX, startY, slotW, slotH);
+          // Slot border
+          ctx.strokeStyle = isActive ? "#FFD700" : "#444";
+          ctx.lineWidth = isActive ? 2 : 1;
+          ctx.strokeRect(slotX, startY, slotW, slotH);
+
+          // Weapon emoji
+          ctx.font = "22px monospace";
+          ctx.textAlign = "center";
+          ctx.fillStyle = "#fff";
+          ctx.fillText(weaponData?.emoji ?? "?", slotX + slotW / 2, startY + 28);
+
+          // Number key hint
+          ctx.font = "8px 'Press Start 2P', monospace";
+          ctx.fillStyle = isActive ? "#FFD700" : "#888";
+          ctx.fillText(`${i + 1}`, slotX + slotW / 2, startY + slotH - 6);
+
+          ctx.textAlign = "start";
+        }
+
+        // Q / E hints centered below slots
+        ctx.font = "7px 'Press Start 2P', monospace";
+        ctx.fillStyle = "#ffffff44";
+        ctx.textAlign = "center";
+        ctx.fillText("[Q] đổi súng    [E] ném lựu đạn", AW / 2, startY - 5);
+        ctx.textAlign = "start";
+      }
+
+      // ---- Bomb count HUD (bottom-center, left of weapon slots) ----
+      {
+        const slotH = 50;
+        const yBase = AH - slotH - 10;
+        ctx.font = "9px 'Press Start 2P', monospace";
+        ctx.fillStyle = bombsRef.current > 0 ? "#ff9944" : "#555";
+        ctx.textAlign = "center";
+        ctx.fillText(`💣 ×${bombsRef.current}`, AW / 2, yBase - 18);
+        ctx.textAlign = "start";
+      }
 
       s.frameId = requestAnimationFrame(gameLoop);
     }

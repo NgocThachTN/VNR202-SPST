@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { GAME_LEVELS, WEAPONS, UPGRADES, WAVES_PER_LEVEL } from "./data";
+import { GAME_LEVELS, WEAPONS, UPGRADES, WAVES_PER_LEVEL, BOMB_INITIAL_COUNT } from "./data";
 import type { GameScreen, Upgrade, GameQuestion } from "./data";
 import { PixelHeart } from "./components/PixelArt";
 import ShooterArena from "./components/ShooterArena";
@@ -87,6 +87,7 @@ export default function GamePage() {
   const [weaponId, setWeaponId] = useState("single");
   const [ownedWeapons, setOwnedWeapons] = useState<string[]>(["single"]);
   const [ammoQuizUsed, setAmmoQuizUsed] = useState(false);
+  const [bombs, setBombs] = useState(BOMB_INITIAL_COUNT);
 
   // Upgrade system
   const [upgradeCounts, setUpgradeCounts] = useState<Record<string, number>>({});
@@ -149,6 +150,7 @@ export default function GamePage() {
     setWeaponId("single");
     setOwnedWeapons(["single"]);
     setAmmoQuizUsed(false);
+    setBombs(BOMB_INITIAL_COUNT);
     setUpgradeCounts({});
     setUpgradeChoices([]);
     setCurrentQuestion(null);
@@ -248,6 +250,7 @@ export default function GamePage() {
     } else {
       setLevel((l) => l + 1);
       setAmmo(30);
+      setBombs(BOMB_INITIAL_COUNT);
       setAmmoQuizUsed(false);
       usedQuestionsRef.current.clear();
       setScreen("shop");
@@ -264,6 +267,7 @@ export default function GamePage() {
     setWeaponId("single");
     setOwnedWeapons(["single"]);
     setAmmoQuizUsed(false);
+    setBombs(BOMB_INITIAL_COUNT);
     setUpgradeCounts({});
     setUpgradeChoices([]);
     setCurrentQuestion(null);
@@ -286,6 +290,13 @@ export default function GamePage() {
     }
   }
 
+  // In-game weapon switching (called from ShooterArena via Q key / number keys)
+  const onWeaponSwitch = useCallback((id: string) => {
+    if (ownedWeapons.includes(id)) {
+      setWeaponId(id);
+    }
+  }, [ownedWeapons]);
+
   // Build stats display for HUD
   const activeUpgrades: string[] = [];
   if (extraBullets > 0) activeUpgrades.push(`+${extraBullets}đạn`);
@@ -295,6 +306,9 @@ export default function GamePage() {
   if (fireRateStacks > 0) activeUpgrades.push(`⚡×${fireRateStacks}`);
   const speedStacks = upgradeCounts["speed_up"] || 0;
   if (speedStacks > 0) activeUpgrades.push(`🏃×${speedStacks}`);
+
+  const currentWeaponData = WEAPONS.find((w) => w.id === effectiveWeaponId);
+  const isCombatFlow = screen === "combat" || screen === "quiz" || screen === "upgrade";
 
   return (
     <>
@@ -335,6 +349,12 @@ export default function GamePage() {
             <div className="pixel-font text-[13px] sm:text-[14px] text-[#aaa]">
               ĐẠN: <span className={ammo <= 5 ? "text-[#ff4444]" : "text-[#4fc3f7]"}>{ammo}</span>
             </div>
+            <div className="pixel-font text-[12px] text-[#aaa]" title="Lựu đạn (phím E)">
+              💣 <span className={bombs <= 0 ? "text-[#666]" : "text-[#ff9944]"}>{bombs}</span>
+            </div>
+            <div className="pixel-font text-[11px] sm:text-[12px] text-[#FFD700]" title={`Súng: ${currentWeaponData?.name} — phím Q để đổi`}>
+              {currentWeaponData?.emoji} {currentWeaponData?.name}
+            </div>
             {activeUpgrades.length > 0 && (
               <div className="pixel-font text-[11px] sm:text-[12px] text-[#a855f7]">
                 {activeUpgrades.join(" ")}
@@ -351,25 +371,14 @@ export default function GamePage() {
 
         {/* Main area — flex-1 to fill remaining space */}
         <div className={`flex-1 min-h-0 ${screen === "combat" ? "overflow-hidden" : "overflow-auto"}`}>
-          <AnimatePresence mode="wait">
-            {screen === "title" && <TitleScreen key="title" onStart={startGame} />}
-
-            {screen === "tutorial" && (
-              <TutorialScreen key="tutorial" onStart={() => setScreen("level-intro")} />
-            )}
-
-            {screen === "level-intro" && (
-              <LevelIntro key={`intro-${level}`} level={level} levelData={levelData} onStart={startLevel} />
-            )}
-
-            {screen === "combat" && (
-              <motion.div
-                key={`combat-${level}-${waveIdx}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="w-full h-full"
-              >
+          {isCombatFlow ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="w-full h-full"
+            >
+              <div className="relative w-full h-full">
                 <ShooterArena
                   levelData={levelData}
                   levelIndex={level}
@@ -382,57 +391,78 @@ export default function GamePage() {
                   waveNum={waveIdx}
                   weaponId={effectiveWeaponId}
                   upgrades={upgradeCounts}
+                  bombs={bombs}
+                  setBombs={setBombs}
+                  ownedWeapons={ownedWeapons}
+                  onWeaponSwitch={onWeaponSwitch}
+                  paused={screen !== "combat"}
                 />
-              </motion.div>
-            )}
 
-            {screen === "quiz" && currentQuestion && (
-              <QuizScreen
-                key={`quiz-${level}-${waveIdx}-${quizRetry}`}
-                question={currentQuestion}
-                onAnswer={onQuizAnswer}
-              />
-            )}
+                {screen === "quiz" && currentQuestion && (
+                  <div className="absolute inset-0 overflow-auto bg-black/45">
+                    <QuizScreen
+                      key={`quiz-${level}-${waveIdx}-${quizRetry}`}
+                      question={currentQuestion}
+                      onAnswer={onQuizAnswer}
+                    />
+                  </div>
+                )}
 
-            {screen === "upgrade" && (
-              <UpgradeScreen
-                key={`upgrade-${level}-${waveIdx}`}
-                choices={upgradeChoices.map((u) => ({
-                  upgrade: u,
-                  stacks: upgradeCounts[u.id] || 0,
-                }))}
-                onPick={onUpgradePick}
-              />
-            )}
+                {screen === "upgrade" && (
+                  <div className="absolute inset-0 overflow-auto bg-black/45">
+                    <UpgradeScreen
+                      key={`upgrade-${level}-${waveIdx}`}
+                      choices={upgradeChoices.map((u) => ({
+                        upgrade: u,
+                        stacks: upgradeCounts[u.id] || 0,
+                      }))}
+                      onPick={onUpgradePick}
+                    />
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          ) : (
+            <AnimatePresence mode="wait">
+              {screen === "title" && <TitleScreen key="title" onStart={startGame} />}
 
-            {screen === "level-complete" && (
-              <LevelComplete
-                key={`complete-${level}`}
-                levelData={levelData}
-                correctCount={correctCount}
-                totalQ={totalQ}
-                totalScore={score}
-                onNext={nextLevel}
-                isLastLevel={level + 1 >= GAME_LEVELS.length}
-              />
-            )}
+              {screen === "tutorial" && (
+                <TutorialScreen key="tutorial" onStart={() => setScreen("level-intro")} />
+              )}
 
-            {screen === "shop" && (
-              <ShopScreen
-                key={`shop-${level}`}
-                score={score}
-                currentWeaponId={effectiveWeaponId}
-                ownedWeapons={ownedWeapons}
-                onBuy={buyWeapon}
-                onEquip={equipWeapon}
-                onContinue={() => setScreen("level-intro")}
-              />
-            )}
+              {screen === "level-intro" && (
+                <LevelIntro key={`intro-${level}`} level={level} levelData={levelData} onStart={startLevel} />
+              )}
 
-            {screen === "game-over" && <GameOverScreen key="gameover" score={score} onRestart={restart} />}
+              {screen === "level-complete" && (
+                <LevelComplete
+                  key={`complete-${level}`}
+                  levelData={levelData}
+                  correctCount={correctCount}
+                  totalQ={totalQ}
+                  totalScore={score}
+                  onNext={nextLevel}
+                  isLastLevel={level + 1 >= GAME_LEVELS.length}
+                />
+              )}
 
-            {screen === "victory" && <VictoryScreen key="victory" score={score} onRestart={restart} />}
-          </AnimatePresence>
+              {screen === "shop" && (
+                <ShopScreen
+                  key={`shop-${level}`}
+                  score={score}
+                  currentWeaponId={effectiveWeaponId}
+                  ownedWeapons={ownedWeapons}
+                  onBuy={buyWeapon}
+                  onEquip={equipWeapon}
+                  onContinue={() => setScreen("level-intro")}
+                />
+              )}
+
+              {screen === "game-over" && <GameOverScreen key="gameover" score={score} onRestart={restart} />}
+
+              {screen === "victory" && <VictoryScreen key="victory" score={score} onRestart={restart} />}
+            </AnimatePresence>
+          )}
         </div>
       </div>
     </>

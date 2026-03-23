@@ -87,7 +87,7 @@
   }
 
   .pixel-font {
-    font-family: 'Press Start 2P', monospace;
+    font-family: 'Press Start 2P', 'Inter', 'Segoe UI', Arial, sans-serif;
   }
 
   .container-custom {

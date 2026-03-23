@@ -1,181 +1,140 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { BookOpen, Star, ArrowRight, Target } from 'lucide-react';
-import Link from 'next/link';
+import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useTheme } from '@/app/components/ThemeProvider';
 
 export default function HeritageSection() {
+  const { isDarkMode } = useTheme();
+  const [page, setPage] = useState(0);
+
+  const features = [
+    {
+      title: 'Sự lãnh đạo tuyệt đối của Đảng Cộng sản Việt Nam',
+      content:
+        'Đảng quyết định bản chất và sự thành công của công cuộc xây dựng Nhà nước pháp quyền. Sự lãnh đạo này đảm bảo tính thống nhất chính trị và tránh tình trạng chia cắt quyền lực dẫn đến bế tắc.'
+    },
+    {
+      title: 'Bản chất Nhà nước của Nhân dân, do Nhân dân, vì Nhân dân',
+      content:
+        'Nhân dân là chủ thể tối cao của quyền lực nhà nước. Điều này đòi hỏi các cơ chế dân chủ trực tiếp và đại diện phải được thực thi hiệu quả, đặc biệt là dân chủ cơ sở.'
+    },
+    {
+      title: 'Tôn trọng, bảo đảm và bảo vệ quyền con người, quyền công dân',
+      content:
+        'Quyền con người được cụ thể hóa trong Hiến pháp và các đạo luật. Nhà nước có trách nhiệm tạo hành lang pháp lý để người dân phát huy năng lực và bảo vệ họ trước các hành vi xâm phạm.'
+    },
+    {
+      title: 'Thượng tôn Hiến pháp và pháp luật',
+      content:
+        'Mọi cơ quan, tổ chức và cá nhân đều phải tôn trọng sự tối thượng của Hiến pháp. Hệ thống pháp luật phải minh bạch, ổn định và dễ tiếp cận.'
+    },
+    {
+      title: 'Quyền lực nhà nước là thống nhất, phân công rành mạch, phối hợp chặt chẽ và kiểm soát hiệu quả',
+      content:
+        'Quyền lực nhà nước không phân lập mà thống nhất, nhưng có sự chuyên môn hóa giữa quyền lập pháp, hành pháp và tư pháp để ngăn ngừa tha hóa quyền lực.'
+    },
+    {
+      title: 'Hệ thống pháp luật dân chủ, công bằng, nhân đạo và hiện đại',
+      content:
+        'Pháp luật là đòn bẩy cho sự phát triển bền vững và đổi mới sáng tạo, tạo môi trường công bằng cho mọi thành phần kinh tế thay vì là rào cản hành chính.'
+    },
+    {
+      title: 'Độc lập của Tòa án theo thẩm quyền xét xử',
+      content:
+        'Tòa án phải độc lập; thẩm phán và hội thẩm nhân dân chỉ tuân theo pháp luật. Đây là chốt chặn cuối cùng bảo vệ công lý và quyền lợi hợp pháp của công dân.'
+    },
+    {
+      title: 'Tôn trọng và thực hiện các điều ước quốc tế',
+      content:
+        'Nhà nước cam kết tuân thủ các chuẩn mực quốc tế trên cơ sở tôn trọng độc lập, chủ quyền và lợi ích quốc gia - dân tộc.'
+    }
+  ];
+
+  const pageSize = 3;
+  const totalPages = Math.ceil(features.length / pageSize);
+  const currentItems = features.slice(page * pageSize, (page + 1) * pageSize);
+
+
   return (
-    <section className="bg-[#F5E6D3] py-24 relative overflow-hidden border-b-4 border-[#2C2A29]">
+    <section className={`py-24 relative overflow-hidden border-b-4 transition-colors duration-500 ${isDarkMode ? 'bg-[#000000] border-[#DA251D]/30' : 'bg-[#F5E6D3] border-[#2C2A29]'}`}>
       <div className="absolute inset-0 opacity-40 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
       
       <div className="container-custom relative mx-auto px-6">
         {/* Newspaper Masthead */}
-        <div className="text-center mb-16 border-b-4 border-double border-[#2C2A29] pb-8">
-          <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.3em] text-[#2C2A29] mb-4">
-            <span>SỐ CHUYÊN ĐỀ: GIẢI MÃ VĂN KIỆN</span>
-            <span className="hidden md:block">TƯ DUY ĐỔI MỚI - GEN Z CONNECT</span>
+        <div className={`text-center mb-16 border-b-4 border-double pb-8 transition-colors duration-500 ${isDarkMode ? 'border-[#DA251D]/20' : 'border-[#2C2A29]'}`}>
+          <div className={`flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.3em] mb-4 transition-colors ${isDarkMode ? 'text-[#E8D9C5]/40' : 'text-[#2C2A29]'}`}>
+            <span>SỐ CHUYÊN ĐỀ: LÝ LUẬN</span>
+            <span className="hidden md:block"></span>
             <span>VIỆT NAM 2026</span>
           </div>
-          <h2 className="text-5xl md:text-7xl font-serif-heading font-black text-[#2C2A29] uppercase tracking-tighter leading-none mb-4">
-            Góc Nhìn <span className="text-[#DA251D]">Di Sản</span>
+          <h2 className={`text-5xl md:text-7xl font-serif-heading font-black uppercase tracking-tighter leading-none mb-4 transition-colors ${isDarkMode ? 'text-[#E8D9C5]' : 'text-[#2C2A29]'}`}>
+            Đặc Trưng <span className="text-[#DA251D]">Cơ Bản</span>
           </h2>
-          <p className="font-serif-body text-xl italic text-[#5C554E] max-w-2xl mx-auto">
-            "Những trang văn kiện tưởng chừng khô khan lại chứa đựng những quyết sách thay đổi vận mệnh hàng chục triệu con người."
+          <p className="font-serif-body text-xl italic text-[var(--text-secondary)] max-w-2xl mx-auto">
+            "Đây là khung lý luận cốt lõi xác định hình mẫu Nhà nước pháp quyền Việt Nam hiện đại."
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Main Column - Editorial */}
-          <div className="lg:col-span-2 space-y-8">
-            <div className="relative border-4 border-double border-[#2C2A29] bg-[#FAF3EB] shadow-[8px_8px_0px_0px_#2C2A29] overflow-hidden">
-              {/* Newspaper header */}
-              <div className="px-8 pt-6 pb-5 border-b-4 border-double border-[#2C2A29] bg-[#F5E6D3]">
-                <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-[#5C554E] mb-2">
-                  Chuyên đề · Văn kiện Đảng
-                </p>
-                <h3 className="text-2xl md:text-3xl font-serif-heading font-black text-[#2C2A29] uppercase leading-tight mb-2">
-                  Ba Bước Chuyển Mình Định Hình Lại Nền Kinh Tế
-                </h3>
-                <p className="font-serif-body text-sm italic text-[#5C554E]">
-                  Từ khủng hoảng thiếu gạo đến mở cửa thị trường — hiểu rõ từng quyết định then chốt.
-                </p>
-              </div>
-
-              {/* 3 articles */}
-              <div className="divide-y divide-[#2C2A29]/15">
-
-                {/* Article 1 */}
-                <div className="flex gap-5 px-8 py-6 hover:bg-[#F0E7D8] transition-colors group">
-                  <div className="shrink-0 flex flex-col items-center gap-1.5 pt-0.5">
-                    <div className="border-2 border-[#2C2A29] overflow-hidden w-14 text-center shadow-[2px_2px_0px_0px_#2C2A29]">
-                      <div className="bg-[#2C2A29] text-[#FAF3EB] text-[8px] font-bold uppercase tracking-wider px-1 py-0.5">NĂM</div>
-                      <div className="font-serif-heading font-black text-lg text-[#DA251D] py-1 leading-none">1976</div>
-                    </div>
-                    <span className="text-[8px] font-bold uppercase tracking-wider text-[#2C2A29] text-center leading-tight">Đường Lối</span>
-                  </div>
-                  <div>
-                    <h4 className="font-serif-heading font-black text-base md:text-lg text-[#2C2A29] uppercase leading-tight mb-1.5 group-hover:text-[#DA251D] transition-colors">
-                      Nghị Quyết Đảng — Kim Chỉ Nam Quốc Gia
-                    </h4>
-                    <p className="font-serif-body text-sm text-[#5C554E] leading-relaxed text-justify">
-                      Cuối thập niên 70, Việt Nam đối mặt với thiếu lương thực, lạm phát gần <strong className="text-[#2C2A29]">700%</strong>, hàng hóa khan hiếm toàn diện. Thay vì chờ khủng hoảng tự tan, Đảng dùng Nghị quyết như một <strong className="text-[#2C2A29]">kế hoạch hành động rõ ràng</strong> — xác định đúng vấn đề, đặt mục tiêu cụ thể, phân công trách nhiệm từng cấp. Nhờ đó cả hệ thống vận hành cùng một hướng thay vì mỗi nơi làm một kiểu.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Article 2 */}
-                <div className="flex gap-5 px-8 py-6 hover:bg-[#F0E7D8] transition-colors group">
-                  <div className="shrink-0 flex flex-col items-center gap-1.5 pt-0.5">
-                    <div className="border-2 border-[#2C2A29] overflow-hidden w-14 text-center shadow-[2px_2px_0px_0px_#2C2A29]">
-                      <div className="bg-[#2C2A29] text-[#FAF3EB] text-[8px] font-bold uppercase tracking-wider px-1 py-0.5">NĂM</div>
-                      <div className="font-serif-heading font-black text-lg text-[#DA251D] py-1 leading-none">1981</div>
-                    </div>
-                    <span className="text-[8px] font-bold uppercase tracking-wider text-[#2C2A29] text-center leading-tight">Nông Nghiệp</span>
-                  </div>
-                  <div>
-                    <h4 className="font-serif-heading font-black text-base md:text-lg text-[#2C2A29] uppercase leading-tight mb-1.5 group-hover:text-[#DA251D] transition-colors">
-                      Khoán 100 — Trao Quyền Cho Người Nông Dân
-                    </h4>
-                    <p className="font-serif-body text-sm text-[#5C554E] leading-relaxed text-justify">
-                      Trước 1981, nông dân làm chung trong hợp tác xã — <strong className="text-[#2C2A29]">ai làm ít hay làm nhiều đều nhận phần bằng nhau</strong>. Không ai có động lực làm thêm nên năng suất rất thấp. Khoán 100 phá vỡ điều đó: khoán thẳng sản lượng tới từng hộ gia đình — <strong className="text-[#DA251D]">làm nhiều hưởng nhiều, làm ít hưởng ít</strong>. Chỉ một vụ sau khi áp dụng, sản lượng lương thực tăng vọt rõ rệt.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Article 3 */}
-                <div className="flex gap-5 px-8 py-6 hover:bg-[#F0E7D8] transition-colors group">
-                  <div className="shrink-0 flex flex-col items-center gap-1.5 pt-0.5">
-                    <div className="border-2 border-[#2C2A29] overflow-hidden w-14 text-center shadow-[2px_2px_0px_0px_#2C2A29]">
-                      <div className="bg-[#2C2A29] text-[#FAF3EB] text-[8px] font-bold uppercase tracking-wider px-1 py-0.5">NĂM</div>
-                      <div className="font-serif-heading font-black text-lg text-[#DA251D] py-1 leading-none">1985</div>
-                    </div>
-                    <span className="text-[8px] font-bold uppercase tracking-wider text-[#2C2A29] text-center leading-tight">Kinh Tế</span>
-                  </div>
-                  <div>
-                    <h4 className="font-serif-heading font-black text-base md:text-lg text-[#2C2A29] uppercase leading-tight mb-1.5 group-hover:text-[#DA251D] transition-colors">
-                      Hội Nghị TW 8 — Xóa Bao Cấp, Mở Thị Trường
-                    </h4>
-                    <p className="font-serif-body text-sm text-[#5C554E] leading-relaxed text-justify">
-                      Thời bao cấp, Nhà nước định giá mọi thứ và phân phối qua tem phiếu — <strong className="text-[#2C2A29]">giá không phản ánh cung cầu thực tế</strong>, doanh nghiệp không có lợi nhuận để tái đầu tư. Hội nghị TW 8 quyết định để <strong className="text-[#DA251D]">thị trường tự định giá</strong>, doanh nghiệp tự hạch toán lãi lỗ. Lần đầu tiên Nhà nước thừa nhận kinh tế phải vận hành theo quy luật cung — cầu, dọn đường thẳng cho Đổi Mới 1986.
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Footer */}
-              <div className="px-8 py-4 bg-[#E8D9C5] border-t-2 border-[#2C2A29]/20 flex items-center justify-between">
-                <span className="font-serif-body text-[11px] italic text-[#5C554E]">
-                  Nguồn: tulieuvankien.dangcongsan.vn
-                </span>
-                <Link href="/noi-dung-chinh" className="flex items-center gap-1.5 text-[#DA251D] font-black uppercase text-[11px] tracking-widest hover:gap-3 transition-all">
-                  Xem tư liệu đầy đủ <ArrowRight size={14} />
-                </Link>
-              </div>
+        <div className="max-w-5xl mx-auto">
+          <div className={`relative border-4 border-double shadow-[8px_8px_0px_0px_var(--text-primary)] overflow-hidden transition-all duration-500 ${isDarkMode ? 'bg-[#0A0A0A] border-[#DA251D]' : 'bg-[#FAF3EB] border-[#2C2A29]'}`}>
+            <div className={`px-8 pt-6 pb-5 border-b-4 border-double transition-colors duration-500 ${isDarkMode ? 'bg-[#1C1C1C] border-[#DA251D]' : 'bg-[#F5E6D3] border-[#2C2A29]'}`}>
+              <h3 className={`text-2xl md:text-3xl font-serif-heading font-black uppercase leading-tight mb-2 transition-colors ${isDarkMode ? 'text-[#E8D9C5]' : 'text-[#2C2A29]'}`}>
+                Tám đặc trưng cơ bản (Theo Nghị quyết số 27-NQ/TW)
+              </h3>
+              <p className="font-serif-body text-sm italic text-[var(--text-secondary)]">
+                Đây là khung lý luận cốt lõi xác định hình mẫu Nhà nước pháp quyền Việt Nam hiện đại.
+              </p>
             </div>
 
-            {/* Sub-articles */}
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="border-l-4 border-[#DA251D] pl-6 hover:bg-[#2C2A29]/5 p-4 transition-colors group">
-                <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#DA251D] mb-1">1976</p>
-                <h4 className="font-serif-heading font-black text-lg text-[#2C2A29] mb-2 uppercase group-hover:text-[#DA251D] transition-colors">Đại hội IV — Thống Nhất Nhà Nước</h4>
-                <p className="font-serif-body text-xs text-[#5C554E] leading-relaxed">
-                  Tổng tuyển cử 25/4/1976 lần đầu tiên hợp nhất hai hệ thống chính quyền Bắc – Nam thành một nhà nước duy nhất. Đây là nền móng pháp lý vững chắc để cả nước cùng đi một hướng trong công cuộc xây dựng đất nước.
-                </p>
+            <div className={`divide-y transition-colors ${isDarkMode ? 'divide-[#DA251D]/10' : 'divide-[#2C2A29]/15'}`}>
+              {currentItems.map((item, index) => (
+                <div key={item.title} className={`flex gap-5 px-8 py-6 transition-colors ${isDarkMode ? 'hover:bg-[#1C1C1C]' : 'hover:bg-[#F0E7D8]'}`}>
+                  <div className="shrink-0 pt-1">
+                    <div className={`border-2 overflow-hidden w-14 text-center shadow-[2px_2px_0px_0px_var(--text-primary)] transition-colors ${isDarkMode ? 'border-[#DA251D]' : 'border-[#2C2A29]'}`}>
+                      <div className={`text-[8px] font-bold uppercase tracking-wider px-1 py-0.5 transition-colors ${isDarkMode ? 'bg-[#DA251D] text-white' : 'bg-[#2C2A29] text-[#FAF3EB]'}`}>
+                        MỤC
+                      </div>
+                      <div className="font-serif-heading font-black text-lg text-[#DA251D] py-1 leading-none">
+                        {page * pageSize + index + 1}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className={`font-serif-heading font-black text-base md:text-lg leading-tight mb-1.5 transition-colors ${isDarkMode ? 'text-[#E8D9C5]' : 'text-[#2C2A29]'}`}>
+                      {item.title}
+                    </h4>
+                    <p className={`font-serif-body text-sm leading-relaxed text-justify transition-colors ${isDarkMode ? 'text-[#E8D9C5]/70' : 'text-[#5C554E]'}`}>
+                      {item.content}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className={`px-8 py-4 border-t-2 flex items-center justify-between transition-colors duration-500 ${isDarkMode ? 'bg-[#1C1C1C] border-[#DA251D]/20' : 'bg-[#E8D9C5] border-[#2C2A29]/20'}`}>
+              <button
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={page === 0}
+                className={`inline-flex items-center gap-2 px-4 py-2 border-2 text-xs font-black uppercase tracking-widest transition-all ${page === 0 ? 'opacity-40 cursor-not-allowed' : 'hover:-translate-x-0.5'} ${isDarkMode ? 'border-[#DA251D] text-[#E8D9C5]' : 'border-[#2C2A29] text-[#2C2A29]'}`}
+              >
+                <ChevronLeft size={14} /> Lùi
+              </button>
+
+              <div className={`font-serif-body text-xs italic transition-colors ${isDarkMode ? 'text-[#E8D9C5]/60' : 'text-[#5C554E]'}`}>
+                Trang {page + 1}/{totalPages}
               </div>
-              <div className="border-l-4 border-[#DA251D] pl-6 hover:bg-[#2C2A29]/5 p-4 transition-colors group">
-                <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-[#DA251D] mb-1">1986</p>
-                <h4 className="font-serif-heading font-black text-lg text-[#2C2A29] mb-2 uppercase group-hover:text-[#DA251D] transition-colors">Đại hội VI — Dũng Cảm Nhìn Thẳng Sự Thật</h4>
-                <p className="font-serif-body text-xs text-[#5C554E] leading-relaxed">
-                  Phương châm "Nhìn thẳng vào sự thật" buộc toàn Đảng thẳng thắn thừa nhận những yếu kém trong quản lý kinh tế. Chính sự dũng cảm đó đã mở ra cuộc Đổi Mới toàn diện — bước ngoặt lớn nhất của lịch sử kinh tế Việt Nam hiện đại.
-                </p>
-              </div>
+
+              <button
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                disabled={page === totalPages - 1}
+                className={`inline-flex items-center gap-2 px-4 py-2 border-2 text-xs font-black uppercase tracking-widest transition-all ${page === totalPages - 1 ? 'opacity-40 cursor-not-allowed' : 'hover:translate-x-0.5'} ${isDarkMode ? 'border-[#DA251D] text-[#E8D9C5]' : 'border-[#2C2A29] text-[#2C2A29]'}`}
+              >
+                Qua <ChevronRight size={14} />
+              </button>
             </div>
           </div>
 
-          {/* Sidebar - Stamped Cards/Badge */}
-          <div className="space-y-8">
-            <div className="bg-[#FAF3EB] border-2 border-dashed border-[#2C2A29] p-6 text-center rotate-1 shadow-sm">
-              <div className="text-[#DA251D] mb-4">
-                <Target size={32} className="mx-auto" />
-              </div>
-              <h4 className="font-serif-heading font-black text-xl text-[#2C2A29] mb-2 uppercase tracking-tighter">
-                Bài Học Cốt Lõi
-              </h4>
-              <ul className="text-left space-y-3 font-serif-body text-xs text-[#333]">
-                <li className="flex items-start gap-2">
-                  <Star size={12} className="mt-1 shrink-0 text-[#DA251D]" />
-                  <span>Văn kiện là nền tảng định hướng cho mọi quyết sách lớn của đất nước.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Star size={12} className="mt-1 shrink-0 text-[#DA251D]" />
-                  <span>Dám thừa nhận sai lầm và sửa đổi kịp thời là bản lĩnh của một Đảng mạnh.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Star size={12} className="mt-1 shrink-0 text-[#DA251D]" />
-                  <span>Mỗi đổi mới lớn trong lịch sử đều bắt đầu từ việc lắng nghe thực tiễn.</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* "Clipping" Style Call to Action */}
-            <div className="relative group overflow-hidden">
-               <div className="absolute inset-0 bg-[#2C2A29] translate-x-1 translate-y-1 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform" />
-               <div className="relative bg-[#DA251D] border-2 border-[#2C2A29] p-6 text-[#FAF3EB]">
-                 <BookOpen size={24} className="mb-4" />
-                 <h4 className="text-xl font-serif-heading font-black uppercase mb-2">Bạn đã sẵn sàng?</h4>
-                 <p className="text-xs font-serif-body italic mb-6 opacity-90">Cùng lật lại những trang hồ sơ "quyền lực" nhất lịch sử dân tộc.</p>
-                 <Link href="/noi-dung-chinh" className="inline-block bg-[#FAF3EB] text-[#2C2A29] px-6 py-2 font-black text-xs uppercase tracking-widest hover:bg-[#F4D03F] transition-colors">
-                   Khám phá ngay
-                 </Link>
-               </div>
-            </div>
-
-            <div className="pt-4 text-center">
-            
-            </div>
-          </div>
         </div>
       </div>
     </section>

@@ -110,6 +110,30 @@ export default function GamePage() {
   const levelData = GAME_LEVELS[level];
   const totalQ = WAVES_PER_LEVEL;
 
+  function shuffleQuestionOptions(question: GameQuestion): GameQuestion {
+    const indexedOptions = question.options.map((option, originalIndex) => ({
+      option,
+      originalIndex,
+    }));
+
+    for (let i = indexedOptions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indexedOptions[i], indexedOptions[j]] = [indexedOptions[j], indexedOptions[i]];
+    }
+
+    const shuffledCorrectIndex = indexedOptions.findIndex(
+      (item) => item.originalIndex === question.correctIndex
+    );
+
+    if (shuffledCorrectIndex < 0) return question;
+
+    return {
+      ...question,
+      options: indexedOptions.map((item) => item.option),
+      correctIndex: shuffledCorrectIndex,
+    };
+  }
+
   // Pick a random question from the pool, avoiding repeats
   function pickQuestion(): GameQuestion {
     const pool = levelData.questions;
@@ -119,7 +143,7 @@ export default function GamePage() {
     if (unused.length === 0) usedQuestionsRef.current.clear();
     const idx = candidates[Math.floor(Math.random() * candidates.length)];
     usedQuestionsRef.current.add(idx);
-    return pool[idx];
+    return shuffleQuestionOptions(pool[idx]);
   }
 
   // Compute current weapon stats from upgrades
@@ -327,7 +351,7 @@ export default function GamePage() {
             ← THOÁT
           </Link>
           <span className="pixel-font text-[11px] sm:text-[13px] text-[#FFD700]">
-            KÝ ỨC THỐNG NHẤT — XÂY DỰNG & BẢO VỆ TỔ QUỐC
+            NHÀ NƯỚC PHÁP QUYỀN XÃ HỘI CHỦ NGHĨA VIỆT NAM — XÂY DỰNG & BẢO VỆ TỔ QUỐC
           </span>
           <span className="pixel-font text-[11px] sm:text-[13px] text-[#555]">v2.0</span>
         </div>

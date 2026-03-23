@@ -387,7 +387,7 @@ export function QuizScreen({
                 }}
               >
                 <p className="mb-2 text-[14px] sm:text-[16px]">
-                  {isCorrect ? "CHINH XAC! +1 HP, +15 DAN, +100 DIEM" : "SAI ROI! NHAN CAU MOI DE THU LAI"}
+                  {isCorrect ? "CHÍNH XÁC! +1 HP, +15 ĐẠN, +100 ĐIỂM" : "SAI RỒI! NHẤN CÂU MỚI ĐỂ THỬ LẠI"}
                 </p>
               </div>
 
